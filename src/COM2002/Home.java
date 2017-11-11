@@ -1,3 +1,5 @@
+package COM2002;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -8,7 +10,6 @@ import java.awt.Color;
 import javax.swing.JLayeredPane;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTabbedPane;
@@ -17,13 +18,23 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+
 import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+import java.awt.GridBagConstraints; 
 import java.awt.Insets;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.GridLayout;
 import javax.swing.JSplitPane;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import net.miginfocom.swing.MigLayout;
+import java.awt.Button;
+import java.awt.Font;
 
 public class Home extends JFrame {
 
@@ -32,7 +43,6 @@ public class Home extends JFrame {
 	private JPanel Appointment;
 	private JPanel Patient;
 	private JPanel healthcarePlan;
-	private JPanel appointmentControl;
 	private JButton btnNewButton;
 	private JPanel appointmentTable;
 	private JRadioButton Dentist;
@@ -41,13 +51,20 @@ public class Home extends JFrame {
 	private JComboBox comboBox;
 	private JComboBox comboBox_1;
 	private JComboBox comboBox_2;
-	private JSplitPane splitPane;
 	private JPanel panel_4;
+	private JButton btnNewButton_1;
+	private JButton btnNewButton_2;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		try { 
+		    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -79,22 +96,26 @@ public class Home extends JFrame {
 		tabbedPane.addTab("Appointment\r\n", null, Appointment, null);
 		Appointment.setLayout(new BorderLayout(0, 0));
 		
-		appointmentControl = new JPanel();
-		Appointment.add(appointmentControl, BorderLayout.EAST);
-		
-		btnNewButton = new JButton("Create new Appointment");
-		appointmentControl.add(btnNewButton);
-		
 		appointmentTable = new JPanel();
 		Appointment.add(appointmentTable, BorderLayout.CENTER);
-		appointmentTable.setLayout(new BorderLayout(0, 0));
+		appointmentTable.setLayout(null);
 		
-		splitPane = new JSplitPane();
-		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		appointmentTable.add(splitPane);
+		btnNewButton = new JButton("Create new Appointment");
+		btnNewButton.setBounds(615, 0, 154, 50);
+		appointmentTable.add(btnNewButton);
+		
+		btnNewButton_1 = new JButton("Find Appointment");
+		btnNewButton_1.setBounds(615, 70, 154, 50);
+		appointmentTable.add(btnNewButton_1);
+		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
+		btnNewButton_2 = new JButton("Delete Appointment");
+		btnNewButton_2.setBounds(615, 140, 154, 50);
+		appointmentTable.add(btnNewButton_2);
 		
 		table = new JTable();
-		splitPane.setRightComponent(table);
+		table.setBounds(0, 51, 614, 372);
+		appointmentTable.add(table);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null},
@@ -109,13 +130,19 @@ public class Home extends JFrame {
 		));
 		
 		panel_4 = new JPanel();
-		splitPane.setLeftComponent(panel_4);
+		panel_4.setBounds(0, 0, 615, 33);
+		appointmentTable.add(panel_4);
+		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		Hygienist = new JRadioButton("Hygienist");
 		panel_4.add(Hygienist);
 		
 		Dentist = new JRadioButton("Dentist");
 		panel_4.add(Dentist);
+		
+		ButtonGroup partnerGroup = new ButtonGroup();
+		partnerGroup.add(Hygienist);
+		partnerGroup.add(Dentist);
 		
 		comboBox = new JComboBox();
 		panel_4.add(comboBox);
@@ -126,6 +153,14 @@ public class Home extends JFrame {
 		
 		comboBox_1 = new JComboBox();
 		panel_4.add(comboBox_1);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		
 		Patient = new JPanel();
 		tabbedPane.addTab("Patient", null, Patient, null);
