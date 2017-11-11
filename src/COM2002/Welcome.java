@@ -70,6 +70,13 @@ public class Welcome extends JFrame {
 		JButton SecretaryLogin = new JButton("Secretary");
 		SecretaryLogin.setBounds(65, 146, 110, 63);
 		contentPane.add(SecretaryLogin);
+		SecretaryLogin.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Home homeFrame = new Home();
+				homeFrame.setVisible(true);
+			}
+		});
 		
 		JButton HygienistLogin = new JButton("Hygienist");
 		HygienistLogin.setBounds(241, 146, 108, 63);

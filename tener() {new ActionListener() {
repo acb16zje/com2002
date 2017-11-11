@@ -1,0 +1,101 @@
+warning: LF will be replaced by CRLF in bin/.gitignore.
+The file will have its original line endings in your working directory.
+[1mdiff --git a/bin/.gitignore b/bin/.gitignore[m
+[1mindex c522a5e..e27683a 100644[m
+[1m--- a/bin/.gitignore[m
+[1m+++ b/bin/.gitignore[m
+[36m@@ -1,4 +1 @@[m
+[31m-/org/[m
+ /COM2002/[m
+[31m-/Welcome$1.class[m
+[31m-/Welcome.class[m
+[1mdiff --git a/src/COM2002/Home.java b/src/COM2002/Home.java[m
+[1mindex 457a1b7..6710c46 100644[m
+[1m--- a/src/COM2002/Home.java[m
+[1m+++ b/src/COM2002/Home.java[m
+[36m@@ -15,6 +15,7 @@[m [mimport javax.swing.table.DefaultTableModel;[m
+ import javax.swing.JTabbedPane;[m
+ import javax.swing.JButton;[m
+ import javax.swing.JMenuItem;[m
+[32m+[m[32mimport javax.swing.JOptionPane;[m
+ import javax.swing.JRadioButton;[m
+ import java.awt.FlowLayout;[m
+ import javax.swing.BoxLayout;[m
+[36m@@ -35,6 +36,10 @@[m [mimport java.awt.event.ActionEvent;[m
+ import net.miginfocom.swing.MigLayout;[m
+ import java.awt.Button;[m
+ import java.awt.Font;[m
+[32m+[m[32mimport javax.swing.JTextField;[m
+[32m+[m[32mimport javax.swing.JTextArea;[m
+[32m+[m[32mimport javax.swing.JEditorPane;[m
+[32m+[m[32mimport javax.swing.border.LineBorder;[m
+ [m
+ public class Home extends JFrame {[m
+ [m
+[36m@@ -54,6 +59,29 @@[m [mpublic class Home extends JFrame {[m
+ 	private JPanel panel_4;[m
+ 	private JButton btnNewButton_1;[m
+ 	private JButton btnNewButton_2;[m
+[32m+[m	[32mprivate JPanel panel;[m
+[32m+[m	[32mprivate JPanel panel_1;[m
+[32m+[m	[32mprivate JPanel panel_2;[m
+[32m+[m	[32mprivate JPanel panel_3;[m
+[32m+[m	[32mprivate JTextField patientID;[m
+[32m+[m	[32mprivate JButton searchPatientButton;[m
+[32m+[m	[32mprivate JLabel lblPatientId;[m
+[32m+[m	[32mprivate JButton addPatientButton;[m
+[32m+[m	[32mprivate JPanel panel_5;[m
+[32m+[m	[32mprivate JButton editPatientButton;[m
+[32m+[m	[32mprivate JButton deletePatientButton;[m
+[32m+[m	[32mprivate JTable table_1;[m
+[32m+[m	[32mprivate JPanel panel_6;[m
+[32m+[m	[32mprivate JButton btnCreateNewPlan;[m
+[32m+[m	[32mprivate JPanel panel_7;[m
+[32m+[m	[32mprivate JLabel healthCarePlan;[m
+[32m+[m	[32mprivate JTextField searchBox;[m
+[32m+[m	[32mprivate JButton searchPlan;[m
+[32m+[m	[32mprivate JTable table_2;[m
+[32m+[m	[32mprivate JPanel panel_8;[m
+[32m+[m	[32mprivate JButton removePlan;[m
+[32m+[m	[32mprivate JButton editPlan;[m
+[32m+[m	[32mprivate JButton btnViewPatientPlan;[m
+ [m
+ 	/**[m
+ 	 * Launch the application.[m
+[36m@@ -81,6 +109,7 @@[m [mpublic class Home extends JFrame {[m
+ 	 * Create the frame.[m
+ 	 */[m
+ 	public Home() {[m
+[32m+[m		[32msetTitle("Sheffield Dentistry Management Program");[m
+ 		setBackground(Color.WHITE);[m
+ 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);[m
+ 		setBounds(100, 100, 800, 500);[m
+[36m@@ -92,29 +121,41 @@[m [mpublic class Home extends JFrame {[m
+ 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);[m
+ 		contentPane.add(tabbedPane, BorderLayout.CENTER);[m
+ 		[m
+[32m+[m		[32m//UI for appointment[m
+ 		Appointment = new JPanel();[m
+[32m+[m[41m		[m
+ 		tabbedPane.addTab("Appointment\r\n", null, Appointment, null);[m
+[32m+[m[41m		[m
+[32m+[m		[32mButtonGroup partnerGroup = new ButtonGroup();[m
+ 		Appointment.setLayout(new BorderLayout(0, 0));[m
+ 		[m
+ 		appointmentTable = new JPanel();[m
+[31m-		Appointment.add(appointmentTable, BorderLayout.CENTER);[m
+[31m-		appointmentTable.setLayout(null);[m
+[32m+[m		[32mAppointment.add(appointmentTable);[m
+[32m+[m		[32mappointmentTable.setLayout(new BorderLayout(0, 0));[m
+ 		[m
+[31m-		btnNewButton = new JButton("Create new Appointment");[m
+[31m-		btnNewButton.setBounds(615, 0, 154, 50);[m
+[31m-		appointmentTable.add(btnNewButton);[m
+[32m+[m		[32mpanel_4 = new JPanel();[m
+[32m+[m		[32mappointmentTable.add(panel_4, BorderLayout.NORTH);[m
+[32m+[m		[32mpanel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));[m
+ 		[m
+[31m-		btnNewButton_1 = new JButton("Find Appointment");[m
+[31m-		btnNewButton_1.setBounds(615, 70, 154, 50);[m
+[31m-		appointmentTable.add(btnNewButton_1);[m
+[31m-		btnNewButton_1.se
