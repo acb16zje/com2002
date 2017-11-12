@@ -8,6 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -18,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
@@ -134,26 +138,7 @@ public class EditPatient extends JDialog {
 		gbc_label_3.gridy = 3;
 		panel.add(label_3, gbc_label_3);
 		
-		JSpinner day = new JSpinner();
-		int currentDay = Calendar.getInstance().get(Calendar.DATE);
-		day.setModel(new SpinnerNumberModel(currentDay,1,30,1));
-		GridBagConstraints gbc_day = new GridBagConstraints();
-		gbc_day.fill = GridBagConstraints.HORIZONTAL;
-		gbc_day.insets = new Insets(0, 0, 5, 5);
-		gbc_day.gridx = 2;
-		gbc_day.gridy = 3;
-		panel.add(day, gbc_day);
-		
-		JSpinner month = new JSpinner();
-		int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
-		month.setModel(new SpinnerNumberModel(currentMonth,1,30,1));
-		GridBagConstraints gbc_month = new GridBagConstraints();
-		gbc_month.fill = GridBagConstraints.HORIZONTAL;
-		gbc_month.insets = new Insets(0, 0, 5, 5);
-		gbc_month.gridx = 3;
-		gbc_month.gridy = 3;
-		panel.add(month, gbc_month);
-		
+		//reminder that month works as 0-11(JAN,FEB,...,DEC)
 		JSpinner year = new JSpinner();
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 		year.setModel(new SpinnerNumberModel(currentYear, 1920, currentYear, 1));
@@ -163,6 +148,48 @@ public class EditPatient extends JDialog {
 		gbc_year.gridx = 4;
 		gbc_year.gridy = 3;
 		panel.add(year, gbc_year);
+		
+		JSpinner month = new JSpinner();
+		int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+		month.setModel(new SpinnerNumberModel(currentMonth+1,1,12,1));
+		GridBagConstraints gbc_month = new GridBagConstraints();
+		gbc_month.fill = GridBagConstraints.HORIZONTAL;
+		gbc_month.insets = new Insets(0, 0, 5, 5);
+		gbc_month.gridx = 3;
+		gbc_month.gridy = 3;
+		panel.add(month, gbc_month);
+		
+		JSpinner day = new JSpinner();
+		Calendar daycal = new GregorianCalendar(currentYear, currentMonth, 1);
+		int daysInMonth = daycal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int currentDay = Calendar.getInstance().get(Calendar.DATE);
+		day.setModel(new SpinnerNumberModel(currentDay,1,daysInMonth,1));
+		GridBagConstraints gbc_day = new GridBagConstraints();
+		gbc_day.fill = GridBagConstraints.HORIZONTAL;
+		gbc_day.insets = new Insets(0, 0, 5, 5);
+		gbc_day.gridx = 2;
+		gbc_day.gridy = 3;
+		panel.add(day, gbc_day);
+		
+		//Listeners for dates
+		month.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int newMonth = (int) month.getValue();
+				Calendar cal = new GregorianCalendar(currentYear, newMonth-1, 1);
+				int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+				day.setModel(new SpinnerNumberModel(currentDay,1,daysInMonth,1));
+			}
+		});
+		year.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int newYear = (int) year.getValue();
+				Calendar cal = new GregorianCalendar(newYear, (int)month.getValue()-1, 1);
+				int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+				day.setModel(new SpinnerNumberModel(currentDay,1,daysInMonth,1));
+			}
+		});
 		
 		JLabel label_4 = new JLabel("Phone No:");
 		GridBagConstraints gbc_label_4 = new GridBagConstraints();
