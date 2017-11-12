@@ -1,10 +1,12 @@
-package COM2002;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -23,7 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Window.Type;
 
-public class Welcome extends JDialog {
+public class Welcome extends JFrame {
 
 	private JPanel contentPane;
 
@@ -65,11 +67,11 @@ public class Welcome extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Sheffield Dentistry Manangement Program");
-		lblNewLabel.setBounds(5, 76, 574, 25);
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		contentPane.add(lblNewLabel);
+		JLabel lblLogo = new JLabel("Sheffield Dentistry Manangement Program");
+		lblLogo.setBounds(5, 76, 574, 25);
+		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		contentPane.add(lblLogo);
 		
 		JButton SecretaryLogin = new JButton("Secretary");
 		SecretaryLogin.setBounds(65, 146, 110, 63);
@@ -102,5 +104,5 @@ public class Welcome extends JDialog {
 		});
 		contentPane.add(DentistLogin);
 	}
-
+	
 }
