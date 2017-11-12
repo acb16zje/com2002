@@ -13,13 +13,17 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
-public class EditPatient extends JFrame {
+public class EditPatient extends JDialog {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -30,6 +34,7 @@ public class EditPatient extends JFrame {
 	private JTextField textField_5;
 	private JTextField textField_6;
 	private JTextField textField_7;
+	private enum Title {MR,MRS,MS};
 
 	/**
 	 * Launch the application.
@@ -39,6 +44,7 @@ public class EditPatient extends JFrame {
 			public void run() {
 				try {
 					EditPatient frame = new EditPatient();
+					frame.setModal(true);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,7 +58,7 @@ public class EditPatient extends JFrame {
 	 */
 	public EditPatient() {
 		setTitle("Patient Editor");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -78,7 +84,7 @@ public class EditPatient extends JFrame {
 		gbc_label.gridy = 0;
 		panel.add(label, gbc_label);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox comboBox = new JComboBox(Title.values());
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
@@ -128,29 +134,35 @@ public class EditPatient extends JFrame {
 		gbc_label_3.gridy = 3;
 		panel.add(label_3, gbc_label_3);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
-		gbc_comboBox_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox_1.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox_1.gridx = 2;
-		gbc_comboBox_1.gridy = 3;
-		panel.add(comboBox_1, gbc_comboBox_1);
+		JSpinner day = new JSpinner();
+		int currentDay = Calendar.getInstance().get(Calendar.DATE);
+		day.setModel(new SpinnerNumberModel(currentDay,1,30,1));
+		GridBagConstraints gbc_day = new GridBagConstraints();
+		gbc_day.fill = GridBagConstraints.HORIZONTAL;
+		gbc_day.insets = new Insets(0, 0, 5, 5);
+		gbc_day.gridx = 2;
+		gbc_day.gridy = 3;
+		panel.add(day, gbc_day);
 		
-		JComboBox comboBox_2 = new JComboBox();
-		GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
-		gbc_comboBox_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox_2.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox_2.gridx = 3;
-		gbc_comboBox_2.gridy = 3;
-		panel.add(comboBox_2, gbc_comboBox_2);
+		JSpinner month = new JSpinner();
+		int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+		month.setModel(new SpinnerNumberModel(currentMonth,1,30,1));
+		GridBagConstraints gbc_month = new GridBagConstraints();
+		gbc_month.fill = GridBagConstraints.HORIZONTAL;
+		gbc_month.insets = new Insets(0, 0, 5, 5);
+		gbc_month.gridx = 3;
+		gbc_month.gridy = 3;
+		panel.add(month, gbc_month);
 		
-		JComboBox comboBox_3 = new JComboBox();
-		GridBagConstraints gbc_comboBox_3 = new GridBagConstraints();
-		gbc_comboBox_3.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox_3.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox_3.gridx = 4;
-		gbc_comboBox_3.gridy = 3;
-		panel.add(comboBox_3, gbc_comboBox_3);
+		JSpinner year = new JSpinner();
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		year.setModel(new SpinnerNumberModel(currentYear, 1920, currentYear, 1));
+		GridBagConstraints gbc_year = new GridBagConstraints();
+		gbc_year.fill = GridBagConstraints.HORIZONTAL;
+		gbc_year.insets = new Insets(0, 0, 5, 5);
+		gbc_year.gridx = 4;
+		gbc_year.gridy = 3;
+		panel.add(year, gbc_year);
 		
 		JLabel label_4 = new JLabel("Phone No:");
 		GridBagConstraints gbc_label_4 = new GridBagConstraints();

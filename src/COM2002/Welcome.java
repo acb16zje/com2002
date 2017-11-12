@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JLabel;
@@ -15,11 +17,13 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Window.Type;
 
-public class Welcome extends JFrame {
+public class Welcome extends JDialog {
 
 	private JPanel contentPane;
 
@@ -75,6 +79,14 @@ public class Welcome extends JFrame {
 				dispose();
 				Home homeFrame = new Home();
 				homeFrame.setVisible(true);
+				homeFrame.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						homeFrame.dispose();
+						Welcome welcome = new Welcome();
+						welcome.setVisible(true);
+					}
+				});
 			}
 		});
 		

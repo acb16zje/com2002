@@ -25,6 +25,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints; 
 import java.awt.Insets;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.GridLayout;
 import javax.swing.JSplitPane;
@@ -32,6 +33,9 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.event.ActionEvent;
 import net.miginfocom.swing.MigLayout;
 import java.awt.Button;
@@ -42,7 +46,8 @@ import javax.swing.JEditorPane;
 import javax.swing.border.LineBorder;
 
 public class Home extends JFrame {
-
+	
+	JFrame frame;
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
 	private JPanel Appointment;
@@ -103,6 +108,8 @@ public class Home extends JFrame {
 				}
 			}
 		});
+		
+		
 	}
 
 	/**
@@ -111,7 +118,7 @@ public class Home extends JFrame {
 	public Home() {
 		setTitle("Sheffield Dentistry Management Program");
 		setBackground(Color.WHITE);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -221,9 +228,8 @@ public class Home extends JFrame {
 		addPatientButton = new JButton("Add Patient");
 		addPatientButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EditPatient patientFrame = new EditPatient();
-				patientFrame.setVisible(true);
-				}
+				EditPatient.main(null);
+			}
 		});
 		panel_3.add(addPatientButton);
 		
@@ -239,9 +245,8 @@ public class Home extends JFrame {
 		editPatientButton = new JButton("Edit");
 		editPatientButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EditPatient patientFrame = new EditPatient();
-				patientFrame.setVisible(true);
-				}
+				EditPatient.main(null);
+			}
 		});
 		panel_5.add(editPatientButton);
 		
@@ -282,6 +287,11 @@ public class Home extends JFrame {
 		panel_6.setLayout(new BoxLayout(panel_6, BoxLayout.Y_AXIS));
 		
 		btnCreateNewPlan = new JButton("Create New Plan");
+		btnCreateNewPlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				HealthcarePlanEditor.main(null);
+				}
+		});
 		panel_6.add(btnCreateNewPlan);
 		
 		panel_7 = new JPanel();
@@ -317,6 +327,11 @@ public class Home extends JFrame {
 		});
 		
 		editPlan = new JButton("Edit Healthcare Plan");
+		editPlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				HealthcarePlanEditor.main(null);
+				}
+		});
 		panel_8.add(editPlan);
 		panel_8.add(removePlan);
 	}
