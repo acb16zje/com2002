@@ -51,6 +51,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelListener;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class Home extends JFrame {
 	
@@ -172,18 +173,24 @@ public class Home extends JFrame {
 		tableControlPanel.add(year);	
 		
 		appointmentTable = new JTable();
-		Appointment.add(new JScrollPane(appointmentTable), BorderLayout.CENTER);
+		JScrollPane scrollPane_1 = new JScrollPane(appointmentTable);
+		Appointment.add(scrollPane_1, BorderLayout.CENTER);
 		
+		String[][] appointmentList = new String[25][5];
+		int row = 0;
+		for (int i=9;i<=16;i++) {
+			for (int j=0;j<=4;j += 2) {
+				String[] tempArray = {(String)(Integer.toString(i)+":"+Integer.toString(j)+"0"),null, null, null, null,null};
+				appointmentList[row] = tempArray; 
+				row++;
+			}
+		}
+		String[] lastArray = {(String)"17:00",null, null, null, null,null};
+		appointmentList[24] = lastArray;
 		appointmentTable.setModel(new DefaultTableModel(
-				new Object[][] {
-			{null, null, null, null, null},
-			{null, null, null, null, null},
-			{null, null, null, null, null},
-			{null, null, null, null, null},
-			{null, null, null, null, null},
-		},
+				appointmentList,
 		new String[] {
-			"Time", "New column", "New column", "New column", "New column"
+			"Time", "Monday","Tuesday","Wednesday","Thursday","Friday"
 		}) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -191,11 +198,10 @@ public class Home extends JFrame {
 			}}
 		);
 		appointmentPanel = new JPanel();
-		Appointment.add(appointmentPanel, BorderLayout.EAST);
-		appointmentPanel.setLayout(new BoxLayout(appointmentPanel, BoxLayout.Y_AXIS));
+		Appointment.add(appointmentPanel, BorderLayout.SOUTH);
+		appointmentPanel.setLayout(new BoxLayout(appointmentPanel, BoxLayout.X_AXIS));
 		
 		newAppointmentButton = new JButton("Create new Appointment");
-		newAppointmentButton.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		appointmentPanel.add(newAppointmentButton);
 		
 		findAppointmentButton = new JButton("Find Appointment");
@@ -258,6 +264,11 @@ public class Home extends JFrame {
 		fl_patientEditPanel.setAlignOnBaseline(true);
 		
 		viewPatientPlanButton = new JButton("View Healthcare Plan");
+		viewPatientPlanButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				subscriptionPlan.main(null);
+			}
+		});
 		patientEditPanel.add(viewPatientPlanButton);
 		
 		editPatientButton = new JButton("Edit");
@@ -301,34 +312,15 @@ public class Home extends JFrame {
 				{null, null, null, null, null, null},
 			},
 			new String[] {
-				"Patient ID", "Name", "Date Of Birth", "Phone No", "Adress", "Healthcare Plan"
+				"Patient ID", "Name", "Date Of Birth", "Phone No", "Address", "Healthcare Plan"
 			}
-		)
-		{
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-		}
-		});
+		));
 		patientTable.setFillsViewportHeight(true);
 		
 		//UI for healthcare plan tab
 		healthcarePlan = new JPanel();
 		tabbedPane.addTab("Healthcare Plan", null, healthcarePlan, null);
 		healthcarePlan.setLayout(new BorderLayout(0, 0));
-		
-		planPanel = new JPanel();
-		healthcarePlan.add(planPanel, BorderLayout.EAST);
-		planPanel.setLayout(new BoxLayout(planPanel, BoxLayout.Y_AXIS));
-		
-		btnCreateNewPlan = new JButton("Create New Plan");
-		btnCreateNewPlan.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				HealthcarePlanEditor.main(null);
-				}
-		});
-		planPanel.add(btnCreateNewPlan);
-		
 		searchPlanPanel = new JPanel();
 		healthcarePlan.add(searchPlanPanel, BorderLayout.NORTH);
 		
@@ -344,6 +336,19 @@ public class Home extends JFrame {
 		
 		planTable = new JTable();
 		healthcarePlan.add(planTable, BorderLayout.CENTER);
+		/**
+		
+		planPanel = new JPanel();
+		healthcarePlan.add(planPanel, BorderLayout.EAST);
+		planPanel.setLayout(new BoxLayout(planPanel, BoxLayout.Y_AXIS));
+		
+		btnCreateNewPlan = new JButton("Create New Plan");
+		btnCreateNewPlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				HealthcarePlanEditors.main(null);
+			}
+		});
+		planPanel.add(btnCreateNewPlan);
 		
 		planEditPanel = new JPanel();
 		FlowLayout fl_planEditPanel = (FlowLayout) planEditPanel.getLayout();
@@ -369,5 +374,6 @@ public class Home extends JFrame {
 		});
 		planEditPanel.add(editPlan);
 		planEditPanel.add(removePlan);
+		**/
 	}
 }
