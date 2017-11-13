@@ -176,22 +176,23 @@ public class Home extends JFrame {
 		JScrollPane scrollPane_1 = new JScrollPane(appointmentTable);
 		Appointment.add(scrollPane_1, BorderLayout.CENTER);
 		
-		String[][] appointmentList = new String[25][5];
+		String[][] appointmentList = new String[24][6];
 		int row = 0;
 		for (int i=9;i<=16;i++) {
 			for (int j=0;j<=4;j += 2) {
-				String[] tempArray = {(String)(Integer.toString(i)+":"+Integer.toString(j)+"0"),null, null, null, null,null};
-				appointmentList[row] = tempArray; 
-				row++;
+				if (j == 4) {
+					String[] tempArray = {(String)(Integer.toString(i)+":"+Integer.toString(j)+"0 - "+Integer.toString(i+1)+":00"),null, null, null, null,null};
+					appointmentList[row] = tempArray; 
+					row++;
+				}
+				else {
+					String[] tempArray = {(String)(Integer.toString(i)+":"+Integer.toString(j)+"0 - "+Integer.toString(i+1)+":"+Integer.toString(j+2)+"0"),null, null, null, null,null};
+					appointmentList[row] = tempArray; 
+					row++;
+				}
 			}
 		}
-		String[] lastArray = {(String)"17:00",null, null, null, null,null};
-		appointmentList[24] = lastArray;
-		appointmentTable.setModel(new DefaultTableModel(
-				appointmentList,
-		new String[] {
-			"Time", "Monday","Tuesday","Wednesday","Thursday","Friday"
-		}) {
+		appointmentTable.setModel(new DefaultTableModel(appointmentList,new String[] {"Time", "Monday","Tuesday","Wednesday","Thursday","Friday"}) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
