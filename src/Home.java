@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-<<<<<<< HEAD
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,12 +15,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-=======
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
->>>>>>> 2dd47166e52fad903c6a5c4979da9d6261eb9162
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -42,7 +36,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 public class Home extends JFrame {
-<<<<<<< HEAD
 	
 	JFrame frame;
 	private JPanel contentPane;
