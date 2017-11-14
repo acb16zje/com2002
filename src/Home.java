@@ -166,7 +166,6 @@ public class Home extends JFrame {
 				String selectedWeek = ((String)week.getSelectedItem()).substring(0, 10);
 		    	try {
 					monDate = timeFormat.parse(selectedWeek);
-					System.out.println(monDate);
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
