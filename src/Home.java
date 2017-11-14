@@ -36,7 +36,7 @@ public class Home extends JFrame {
     private JPanel Appointment;
     private JPanel Patient;
     private JPanel healthcarePlan;
-    private JButton newAppointmentButton;
+    private JButton createAppointmentButton;
     private JRadioButton Dentist;
     private JRadioButton Hygienist;
     private JTable appointmentTable;
@@ -65,9 +65,6 @@ public class Home extends JFrame {
      * Create the frame.
      */
     public Home() {
-        setTitle("Sheffield Dentistry Management Program");
-        setBackground(Color.WHITE);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 936, 622);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -150,10 +147,10 @@ public class Home extends JFrame {
         );
         appointmentPanel = new JPanel();
         Appointment.add(appointmentPanel, BorderLayout.SOUTH);
-        appointmentPanel.setLayout(new BoxLayout(appointmentPanel, BoxLayout.X_AXIS));
+        appointmentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-        newAppointmentButton = new JButton("Create new Appointment");
-        appointmentPanel.add(newAppointmentButton);
+        createAppointmentButton = new JButton("Create Appointment");
+        appointmentPanel.add(createAppointmentButton);
 
         findAppointmentButton = new JButton("Find Appointment");
         appointmentPanel.add(findAppointmentButton);
@@ -326,6 +323,11 @@ public class Home extends JFrame {
          planEditPanel.add(editPlan);
          planEditPanel.add(removePlan);
          **/
+        
+        setTitle("Sheffield Dentistry Management Program");
+        setBackground(Color.WHITE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
     }
 
     /**

@@ -179,6 +179,8 @@ public class HealthcarePlanEditor extends JDialog {
             }
         });
         selectPanel.add(cancelButton);
+        
+        setLocationRelativeTo(null);
     }
 
     /**

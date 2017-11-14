@@ -300,9 +300,9 @@ public class EditPatient extends JDialog {
             }
         });
         confirmPanel.add(cancelButton);
+        
+        setLocationRelativeTo(null);
     }
-
-    ;
 
     /**
      * Launch the application.
