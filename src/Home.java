@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -6,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+<<<<<<< HEAD
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,6 +16,12 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+=======
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+>>>>>>> 2dd47166e52fad903c6a5c4979da9d6261eb9162
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -36,6 +42,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 public class Home extends JFrame {
+<<<<<<< HEAD
 	
 	JFrame frame;
 	private JPanel contentPane;
@@ -151,9 +158,6 @@ public class Home extends JFrame {
 		JSpinner month = new JSpinner();
 		month.setModel(new SpinnerNumberModel(currentMonth+1,1,12,1));
 		
-		JSpinner day = new JSpinner();
-		day.setModel(new SpinnerNumberModel(currentDay,1,daysInMonth,1));
-		
 		JComboBox week = WeekGenerator.weekSpinner(currentCalendar);
 		
 		tableControlPanel.add(week);
@@ -165,7 +169,6 @@ public class Home extends JFrame {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				currentCalendar.set(Calendar.MONTH, (int)month.getValue()-1);
-				System.out.println(currentCalendar.getTime());
 				week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
 				String selectedWeek = ((String)week.getSelectedItem()).substring(0, 10);
 		    	try {
@@ -184,6 +187,7 @@ public class Home extends JFrame {
 				);
 			}
 		});
+
 		year.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -227,6 +231,7 @@ public class Home extends JFrame {
 				);
 		    }
 		});
+
 		appointmentTable = new JTable();
 		JScrollPane appointmentScrollPane = new JScrollPane(appointmentTable);
 		Appointment.add(appointmentScrollPane, BorderLayout.CENTER);
@@ -309,7 +314,7 @@ public class Home extends JFrame {
 				int a=JOptionPane.showConfirmDialog(deletePatientButton,"Are you sure?");  
 				if(a==JOptionPane.YES_OPTION){ 
 					//insert delete patient sql stuff here
-				 }  
+				}  
 			}
 		});
 		patientEditPanel.add(deletePatientButton);

@@ -1,52 +1,49 @@
 import java.awt.Toolkit;
-
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
-public class MoneyFlt extends DocumentFilter{
+public class MoneyFlt extends DocumentFilter {
 
     @Override
     public void insertString(DocumentFilter.FilterBypass fp
-            , int offset, String string, AttributeSet aset)
-                                throws BadLocationException
-    {
+        , int offset, String string, AttributeSet aset)
+        throws BadLocationException {
         int len = string.length();
         boolean isValidInteger = true;
 
-        for (int i = 0; i < len; i++)
-        {
-            if (!Character.isDigit(string.charAt(i)) && (string.charAt(i) != '.'))
-            {
+        for (int i = 0; i < len; i++) {
+            if (!Character.isDigit(string.charAt(i)) && (string.charAt(i) != '.')) {
                 isValidInteger = false;
                 break;
             }
         }
-        if (isValidInteger)
+
+        if (isValidInteger) {
             super.insertString(fp, offset, string, aset);
-        else
+        } else {
             Toolkit.getDefaultToolkit().beep();
+        }
     }
 
     @Override
     public void replace(DocumentFilter.FilterBypass fp, int offset
-                    , int length, String string, AttributeSet aset)
-                                        throws BadLocationException
-    {
+        , int length, String string, AttributeSet aset)
+        throws BadLocationException {
         int len = string.length();
         boolean isValidInteger = true;
 
-        for (int i = 0; i < len; i++)
-        {
-            if (!Character.isDigit(string.charAt(i)) && (string.charAt(i) != '.'))
-            {
+        for (int i = 0; i < len; i++) {
+            if (!Character.isDigit(string.charAt(i)) && (string.charAt(i) != '.')) {
                 isValidInteger = false;
                 break;
             }
         }
-        if (isValidInteger)
+
+        if (isValidInteger) {
             super.replace(fp, offset, length, string, aset);
-        else
+        } else {
             Toolkit.getDefaultToolkit().beep();
+        }
     }
 }

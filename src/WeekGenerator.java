@@ -25,7 +25,6 @@ public class WeekGenerator{
 		int currentMonth = c.get(Calendar.MONTH);
 		int currentYear = c.get(Calendar.YEAR);
 		Calendar tempCal = new GregorianCalendar(currentYear,currentMonth,1);
-		System.out.println(tempCal.get(Calendar.MONTH));
 		int arrayLen =0;
 		while (tempCal.get(Calendar.MONTH) == currentMonth) {
 			int tempDay = tempCal.get(Calendar.DAY_OF_WEEK);
@@ -39,8 +38,6 @@ public class WeekGenerator{
 		tempCal.set(Calendar.DAY_OF_MONTH, 1);
 		String [] weekList = new String[arrayLen];
 		int weekSaved = 0;
-		System.out.println(c.get(Calendar.MONTH));
-		System.out.println(currentMonth);
 		while (tempCal.get(Calendar.MONTH) == currentMonth) {
 			int tempDay = tempCal.get(Calendar.DAY_OF_WEEK);
 			if (tempDay == Calendar.MONDAY) {
@@ -48,7 +45,6 @@ public class WeekGenerator{
 				tempCal.set(Calendar.DAY_OF_WEEK,6);
 				String tempFri = timeFormat.format(tempCal.getTime());
 				weekList[weekSaved] = tempMon+" - "+tempFri;
-				System.out.println(weekList[weekSaved]);
 				if (currentWeek == tempCal.get(Calendar.WEEK_OF_YEAR)) {
 					selectedWeek = weekSaved;
 				}
