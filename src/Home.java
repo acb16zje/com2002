@@ -1,57 +1,39 @@
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.Color;
-import javax.swing.JLayeredPane;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import java.awt.Component;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JTabbedPane;
-import javax.swing.JButton;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints; 
-import java.awt.Insets;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import java.awt.GridLayout;
-import javax.swing.JSplitPane;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.awt.event.ActionEvent;
-import java.awt.Button;
-import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.JTextArea;
-import javax.swing.JEditorPane;
-import javax.swing.border.LineBorder;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.TableModelListener;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableModel;
 
 public class Home extends JFrame {
 	
@@ -94,7 +76,7 @@ public class Home extends JFrame {
 	private JButton editPlan;
 	private JButton viewPatientPlanButton;
 	private JScrollPane scrollPane;
-
+	Date monDate;
 	/**
 	 * Launch the application.
 	 */
@@ -140,11 +122,6 @@ public class Home extends JFrame {
 		
 		ButtonGroup partnerGroup = new ButtonGroup();
 		Appointment.setLayout(new BorderLayout(0, 0));
-		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
-		Calendar daycal = new GregorianCalendar(currentYear, currentMonth, 1);
-		int daysInMonth = daycal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		int currentDay = Calendar.getInstance().get(Calendar.DATE);
 		
 		tableControlPanel = new JPanel();
 		Appointment.add(tableControlPanel, BorderLayout.NORTH);
@@ -160,39 +137,103 @@ public class Home extends JFrame {
 		Hygienist.setSelected(true);
 		
 		//reminder that month works as 0-11(JAN,FEB,...,DEC)
+		SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
+		Calendar currentCalendar = Calendar.getInstance();
+		int currentYear =currentCalendar.get(Calendar.YEAR);
+		int currentMonth = currentCalendar.get(Calendar.MONTH);
+		int currentWeek = currentCalendar.get(Calendar.WEEK_OF_YEAR);
+		int daysInMonth = currentCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int currentDay = currentCalendar.get(Calendar.DATE);
+		
 		JSpinner year = new JSpinner();
-		year.setModel(new SpinnerNumberModel(currentYear, 1920, currentYear, 1));
+		year.setModel(new SpinnerNumberModel(currentYear, currentYear-20, currentYear+1, 1));
 		
 		JSpinner month = new JSpinner();
 		month.setModel(new SpinnerNumberModel(currentMonth+1,1,12,1));
 		
 		JSpinner day = new JSpinner();
 		day.setModel(new SpinnerNumberModel(currentDay,1,daysInMonth,1));
-		tableControlPanel.add(day);
+		
+		JComboBox week = WeekGenerator.weekSpinner(currentCalendar);
+		
+		tableControlPanel.add(week);
 		tableControlPanel.add(month);
 		tableControlPanel.add(year);	
 		
-		appointmentTable = new JTable();
-		JScrollPane scrollPane_1 = new JScrollPane(appointmentTable);
-		Appointment.add(scrollPane_1, BorderLayout.CENTER);
-		
-		String[][] appointmentList = new String[24][6];
-		int row = 0;
-		for (int i=9;i<=16;i++) {
-			for (int j=0;j<=4;j += 2) {
-				if (j == 4) {
-					String[] tempArray = {(String)(Integer.toString(i)+":"+Integer.toString(j)+"0 - "+Integer.toString(i+1)+":00"),null, null, null, null,null};
-					appointmentList[row] = tempArray; 
-					row++;
+		//Listeners for dates
+		month.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				currentCalendar.set(Calendar.MONTH, (int)month.getValue()-1);
+				System.out.println(currentCalendar.getTime());
+				week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
+				String selectedWeek = ((String)week.getSelectedItem()).substring(0, 10);
+		    	try {
+					monDate = timeFormat.parse(selectedWeek);
+					System.out.println(monDate);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
 				}
-				else {
-					String[] tempArray = {(String)(Integer.toString(i)+":"+Integer.toString(j)+"0 - "+Integer.toString(i+1)+":"+Integer.toString(j+2)+"0"),null, null, null, null,null};
-					appointmentList[row] = tempArray; 
-					row++;
-				}
+		    	Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+		    	appointmentTable.setModel(new DefaultTableModel(WeekGenerator.appointmentList(),new String[] {"Time",
+						"Monday "+timeFormat.format(daysInWeekList[0]),"Tuesday "+timeFormat.format(daysInWeekList[1]),"Wednesday "+timeFormat.format(daysInWeekList[2]),"Thursday "+timeFormat.format(daysInWeekList[3]),"Friday "+timeFormat.format(daysInWeekList[4])}) {
+					@Override
+					public boolean isCellEditable(int row, int column) {
+						return false;
+					}}
+				);
 			}
-		}
-		appointmentTable.setModel(new DefaultTableModel(appointmentList,new String[] {"Time", "Monday","Tuesday","Wednesday","Thursday","Friday"}) {
+		});
+		year.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				currentCalendar.set(Calendar.YEAR, (int)year.getValue());
+				System.out.println(currentCalendar.getTime());
+				week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
+				String selectedWeek = ((String)week.getSelectedItem()).substring(0, 10);
+		    	try {
+					monDate = timeFormat.parse(selectedWeek);
+					System.out.println(monDate);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+		    	Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+		    	appointmentTable.setModel(new DefaultTableModel(WeekGenerator.appointmentList(),new String[] {"Time",
+						"Monday "+timeFormat.format(daysInWeekList[0]),"Tuesday "+timeFormat.format(daysInWeekList[1]),"Wednesday "+timeFormat.format(daysInWeekList[2]),"Thursday "+timeFormat.format(daysInWeekList[3]),"Friday "+timeFormat.format(daysInWeekList[4])}) {
+					@Override
+					public boolean isCellEditable(int row, int column) {
+						return false;
+					}}
+				);
+			}
+		});
+		
+		week.addActionListener(new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	String selectedWeek = ((String)week.getSelectedItem()).substring(0, 10);
+		    	try {
+					monDate = timeFormat.parse(selectedWeek);
+					System.out.println(monDate);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+		    	Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+		    	appointmentTable.setModel(new DefaultTableModel(WeekGenerator.appointmentList(),new String[] {"Time",
+						"Monday "+timeFormat.format(daysInWeekList[0]),"Tuesday "+timeFormat.format(daysInWeekList[1]),"Wednesday "+timeFormat.format(daysInWeekList[2]),"Thursday "+timeFormat.format(daysInWeekList[3]),"Friday "+timeFormat.format(daysInWeekList[4])}) {
+					@Override
+					public boolean isCellEditable(int row, int column) {
+						return false;
+					}}
+				);
+		    }
+		});
+		appointmentTable = new JTable();
+		JScrollPane appointmentScrollPane = new JScrollPane(appointmentTable);
+		Appointment.add(appointmentScrollPane, BorderLayout.CENTER);
+		
+		Date[] daysInWeekList = WeekGenerator.daysInWeekList(currentCalendar.getTime());
+		appointmentTable.setModel(new DefaultTableModel(WeekGenerator.appointmentList(),new String[] {"Time",
+				"Monday "+timeFormat.format(daysInWeekList[0]),"Tuesday "+timeFormat.format(daysInWeekList[1]),"Wednesday "+timeFormat.format(daysInWeekList[2]),"Thursday "+timeFormat.format(daysInWeekList[3]),"Friday "+timeFormat.format(daysInWeekList[4])}) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -220,25 +261,7 @@ public class Home extends JFrame {
 			}
 		});
 		
-		//Listeners for dates
-		month.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				int newMonth = (int) month.getValue();
-				Calendar cal = new GregorianCalendar(currentYear, newMonth-1, 1);
-				int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-				day.setModel(new SpinnerNumberModel(currentDay,1,daysInMonth,1));
-			}
-		});
-		year.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				int newYear = (int) year.getValue();
-				Calendar cal = new GregorianCalendar(newYear, (int)month.getValue()-1, 1);
-				int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-				day.setModel(new SpinnerNumberModel(currentDay,1,daysInMonth,1));
-			}
-		});
+		
 		
 		//UI for patient
 		Patient = new JPanel();
