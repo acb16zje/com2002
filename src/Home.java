@@ -77,6 +77,7 @@ public class Home extends JFrame {
 	private JButton viewPatientPlanButton;
 	private JScrollPane scrollPane;
 	Date monDate;
+	private JButton ViewAppointmentButton;
 	/**
 	 * Launch the application.
 	 */
@@ -225,6 +226,7 @@ public class Home extends JFrame {
 		});
 
 		appointmentTable = new JTable();
+		appointmentTable.setFillsViewportHeight(true);
 		JScrollPane appointmentScrollPane = new JScrollPane(appointmentTable);
 		Appointment.add(appointmentScrollPane, BorderLayout.CENTER);
 		
@@ -241,6 +243,11 @@ public class Home extends JFrame {
 		appointmentPanel.setLayout(new BoxLayout(appointmentPanel, BoxLayout.X_AXIS));
 		
 		newAppointmentButton = new JButton("Create new Appointment");
+		newAppointmentButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AppointmentEditor.main(null);
+			}
+		});
 		appointmentPanel.add(newAppointmentButton);
 		
 		findAppointmentButton = new JButton("Find Appointment");
@@ -248,15 +255,29 @@ public class Home extends JFrame {
 		findAppointmentButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		findAppointmentButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				AppointmentSearch.main(null);
 			}
 		});
 		
 		deleteAppointmentButton = new JButton("Delete Appointment");
-		appointmentPanel.add(deleteAppointmentButton);
 		deleteAppointmentButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int a=JOptionPane.showConfirmDialog(null,"Are you sure?");  
+				if(a==JOptionPane.YES_OPTION){ 
+					//insert delete plan sql stuff here
+				 }  
 			}
 		});
+		appointmentPanel.add(deleteAppointmentButton);
+		
+		ViewAppointmentButton = new JButton("View/Edit Appointment");
+		ViewAppointmentButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AppointmentEditor.main(null);
+			}
+		});
+		appointmentPanel.add(ViewAppointmentButton);
+		
 		
 		
 		
@@ -334,8 +355,12 @@ public class Home extends JFrame {
 			},
 			new String[] {
 				"Patient ID", "Name", "Date Of Birth", "Phone No", "Address", "Healthcare Plan"
-			}
-		));
+			} 
+		){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}});
 		patientTable.setFillsViewportHeight(true);
 		
 		//UI for healthcare plan tab
@@ -356,6 +381,7 @@ public class Home extends JFrame {
 		searchPlanPanel.add(searchPlan);
 		
 		planTable = new JTable();
+		planTable.setFillsViewportHeight(true);
 		healthcarePlan.add(planTable, BorderLayout.CENTER);
 		/**
 		
