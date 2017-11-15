@@ -69,6 +69,7 @@ public class AppointmentSearch extends JDialog {
         cancelButton.setActionCommand("Cancel");
         buttonPane.add(cancelButton);
 
+        setTitle("Search Appointment");
         setBounds(100, 100, 450, 300);
         setLocationRelativeTo(null);
     }

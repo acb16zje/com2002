@@ -20,7 +20,7 @@ public class WeekGenerator {
         return tempSpinner;
     }
 
-    // returns the weeks in a month
+    //returns the weeks in a month
     public static String[] weekList(Calendar c) {
         int currentMonth = c.get(Calendar.MONTH);
         int currentYear = c.get(Calendar.YEAR);
@@ -33,7 +33,6 @@ public class WeekGenerator {
             }
             tempCal.add(Calendar.DAY_OF_YEAR, 1);
         }
-
         tempCal.set(Calendar.YEAR, currentYear);
         tempCal.set(Calendar.MONTH, currentMonth);
         tempCal.set(Calendar.DAY_OF_MONTH, 1);
@@ -43,17 +42,14 @@ public class WeekGenerator {
             int tempDay = tempCal.get(Calendar.DAY_OF_WEEK);
             if (tempDay == Calendar.MONDAY) {
                 String tempMon = timeFormat.format(tempCal.getTime());
-                String tempFri = timeFormat.format(tempCal.getTime());
                 tempCal.set(Calendar.DAY_OF_WEEK, 6);
+                String tempFri = timeFormat.format(tempCal.getTime());
                 weekList[weekSaved] = tempMon + " - " + tempFri;
-
                 if (currentWeek == tempCal.get(Calendar.WEEK_OF_YEAR)) {
                     selectedWeek = weekSaved;
                 }
-
                 weekSaved++;
             }
-
             tempCal.add(Calendar.DAY_OF_YEAR, 1);
         }
         return weekList;

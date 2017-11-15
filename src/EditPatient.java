@@ -226,7 +226,7 @@ public class EditPatient extends JDialog {
         });
         confirmPanel.add(cancelButton);
 
-        setTitle("Patient Editor");
+        setTitle("Edit Patient");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 451, 609);
         setLocationRelativeTo(null);
