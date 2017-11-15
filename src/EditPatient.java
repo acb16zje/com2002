@@ -9,9 +9,6 @@ import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -34,15 +31,11 @@ public class EditPatient extends JDialog {
     private JTextField district;
     private JTextField city;
     private JTextField postcode;
-    private enum title {MR, MRS, MS, MISS}
-    
+
     /**
      * Create the frame.
      */
     public EditPatient() {
-        setTitle("Patient Editor");
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 451, 609);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
@@ -83,14 +76,14 @@ public class EditPatient extends JDialog {
         JLabel dobLabel = new JLabel("Date Of Birth:");
         dobLabel.setBounds(30, 170, 97, 15);
         panel.add(dobLabel);
-           
+
         JComboBox comboDay = new JComboBox();
         comboDay.setBounds(154, 165, 50, 24);
         panel.add(comboDay);
         for (int i = 1; i <= 31; i++) {
-        	comboDay.addItem(i);
+            comboDay.addItem(i);
         }
-        
+
         JComboBox comboMonth = new JComboBox();
         comboMonth.setBounds(216, 165, 105, 24);
         panel.add(comboMonth);
@@ -98,13 +91,13 @@ public class EditPatient extends JDialog {
         for (int i = 0; i < 12; i++) {
             comboMonth.addItem(months[i]);
         }
-        
+
         JComboBox comboYear = new JComboBox();
         comboYear.setBounds(333, 165, 76, 24);
         panel.add(comboYear);
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR); 
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for (int i = 1930; i <= currentYear; i++) {
-        	comboYear.addItem(i);
+            comboYear.addItem(i);
         }
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
@@ -189,21 +182,21 @@ public class EditPatient extends JDialog {
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	boolean completed = true;
-            	
-            	// Check if birth date is valid
-            	String inputDay = comboDay.getSelectedItem().toString();
-            	String inputMonth = String.valueOf(comboMonth.getSelectedIndex() + 1);
-            	String inputYear = comboYear.getSelectedItem().toString();
-            	String inputDate = inputDay + "-" + inputMonth + "-" + inputYear;
-            	
-            	if (isValidDate(inputDate)) {
-            		JOptionPane.showMessageDialog(null, inputDate);
-            	} else {
-            		JOptionPane.showMessageDialog(null, "Please enter a valid date");
-            	}
-            	
-            	// Check if all field are filled in
+                boolean completed = true;
+
+                // Check if birth date is valid
+                String inputDay = comboDay.getSelectedItem().toString();
+                String inputMonth = String.valueOf(comboMonth.getSelectedIndex() + 1);
+                String inputYear = comboYear.getSelectedItem().toString();
+                String inputDate = inputDay + "-" + inputMonth + "-" + inputYear;
+
+                if (isValidDate(inputDate)) {
+                    JOptionPane.showMessageDialog(null, inputDate);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid date");
+                }
+
+                // Check if all field are filled in
                 Component[] components = panel.getComponents();
                 for (Component comp : components) {
                     // Cast comp to JComboBox / JTextField to get the values
@@ -217,7 +210,7 @@ public class EditPatient extends JDialog {
                         }
                     }
                 }
-                
+
                 if (completed) {
                     dispose();
                 }
@@ -232,26 +225,13 @@ public class EditPatient extends JDialog {
             }
         });
         confirmPanel.add(cancelButton);
-        
+
+        setTitle("Patient Editor");
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 451, 609);
         setLocationRelativeTo(null);
     }
 
-    public boolean isValidDate(String date) {
-        //set the format to use as a constructor argument
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false);
-        
-        try {
-          //parse the inDate parameter
-          dateFormat.parse(date.trim());
-        }
-        catch (ParseException pe) {
-          return false;
-        }
-        
-        return true;
-    }
-    
     /**
      * Launch the application.
      */
@@ -268,5 +248,22 @@ public class EditPatient extends JDialog {
             }
         });
     }
+
+    private boolean isValidDate(String date) {
+        //set the format to use as a constructor argument
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dateFormat.setLenient(false);
+
+        try {
+            //parse the inDate parameter
+            dateFormat.parse(date.trim());
+        } catch (ParseException pe) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private enum title {MR, MRS, MS, MISS}
 
 }

@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class HealthcarePlan extends JDialog {
+public class SubscriptionPlan extends JDialog {
 
     private final JPanel contentPanel = new JPanel();
     private JTextField checkUpLeft;
@@ -26,7 +26,7 @@ public class HealthcarePlan extends JDialog {
     /**
      * Create the dialog.
      */
-    public HealthcarePlan() {
+    public SubscriptionPlan() {
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -168,16 +168,17 @@ public class HealthcarePlan extends JDialog {
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
         getContentPane().add(buttonPane, BorderLayout.SOUTH);
-
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-        okButton.setActionCommand("OK");
-        buttonPane.add(okButton);
-        getRootPane().setDefaultButton(okButton);
+        {
+            JButton okButton = new JButton("OK");
+            okButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    dispose();
+                }
+            });
+            okButton.setActionCommand("OK");
+            buttonPane.add(okButton);
+            getRootPane().setDefaultButton(okButton);
+        }
 
         setBounds(100, 100, 450, 300);
         setLocationRelativeTo(null);
@@ -188,7 +189,7 @@ public class HealthcarePlan extends JDialog {
      */
     public static void main(String[] args) {
         try {
-            HealthcarePlan dialog = new HealthcarePlan();
+            SubscriptionPlan dialog = new SubscriptionPlan();
             dialog.setModal(true);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setVisible(true);

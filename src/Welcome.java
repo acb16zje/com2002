@@ -17,14 +17,11 @@ import javax.swing.border.EmptyBorder;
 
 public class Welcome extends JFrame {
 
-    private JPanel contentPane;
-
     /**
      * Create the frame.
      */
     public Welcome() {
-        setBounds(100, 100, 620, 310);
-        contentPane = new JPanel();
+        JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -90,6 +87,7 @@ public class Welcome extends JFrame {
         contentPane.add(DentistLogin, gbc_DentistLogin);
 
         setTitle("Sheffield Dentistry Management Program");
+        setBounds(100, 100, 620, 310);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }

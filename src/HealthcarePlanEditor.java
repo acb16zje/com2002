@@ -26,10 +26,7 @@ public class HealthcarePlanEditor extends JDialog {
      * Create the frame.
      */
     public HealthcarePlanEditor() {
-        setTitle("Healthcare Plan Editor");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 500, 500);
-        contentPane = new JPanel();
+        JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         setContentPane(contentPane);
@@ -179,7 +176,10 @@ public class HealthcarePlanEditor extends JDialog {
             }
         });
         selectPanel.add(cancelButton);
-        
+
+        setTitle("Healthcare Plan Editor");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 500, 500);
         setLocationRelativeTo(null);
     }
 
