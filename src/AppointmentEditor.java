@@ -183,6 +183,7 @@ public class AppointmentEditor extends JDialog {
         cancelButton.setActionCommand("Cancel");
         buttonPane.add(cancelButton);
 
+        setTitle("Edit Appointment");
         setBounds(100, 100, 700, 400);
         setLocationRelativeTo(null);
     }

@@ -34,6 +34,7 @@ public class Home extends JFrame {
 
     private Date monDate;
     private JTable appointmentTable;
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     /**
      * Create the frame.
@@ -50,7 +51,7 @@ public class Home extends JFrame {
         // UI for appointment
         JPanel appointment = new JPanel();
 
-        tabbedPane.addTab("Appointment\r\n", null, appointment, null);
+        tabbedPane.addTab("Appointment", null, appointment, null);
 
         ButtonGroup partnerGroup = new ButtonGroup();
         appointment.setLayout(new BorderLayout(0, 0));
@@ -68,14 +69,10 @@ public class Home extends JFrame {
         partnerGroup.add(Dentist);
         Hygienist.setSelected(true);
 
-        //reminder that month works as 0-11(JAN,FEB,...,DEC)
-        SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
+        // reminder that month works as 0-11(JAN,FEB,...,DEC)
         Calendar currentCalendar = Calendar.getInstance();
         int currentYear = currentCalendar.get(Calendar.YEAR);
         int currentMonth = currentCalendar.get(Calendar.MONTH);
-        int currentWeek = currentCalendar.get(Calendar.WEEK_OF_YEAR);
-        int daysInMonth = currentCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int currentDay = currentCalendar.get(Calendar.DATE);
 
         JSpinner year = new JSpinner();
         year.setModel(new SpinnerNumberModel(currentYear, currentYear - 20, currentYear + 1, 1));
@@ -89,32 +86,14 @@ public class Home extends JFrame {
         tableControlPanel.add(month);
         tableControlPanel.add(year);
 
-        //Listeners for dates
+        // Listeners for dates
         month.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 currentCalendar.set(Calendar.MONTH, (int) month.getValue() - 1);
                 week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
                 String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
-                try {
-                    monDate = timeFormat.parse(selectedWeek);
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-                Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
-                appointmentTable.setModel(
-                    new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
-                        "Monday " + timeFormat.format(daysInWeekList[0]),
-                        "Tuesday " + timeFormat.format(daysInWeekList[1]),
-                        "Wednesday " + timeFormat.format(daysInWeekList[2]),
-                        "Thursday " + timeFormat.format(daysInWeekList[3]),
-                        "Friday " + timeFormat.format(daysInWeekList[4])}) {
-                        @Override
-                        public boolean isCellEditable(int row, int column) {
-                            return false;
-                        }
-                    }
-                );
+                generateAppointmentTable(selectedWeek);
             }
         });
 
@@ -122,59 +101,22 @@ public class Home extends JFrame {
             @Override
             public void stateChanged(ChangeEvent e) {
                 currentCalendar.set(Calendar.YEAR, (int) year.getValue());
-                System.out.println(currentCalendar.getTime());
+                // System.out.println(currentCalendar.getTime());
                 week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
                 String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
-                try {
-                    monDate = timeFormat.parse(selectedWeek);
-                    System.out.println(monDate);
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-                Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
-                appointmentTable.setModel(
-                    new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
-                        "Monday " + timeFormat.format(daysInWeekList[0]),
-                        "Tuesday " + timeFormat.format(daysInWeekList[1]),
-                        "Wednesday " + timeFormat.format(daysInWeekList[2]),
-                        "Thursday " + timeFormat.format(daysInWeekList[3]),
-                        "Friday " + timeFormat.format(daysInWeekList[4])}) {
-                        @Override
-                        public boolean isCellEditable(int row, int column) {
-                            return false;
-                        }
-                    }
-                );
+                generateAppointmentTable(selectedWeek);
             }
         });
 
         week.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
-                try {
-                    monDate = timeFormat.parse(selectedWeek);
-                    System.out.println(monDate);
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-                Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
-                appointmentTable.setModel(
-                    new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
-                        "Monday " + timeFormat.format(daysInWeekList[0]),
-                        "Tuesday " + timeFormat.format(daysInWeekList[1]),
-                        "Wednesday " + timeFormat.format(daysInWeekList[2]),
-                        "Thursday " + timeFormat.format(daysInWeekList[3]),
-                        "Friday " + timeFormat.format(daysInWeekList[4])}) {
-                        @Override
-                        public boolean isCellEditable(int row, int column) {
-                            return false;
-                        }
-                    }
-                );
+                generateAppointmentTable(selectedWeek);
             }
         });
 
         appointmentTable = new JTable();
+        appointmentTable.setRowHeight(20);
         appointmentTable.setFillsViewportHeight(true);
         JScrollPane appointmentScrollPane = new JScrollPane(appointmentTable);
         appointment.add(appointmentScrollPane, BorderLayout.CENTER);
@@ -182,17 +124,19 @@ public class Home extends JFrame {
         Date[] daysInWeekList = WeekGenerator.daysInWeekList(currentCalendar.getTime());
         appointmentTable
             .setModel(new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
-                          "Monday " + timeFormat.format(daysInWeekList[0]),
-                          "Tuesday " + timeFormat.format(daysInWeekList[1]),
-                          "Wednesday " + timeFormat.format(daysInWeekList[2]),
-                          "Thursday " + timeFormat.format(daysInWeekList[3]),
-                          "Friday " + timeFormat.format(daysInWeekList[4])}) {
+                          "Mon " + timeFormat.format(daysInWeekList[0]),
+                          "Tue " + timeFormat.format(daysInWeekList[1]),
+                          "Wed " + timeFormat.format(daysInWeekList[2]),
+                          "Thu " + timeFormat.format(daysInWeekList[3]),
+                          "Fri " + timeFormat.format(daysInWeekList[4])}) {
                           @Override
                           public boolean isCellEditable(int row, int column) {
                               return false;
                           }
                       }
             );
+
+        appointmentTable.getColumnModel().getColumn(0).setPreferredWidth(15);
         JPanel appointmentPanel = new JPanel();
         appointment.add(appointmentPanel, BorderLayout.SOUTH);
 
@@ -205,10 +149,10 @@ public class Home extends JFrame {
         appointmentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         appointmentPanel.add(newAppointmentButton);
 
-        JButton findAppointmentButton = new JButton("Find Appointment");
-        appointmentPanel.add(findAppointmentButton);
-        findAppointmentButton.setFont(new Font("Dialog", Font.BOLD, 12));
-        findAppointmentButton.addActionListener(new ActionListener() {
+        JButton searchAppointmentButton = new JButton("Search Appointment");
+        appointmentPanel.add(searchAppointmentButton);
+        searchAppointmentButton.setFont(new Font("Dialog", Font.BOLD, 12));
+        searchAppointmentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 AppointmentSearch.main(null);
             }
@@ -260,7 +204,7 @@ public class Home extends JFrame {
         JButton viewPatientPlanButton = new JButton("View Healthcare Plan");
         viewPatientPlanButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SubscriptionPlan.main(null);
+                HealthcarePlan.main(null);
             }
         });
         patientEditPanel.add(viewPatientPlanButton);
@@ -296,10 +240,11 @@ public class Home extends JFrame {
         patientPanel.add(addPatientButton);
 
         JTable patientTable = new JTable();
+        patientTable.setRowHeight(20);
         patient.add(new JScrollPane(patientTable), BorderLayout.CENTER);
         patientTable.setModel(new DefaultTableModel(
             new Object[][]{
-                {"P0000", "Blank", null, null, null, null},
+                {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -316,7 +261,7 @@ public class Home extends JFrame {
         });
         patientTable.setFillsViewportHeight(true);
 
-        //UI for healthcare plan tab
+        // UI for healthcare plan tab
         JPanel healthcarePlan = new JPanel();
         tabbedPane.addTab("Healthcare Plan", null, healthcarePlan, null);
         healthcarePlan.setLayout(new BorderLayout(0, 0));
@@ -376,10 +321,10 @@ public class Home extends JFrame {
          planEditPanel.add(removePlan);
          **/
 
-        setTitle("Sheffield Dentistry Management Program");
+        setTitle("Sheffield Dentistry Management Program - Secretary");
         setBackground(Color.WHITE);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 914, 604);
+        setBounds(100, 100, 914, 638);
         setLocationRelativeTo(null);
     }
 
@@ -403,5 +348,28 @@ public class Home extends JFrame {
                 }
             }
         });
+    }
+
+    private void generateAppointmentTable(String selectedWeek) {
+        try {
+            monDate = timeFormat.parse(selectedWeek);
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
+
+        Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+        appointmentTable.setModel(
+            new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
+                "Mon " + timeFormat.format(daysInWeekList[0]),
+                "Tue " + timeFormat.format(daysInWeekList[1]),
+                "Wed " + timeFormat.format(daysInWeekList[2]),
+                "Thu " + timeFormat.format(daysInWeekList[3]),
+                "Fri " + timeFormat.format(daysInWeekList[4])}) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            }
+        );
     }
 }

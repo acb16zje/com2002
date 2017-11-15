@@ -179,6 +179,7 @@ public class HealthcarePlan extends JDialog {
         buttonPane.add(okButton);
         getRootPane().setDefaultButton(okButton);
 
+        setTitle("View Healthcare Plan");
         setBounds(100, 100, 450, 300);
         setLocationRelativeTo(null);
     }
