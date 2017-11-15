@@ -3,12 +3,11 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
-class IntegerFlt extends DocumentFilter {
+public class IntegerFlt extends DocumentFilter {
 
     @Override
-    public void insertString(DocumentFilter.FilterBypass fp
-        , int offset, String string, AttributeSet aset)
-        throws BadLocationException {
+    public void insertString(DocumentFilter.FilterBypass fp, int offset, String string,
+        AttributeSet aset) throws BadLocationException {
         int len = string.length();
         boolean isValidInteger = true;
 
@@ -27,9 +26,8 @@ class IntegerFlt extends DocumentFilter {
     }
 
     @Override
-    public void replace(DocumentFilter.FilterBypass fp, int offset
-        , int length, String string, AttributeSet aset)
-        throws BadLocationException {
+    public void replace(DocumentFilter.FilterBypass fp, int offset, int length, String string,
+        AttributeSet aset) throws BadLocationException {
         int len = string.length();
         boolean isValidInteger = true;
 

@@ -6,8 +6,8 @@ import javax.swing.text.DocumentFilter;
 public class MoneyFlt extends DocumentFilter {
 
     @Override
-    public void insertString(DocumentFilter.FilterBypass fp
-        , int offset, String string, AttributeSet aset)
+    public void insertString(DocumentFilter.FilterBypass fp, int offset, String string,
+        AttributeSet aset)
         throws BadLocationException {
         int len = string.length();
         boolean isValidInteger = true;
@@ -27,8 +27,8 @@ public class MoneyFlt extends DocumentFilter {
     }
 
     @Override
-    public void replace(DocumentFilter.FilterBypass fp, int offset
-        , int length, String string, AttributeSet aset)
+    public void replace(DocumentFilter.FilterBypass fp, int offset, int length, String string,
+        AttributeSet aset)
         throws BadLocationException {
         int len = string.length();
         boolean isValidInteger = true;

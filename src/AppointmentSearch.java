@@ -71,11 +71,14 @@ public class AppointmentSearch extends JDialog {
 
         setTitle("Search Appointment");
         setBounds(100, 100, 450, 300);
+        setResizable(false);
         setLocationRelativeTo(null);
     }
 
     /**
-     * Launch the application.
+     * Main method for running the appointment search frame
+     *
+     * @param args Command line arguments, not used
      */
     public static void main(String[] args) {
         try {

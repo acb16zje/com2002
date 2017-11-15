@@ -30,7 +30,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
-public class Home extends JFrame {
+public class SecretaryInterface extends JFrame {
 
     private Date monDate;
     private JTable appointmentTable;
@@ -39,12 +39,14 @@ public class Home extends JFrame {
     /**
      * Create the frame.
      */
-    public Home() {
+    public SecretaryInterface() {
+        // Main content panel
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         setContentPane(contentPane);
 
+        // The tabs
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
@@ -87,32 +89,23 @@ public class Home extends JFrame {
         tableControlPanel.add(year);
 
         // Listeners for dates
-        month.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                currentCalendar.set(Calendar.MONTH, (int) month.getValue() - 1);
-                week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
-                String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
-                generateAppointmentTable(selectedWeek);
-            }
+        month.addChangeListener(e -> {
+            currentCalendar.set(Calendar.MONTH, (int) month.getValue() - 1);
+            week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
+            String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
+            generateAppointmentTable(selectedWeek);
         });
 
-        year.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                currentCalendar.set(Calendar.YEAR, (int) year.getValue());
-                // System.out.println(currentCalendar.getTime());
-                week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
-                String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
-                generateAppointmentTable(selectedWeek);
-            }
+        year.addChangeListener(e -> {
+            currentCalendar.set(Calendar.YEAR, (int) year.getValue());
+            week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
+            String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
+            generateAppointmentTable(selectedWeek);
         });
 
-        week.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
-                generateAppointmentTable(selectedWeek);
-            }
+        week.addActionListener(e -> {
+            String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
+            generateAppointmentTable(selectedWeek);
         });
 
         appointmentTable = new JTable();
@@ -140,44 +133,32 @@ public class Home extends JFrame {
         JPanel appointmentPanel = new JPanel();
         appointment.add(appointmentPanel, BorderLayout.SOUTH);
 
-        JButton newAppointmentButton = new JButton("Create new Appointment");
-        newAppointmentButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                AppointmentEditor.main(null);
-            }
+        JButton bookAppointmentButton = new JButton("Book Appointment");
+        bookAppointmentButton.addActionListener(e -> {
+            BookAppointment.main(null);
         });
         appointmentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        appointmentPanel.add(newAppointmentButton);
+        appointmentPanel.add(bookAppointmentButton);
+
+        JButton cancelAppointmentButton = new JButton("Cancel Appointment");
+        cancelAppointmentButton.addActionListener(e -> {
+            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+            if (a == JOptionPane.YES_OPTION) {
+                // insert delete plan SQL stuff here
+            }
+        });
+        appointmentPanel.add(cancelAppointmentButton);
+
+        JButton viewAppointmentButton = new JButton("View Appointment");
+        viewAppointmentButton.addActionListener(e -> ViewAppointment.main(null));
+        appointmentPanel.add(viewAppointmentButton);
 
         JButton searchAppointmentButton = new JButton("Search Appointment");
         appointmentPanel.add(searchAppointmentButton);
         searchAppointmentButton.setFont(new Font("Dialog", Font.BOLD, 12));
-        searchAppointmentButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                AppointmentSearch.main(null);
-            }
-        });
+        searchAppointmentButton.addActionListener(e -> AppointmentSearch.main(null));
 
-        JButton deleteAppointmentButton = new JButton("Delete Appointment");
-        deleteAppointmentButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
-                if (a == JOptionPane.YES_OPTION) {
-                    //insert delete plan sql stuff here
-                }
-            }
-        });
-        appointmentPanel.add(deleteAppointmentButton);
-
-        JButton viewAppointmentButton = new JButton("View/Edit Appointment");
-        viewAppointmentButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                AppointmentEditor.main(null);
-            }
-        });
-        appointmentPanel.add(viewAppointmentButton);
-
-        //UI for patient
+        // UI for patient
         JPanel patient = new JPanel();
         tabbedPane.addTab("Patient", null, patient, null);
         patient.setLayout(new BorderLayout(0, 0));
@@ -202,28 +183,18 @@ public class Home extends JFrame {
         fl_patientEditPanel.setAlignOnBaseline(true);
 
         JButton viewPatientPlanButton = new JButton("View Healthcare Plan");
-        viewPatientPlanButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                HealthcarePlan.main(null);
-            }
-        });
+        viewPatientPlanButton.addActionListener(e -> HealthcarePlan.main(null));
         patientEditPanel.add(viewPatientPlanButton);
 
         JButton editPatientButton = new JButton("Edit");
-        editPatientButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                EditPatient.main(null);
-            }
-        });
+        editPatientButton.addActionListener(e -> EditPatient.main(null));
         patientEditPanel.add(editPatientButton);
 
         JButton deletePatientButton = new JButton("Delete");
-        deletePatientButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int a = JOptionPane.showConfirmDialog(deletePatientButton, "Are you sure?");
-                if (a == JOptionPane.YES_OPTION) {
-                    //insert delete patient sql stuff here
-                }
+        deletePatientButton.addActionListener(e -> {
+            int a = JOptionPane.showConfirmDialog(deletePatientButton, "Are you sure?");
+            if (a == JOptionPane.YES_OPTION) {
+                // insert delete patient sql stuff here
             }
         });
         patientEditPanel.add(deletePatientButton);
@@ -232,11 +203,7 @@ public class Home extends JFrame {
         patient.add(patientPanel, BorderLayout.EAST);
 
         JButton addPatientButton = new JButton("Add Patient");
-        addPatientButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                EditPatient.main(null);
-            }
-        });
+        addPatientButton.addActionListener(e -> EditPatient.main(null));
         patientPanel.add(addPatientButton);
 
         JTable patientTable = new JTable();
@@ -261,7 +228,7 @@ public class Home extends JFrame {
         });
         patientTable.setFillsViewportHeight(true);
 
-        // UI for healthcare plan tab
+        // UI for healthcare plan tab (work in progress)
         JPanel healthcarePlan = new JPanel();
         tabbedPane.addTab("Healthcare Plan", null, healthcarePlan, null);
         healthcarePlan.setLayout(new BorderLayout(0, 0));
@@ -321,7 +288,8 @@ public class Home extends JFrame {
          planEditPanel.add(removePlan);
          **/
 
-        setTitle("Sheffield Dentistry Management Program - Secretary");
+        // Basic settings
+        setTitle("Sheffield Dental Care - Secretary");
         setBackground(Color.WHITE);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 914, 638);
@@ -329,7 +297,8 @@ public class Home extends JFrame {
     }
 
     /**
-     * Launch the application.
+     * Main method for creating the secretary interface frame
+     * @param args
      */
     public static void main(String[] args) {
         try {
@@ -338,18 +307,20 @@ public class Home extends JFrame {
             e.printStackTrace();
         }
 
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Home frame = new Home();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        EventQueue.invokeLater(() -> {
+            try {
+                SecretaryInterface frame = new SecretaryInterface();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
 
+    /**
+     * Generate the days in the week
+     * @param selectedWeek The selected week
+     */
     private void generateAppointmentTable(String selectedWeek) {
         try {
             monDate = timeFormat.parse(selectedWeek);

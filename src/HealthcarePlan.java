@@ -181,6 +181,7 @@ public class HealthcarePlan extends JDialog {
 
         setTitle("View Healthcare Plan");
         setBounds(100, 100, 450, 300);
+        setResizable(false);
         setLocationRelativeTo(null);
     }
 

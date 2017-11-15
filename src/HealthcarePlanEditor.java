@@ -20,8 +20,6 @@ import javax.swing.text.AbstractDocument;
 
 public class HealthcarePlanEditor extends JDialog {
 
-    private JPanel contentPane;
-
     /**
      * Create the frame.
      */
@@ -180,6 +178,7 @@ public class HealthcarePlanEditor extends JDialog {
         setTitle("Healthcare Plan Editor");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 500, 500);
+        setResizable(false);
         setLocationRelativeTo(null);
     }
 
