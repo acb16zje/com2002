@@ -76,17 +76,18 @@ public class WeekGenerator {
                         (String) (Integer.toString(i) + ":" + Integer.toString(j) + "0 - " + Integer
                             .toString(i + 1) + ":00"), null, null, null, null, null};
                     appointmentList[row] = tempArray;
-                    row++;
                 } else {
                     String[] tempArray = {
                         (String) (Integer.toString(i) + ":" + Integer.toString(j) + "0 - " + Integer
                             .toString(i + 1) + ":" + Integer.toString(j + 2) + "0"), null, null,
                         null, null, null};
                     appointmentList[row] = tempArray;
-                    row++;
                 }
+
+                row++;
             }
         }
+
         return appointmentList;
     }
 }

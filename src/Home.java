@@ -3,7 +3,6 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -74,9 +73,6 @@ public class Home extends JFrame {
         Calendar currentCalendar = Calendar.getInstance();
         int currentYear = currentCalendar.get(Calendar.YEAR);
         int currentMonth = currentCalendar.get(Calendar.MONTH);
-        int currentWeek = currentCalendar.get(Calendar.WEEK_OF_YEAR);
-        int daysInMonth = currentCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int currentDay = currentCalendar.get(Calendar.DATE);
 
         JSpinner year = new JSpinner();
         year.setModel(new SpinnerNumberModel(currentYear, currentYear - 20, currentYear + 1, 1));
@@ -127,38 +123,19 @@ public class Home extends JFrame {
 
         Date[] daysInWeekList = WeekGenerator.daysInWeekList(currentCalendar.getTime());
         appointmentTable
-            .setModel(new DefaultTableModel(
-        	new Object[][] {
-        		{"9:00 - 10:20", null, null, null, null, null},
-        		{"9:20 - 10:40", null, null, null, null, null},
-        		{"9:40 - 10:00", null, null, null, null, null},
-        		{"10:00 - 11:20", null, null, null, null, null},
-        		{"10:20 - 11:40", null, null, null, null, null},
-        		{"10:40 - 11:00", null, null, null, null, null},
-        		{"11:00 - 12:20", null, null, null, null, null},
-        		{"11:20 - 12:40", null, null, null, null, null},
-        		{"11:40 - 12:00", null, null, null, null, null},
-        		{"12:00 - 13:20", null, null, null, null, null},
-        		{"12:20 - 13:40", null, null, null, null, null},
-        		{"12:40 - 13:00", null, null, null, null, null},
-        		{"13:00 - 14:20", null, null, null, null, null},
-        		{"13:20 - 14:40", null, null, null, null, null},
-        		{"13:40 - 14:00", null, null, null, null, null},
-        		{"14:00 - 15:20", null, null, null, null, null},
-        		{"14:20 - 15:40", null, null, null, null, null},
-        		{"14:40 - 15:00", null, null, null, null, null},
-        		{"15:00 - 16:20", null, null, null, null, null},
-        		{"15:20 - 16:40", null, null, null, null, null},
-        		{"15:40 - 16:00", null, null, null, null, null},
-        		{"16:00 - 17:20", null, null, null, null, null},
-        		{"16:20 - 17:40", null, null, null, null, null},
-        		{"16:40 - 17:00", null, null, null, null, null},
-        	},
-        	new String[] {
-        		"Time", "Mon 13-11-2017", "Tue 14-11-2017", "Wed 15-11-2017", "Thu 16-11-2017", "Fri 17-11-2017"
-        	}
-        )
+            .setModel(new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
+                          "Mon " + timeFormat.format(daysInWeekList[0]),
+                          "Tue " + timeFormat.format(daysInWeekList[1]),
+                          "Wed " + timeFormat.format(daysInWeekList[2]),
+                          "Thu " + timeFormat.format(daysInWeekList[3]),
+                          "Fri " + timeFormat.format(daysInWeekList[4])}) {
+                          @Override
+                          public boolean isCellEditable(int row, int column) {
+                              return false;
+                          }
+                      }
             );
+
         appointmentTable.getColumnModel().getColumn(0).setPreferredWidth(15);
         JPanel appointmentPanel = new JPanel();
         appointment.add(appointmentPanel, BorderLayout.SOUTH);
@@ -351,29 +328,6 @@ public class Home extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void generateAppointmentTable(String selectedWeek) {
-    	try {
-            monDate = timeFormat.parse(selectedWeek);
-        } catch (ParseException e1) {
-            e1.printStackTrace();
-        }
-    	
-        Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
-        appointmentTable.setModel(
-            new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
-                "Mon " + timeFormat.format(daysInWeekList[0]),
-                "Tue " + timeFormat.format(daysInWeekList[1]),
-                "Wed " + timeFormat.format(daysInWeekList[2]),
-                "Thu " + timeFormat.format(daysInWeekList[3]),
-                "Fri " + timeFormat.format(daysInWeekList[4])}) {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
-            }
-        );
-    }
-    
     /**
      * Launch the application.
      */
@@ -394,5 +348,28 @@ public class Home extends JFrame {
                 }
             }
         });
+    }
+
+    private void generateAppointmentTable(String selectedWeek) {
+        try {
+            monDate = timeFormat.parse(selectedWeek);
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
+
+        Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+        appointmentTable.setModel(
+            new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
+                "Mon " + timeFormat.format(daysInWeekList[0]),
+                "Tue " + timeFormat.format(daysInWeekList[1]),
+                "Wed " + timeFormat.format(daysInWeekList[2]),
+                "Thu " + timeFormat.format(daysInWeekList[3]),
+                "Fri " + timeFormat.format(daysInWeekList[4])}) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            }
+        );
     }
 }
