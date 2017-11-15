@@ -1,16 +1,17 @@
-import com.github.lgooddatepicker.components.DatePicker;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -33,14 +34,15 @@ public class EditPatient extends JDialog {
     private JTextField district;
     private JTextField city;
     private JTextField postcode;
-
+    private enum title {MR, MRS, MS, MISS}
+    
     /**
      * Create the frame.
      */
     public EditPatient() {
         setTitle("Patient Editor");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 409, 609);
+        setBounds(100, 100, 451, 609);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
@@ -48,235 +50,165 @@ public class EditPatient extends JDialog {
 
         JPanel panel = new JPanel();
         contentPane.add(panel, BorderLayout.CENTER);
-        GridBagLayout gbl_panel = new GridBagLayout();
-        gbl_panel.columnWidths = new int[]{30, 124, 182, 0, 0};
-        gbl_panel.rowHeights = new int[]{40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 0};
-        gbl_panel.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
-        gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, Double.MIN_VALUE};
-        panel.setLayout(gbl_panel);
+        panel.setLayout(null);
 
-        JLabel lblTitle = new JLabel("Title:");
-        GridBagConstraints gbc_lblTitle = new GridBagConstraints();
-        gbc_lblTitle.anchor = GridBagConstraints.WEST;
-        gbc_lblTitle.insets = new Insets(0, 0, 5, 5);
-        gbc_lblTitle.gridx = 1;
-        gbc_lblTitle.gridy = 1;
-        panel.add(lblTitle, gbc_lblTitle);
+        JLabel titleLabel = new JLabel("Title:");
+        titleLabel.setBounds(30, 50, 36, 15);
+        panel.add(titleLabel);
 
-        JComboBox Title = new JComboBox(title.values());
-        GridBagConstraints gbc_Title = new GridBagConstraints();
-        gbc_Title.anchor = GridBagConstraints.WEST;
-        gbc_Title.insets = new Insets(0, 0, 5, 5);
-        gbc_Title.gridx = 2;
-        gbc_Title.gridy = 1;
-        panel.add(Title, gbc_Title);
+        JComboBox comboTitle = new JComboBox(title.values());
+        comboTitle.setBounds(154, 45, 62, 24);
+        panel.add(comboTitle);
 
-        JLabel lblForeName = new JLabel("Forename:");
-        GridBagConstraints gbc_lblForeName = new GridBagConstraints();
-        gbc_lblForeName.anchor = GridBagConstraints.WEST;
-        gbc_lblForeName.insets = new Insets(0, 0, 5, 5);
-        gbc_lblForeName.gridx = 1;
-        gbc_lblForeName.gridy = 2;
-        panel.add(lblForeName, gbc_lblForeName);
+        JLabel forenameLabel = new JLabel("Forename:");
+        forenameLabel.setBounds(30, 90, 76, 15);
+        panel.add(forenameLabel);
 
         foreName = new JTextField();
+        foreName.setBounds(154, 86, 255, 23);
         foreName.setFont(new Font("Dialog", Font.PLAIN, 16));
         foreName.setColumns(10);
-        GridBagConstraints gbc_foreName = new GridBagConstraints();
-        gbc_foreName.fill = GridBagConstraints.HORIZONTAL;
-        gbc_foreName.insets = new Insets(0, 0, 5, 5);
-        gbc_foreName.gridx = 2;
-        gbc_foreName.gridy = 2;
-        panel.add(foreName, gbc_foreName);
+        panel.add(foreName);
 
-        JLabel lblSurname = new JLabel("Surname:");
-        GridBagConstraints gbc_lblSurname = new GridBagConstraints();
-        gbc_lblSurname.anchor = GridBagConstraints.WEST;
-        gbc_lblSurname.insets = new Insets(0, 0, 5, 5);
-        gbc_lblSurname.gridx = 1;
-        gbc_lblSurname.gridy = 3;
-        panel.add(lblSurname, gbc_lblSurname);
+        JLabel surnameLabel = new JLabel("Surname:");
+        surnameLabel.setBounds(30, 130, 68, 15);
+        panel.add(surnameLabel);
 
         surName = new JTextField();
+        surName.setBounds(154, 126, 255, 23);
         surName.setFont(new Font("Dialog", Font.PLAIN, 16));
         surName.setColumns(10);
-        GridBagConstraints gbc_surName = new GridBagConstraints();
-        gbc_surName.fill = GridBagConstraints.HORIZONTAL;
-        gbc_surName.insets = new Insets(0, 0, 5, 5);
-        gbc_surName.gridx = 2;
-        gbc_surName.gridy = 3;
-        panel.add(surName, gbc_surName);
+        panel.add(surName);
 
-        JLabel lblDoB = new JLabel("Date Of Birth:");
-        GridBagConstraints gbc_lblDoB = new GridBagConstraints();
-        gbc_lblDoB.anchor = GridBagConstraints.WEST;
-        gbc_lblDoB.insets = new Insets(0, 0, 5, 5);
-        gbc_lblDoB.gridx = 1;
-        gbc_lblDoB.gridy = 4;
-        panel.add(lblDoB, gbc_lblDoB);
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
-        Calendar daycal = new GregorianCalendar(currentYear, currentMonth, 1);
-        int daysInMonth = daycal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int currentDay = Calendar.getInstance().get(Calendar.DATE);
+        JLabel dobLabel = new JLabel("Date Of Birth:");
+        dobLabel.setBounds(30, 170, 97, 15);
+        panel.add(dobLabel);
+           
+        JComboBox comboDay = new JComboBox();
+        comboDay.setBounds(154, 165, 50, 24);
+        panel.add(comboDay);
+        for (int i = 1; i <= 31; i++) {
+        	comboDay.addItem(i);
+        }
+        
+        JComboBox comboMonth = new JComboBox();
+        comboMonth.setBounds(216, 165, 105, 24);
+        panel.add(comboMonth);
+        String[] months = new DateFormatSymbols().getMonths();
+        for (int i = 0; i < 12; i++) {
+            comboMonth.addItem(months[i]);
+        }
+        
+        JComboBox comboYear = new JComboBox();
+        comboYear.setBounds(333, 165, 76, 24);
+        panel.add(comboYear);
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR); 
+        for (int i = 1930; i <= currentYear; i++) {
+        	comboYear.addItem(i);
+        }
+        comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
-        DatePicker datePicker = new DatePicker();
-        datePicker.getComponentDateTextField().setFont(new Font("Dialog", Font.PLAIN, 16));
-        GridBagConstraints gbc_datePicker = new GridBagConstraints();
-        gbc_datePicker.insets = new Insets(0, 0, 5, 5);
-        gbc_datePicker.fill = GridBagConstraints.HORIZONTAL;
-        gbc_datePicker.gridx = 2;
-        gbc_datePicker.gridy = 4;
-        panel.add(datePicker, gbc_datePicker);
-
-        JLabel lblphoneNo = new JLabel("Phone No:");
-        GridBagConstraints gbc_lblphoneNo = new GridBagConstraints();
-        gbc_lblphoneNo.anchor = GridBagConstraints.WEST;
-        gbc_lblphoneNo.insets = new Insets(0, 0, 5, 5);
-        gbc_lblphoneNo.gridx = 1;
-        gbc_lblphoneNo.gridy = 5;
-        panel.add(lblphoneNo, gbc_lblphoneNo);
+        JLabel phoneNoLabel = new JLabel("Phone No:");
+        phoneNoLabel.setBounds(30, 210, 73, 15);
+        panel.add(phoneNoLabel);
 
         phoneNo = new JTextField();
+        phoneNo.setBounds(154, 206, 255, 23);
         phoneNo.setFont(new Font("Dialog", Font.PLAIN, 16));
         ((AbstractDocument) phoneNo.getDocument()).setDocumentFilter(new IntegerFlt());
         phoneNo.setColumns(13);
-        GridBagConstraints gbc_phoneNo = new GridBagConstraints();
-        gbc_phoneNo.fill = GridBagConstraints.HORIZONTAL;
-        gbc_phoneNo.insets = new Insets(0, 0, 5, 5);
-        gbc_phoneNo.gridx = 2;
-        gbc_phoneNo.gridy = 5;
-        panel.add(phoneNo, gbc_phoneNo);
+        panel.add(phoneNo);
 
-        JLabel lblHouseNo = new JLabel("House No:");
-        GridBagConstraints gbc_lblHouseNo = new GridBagConstraints();
-        gbc_lblHouseNo.anchor = GridBagConstraints.WEST;
-        gbc_lblHouseNo.insets = new Insets(0, 0, 5, 5);
-        gbc_lblHouseNo.gridx = 1;
-        gbc_lblHouseNo.gridy = 6;
-        panel.add(lblHouseNo, gbc_lblHouseNo);
+        JLabel houseNoLabel = new JLabel("House No:");
+        houseNoLabel.setBounds(30, 250, 73, 15);
+        panel.add(houseNoLabel);
 
         houseNo = new JTextField();
+        houseNo.setBounds(154, 246, 255, 23);
         houseNo.setFont(new Font("Dialog", Font.PLAIN, 16));
         ((AbstractDocument) houseNo.getDocument()).setDocumentFilter(new IntegerFlt());
         houseNo.setColumns(5);
-        GridBagConstraints gbc_houseNo = new GridBagConstraints();
-        gbc_houseNo.fill = GridBagConstraints.HORIZONTAL;
-        gbc_houseNo.insets = new Insets(0, 0, 5, 5);
-        gbc_houseNo.gridx = 2;
-        gbc_houseNo.gridy = 6;
-        panel.add(houseNo, gbc_houseNo);
+        panel.add(houseNo);
 
-        JLabel lblStreet = new JLabel("Street:");
-        GridBagConstraints gbc_lblStreet = new GridBagConstraints();
-        gbc_lblStreet.anchor = GridBagConstraints.WEST;
-        gbc_lblStreet.insets = new Insets(0, 0, 5, 5);
-        gbc_lblStreet.gridx = 1;
-        gbc_lblStreet.gridy = 7;
-        panel.add(lblStreet, gbc_lblStreet);
+        JLabel streetLabel = new JLabel("Street:");
+        streetLabel.setBounds(30, 290, 50, 15);
+        panel.add(streetLabel);
 
         street = new JTextField();
+        street.setBounds(154, 286, 255, 23);
         street.setFont(new Font("Dialog", Font.PLAIN, 16));
         street.setColumns(20);
-        GridBagConstraints gbc_street = new GridBagConstraints();
-        gbc_street.fill = GridBagConstraints.HORIZONTAL;
-        gbc_street.insets = new Insets(0, 0, 5, 5);
-        gbc_street.gridx = 2;
-        gbc_street.gridy = 7;
-        panel.add(street, gbc_street);
+        panel.add(street);
 
-        JLabel lblDistrict = new JLabel("District:");
-        GridBagConstraints gbc_lblDistrict = new GridBagConstraints();
-        gbc_lblDistrict.anchor = GridBagConstraints.WEST;
-        gbc_lblDistrict.insets = new Insets(0, 0, 5, 5);
-        gbc_lblDistrict.gridx = 1;
-        gbc_lblDistrict.gridy = 8;
-        panel.add(lblDistrict, gbc_lblDistrict);
+        JLabel districtLabel = new JLabel("District:");
+        districtLabel.setBounds(30, 330, 56, 15);
+        panel.add(districtLabel);
 
         district = new JTextField();
+        district.setBounds(154, 326, 255, 23);
         district.setFont(new Font("Dialog", Font.PLAIN, 16));
         district.setColumns(20);
-        GridBagConstraints gbc_district = new GridBagConstraints();
-        gbc_district.fill = GridBagConstraints.HORIZONTAL;
-        gbc_district.insets = new Insets(0, 0, 5, 5);
-        gbc_district.gridx = 2;
-        gbc_district.gridy = 8;
-        panel.add(district, gbc_district);
+        panel.add(district);
 
-        JLabel lblCity = new JLabel("City:");
-        GridBagConstraints gbc_lblCity = new GridBagConstraints();
-        gbc_lblCity.anchor = GridBagConstraints.WEST;
-        gbc_lblCity.insets = new Insets(0, 0, 5, 5);
-        gbc_lblCity.gridx = 1;
-        gbc_lblCity.gridy = 9;
-        panel.add(lblCity, gbc_lblCity);
+        JLabel cityLabel = new JLabel("City:");
+        cityLabel.setBounds(30, 370, 32, 15);
+        panel.add(cityLabel);
 
         city = new JTextField();
+        city.setBounds(154, 366, 255, 23);
         city.setFont(new Font("Dialog", Font.PLAIN, 16));
         city.setColumns(20);
-        GridBagConstraints gbc_city = new GridBagConstraints();
-        gbc_city.fill = GridBagConstraints.HORIZONTAL;
-        gbc_city.insets = new Insets(0, 0, 5, 5);
-        gbc_city.gridx = 2;
-        gbc_city.gridy = 9;
-        panel.add(city, gbc_city);
+        panel.add(city);
 
-        JLabel lblPostcode = new JLabel("Postcode:");
-        GridBagConstraints gbc_lblPostcode = new GridBagConstraints();
-        gbc_lblPostcode.anchor = GridBagConstraints.WEST;
-        gbc_lblPostcode.insets = new Insets(0, 0, 5, 5);
-        gbc_lblPostcode.gridx = 1;
-        gbc_lblPostcode.gridy = 10;
-        panel.add(lblPostcode, gbc_lblPostcode);
+        JLabel postcodeLabel = new JLabel("Postcode:");
+        postcodeLabel.setBounds(30, 410, 71, 15);
+        panel.add(postcodeLabel);
 
         postcode = new JTextField();
+        postcode.setBounds(154, 406, 255, 23);
         postcode.setFont(new Font("Dialog", Font.PLAIN, 16));
         postcode.setColumns(20);
-        GridBagConstraints gbc_postcode = new GridBagConstraints();
-        gbc_postcode.fill = GridBagConstraints.HORIZONTAL;
-        gbc_postcode.insets = new Insets(0, 0, 5, 5);
-        gbc_postcode.gridx = 2;
-        gbc_postcode.gridy = 10;
-        panel.add(postcode, gbc_postcode);
+        panel.add(postcode);
 
-        JLabel lblHealthPlan = new JLabel("Healthcare Plan:");
-        GridBagConstraints gbc_lblHealthPlan = new GridBagConstraints();
-        gbc_lblHealthPlan.anchor = GridBagConstraints.WEST;
-        gbc_lblHealthPlan.insets = new Insets(0, 0, 5, 5);
-        gbc_lblHealthPlan.gridx = 1;
-        gbc_lblHealthPlan.gridy = 11;
-        panel.add(lblHealthPlan, gbc_lblHealthPlan);
+        JLabel planLabel = new JLabel("Healthcare Plan:");
+        planLabel.setBounds(30, 450, 118, 15);
+        panel.add(planLabel);
 
         JComboBox healthcarePlan = new JComboBox();
-        GridBagConstraints gbc_healthcarePlan = new GridBagConstraints();
-        gbc_healthcarePlan.insets = new Insets(0, 0, 5, 5);
-        gbc_healthcarePlan.fill = GridBagConstraints.HORIZONTAL;
-        gbc_healthcarePlan.gridx = 2;
-        gbc_healthcarePlan.gridy = 11;
-        panel.add(healthcarePlan, gbc_healthcarePlan);
+        healthcarePlan.setBounds(154, 445, 255, 24);
+        panel.add(healthcarePlan);
 
-        JCheckBox chckbxUpdateHealthcarePlan = new JCheckBox("Update Healthcare Plan");
-        chckbxUpdateHealthcarePlan.setForeground(new Color(128, 128, 128));
-        GridBagConstraints gbc_chckbxUpdateHealthcarePlan = new GridBagConstraints();
-        gbc_chckbxUpdateHealthcarePlan.insets = new Insets(0, 0, 0, 5);
-        gbc_chckbxUpdateHealthcarePlan.gridx = 2;
-        gbc_chckbxUpdateHealthcarePlan.gridy = 12;
-        panel.add(chckbxUpdateHealthcarePlan, gbc_chckbxUpdateHealthcarePlan);
+        JCheckBox updatePlanCheckBox = new JCheckBox("Update Healthcare Plan");
+        updatePlanCheckBox.setBounds(154, 488, 194, 23);
+        updatePlanCheckBox.setForeground(new Color(128, 128, 128));
+        panel.add(updatePlanCheckBox);
 
         JPanel confirmPanel = new JPanel();
         contentPane.add(confirmPanel, BorderLayout.SOUTH);
 
         JButton saveButton = new JButton("Save");
-
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	boolean completed = true;
+            	
+            	// Check if birth date is valid
+            	String inputDay = comboDay.getSelectedItem().toString();
+            	String inputMonth = String.valueOf(comboMonth.getSelectedIndex() + 1);
+            	String inputYear = comboYear.getSelectedItem().toString();
+            	String inputDate = inputDay + "-" + inputMonth + "-" + inputYear;
+            	
+            	if (isValidDate(inputDate)) {
+            		JOptionPane.showMessageDialog(null, inputDate);
+            	} else {
+            		JOptionPane.showMessageDialog(null, "Please enter a valid date");
+            	}
+            	
+            	// Check if all field are filled in
                 Component[] components = panel.getComponents();
-                boolean completed = true;
                 for (Component comp : components) {
                     // Cast comp to JComboBox / JTextField to get the values
-                    if ((comp instanceof JTextField)) {
-                        if (((JTextField) comp).getText().equals("")) {
+                    if (comp instanceof JTextField) {
+                        if (((JTextField) comp).getText().isEmpty()) {
                             JOptionPane.showMessageDialog(null, "Please Complete");
                             completed = false;
                             break;
@@ -285,12 +217,12 @@ public class EditPatient extends JDialog {
                         }
                     }
                 }
+                
                 if (completed) {
                     dispose();
                 }
             }
         });
-
         confirmPanel.add(saveButton);
 
         JButton cancelButton = new JButton("Cancel");
@@ -304,6 +236,22 @@ public class EditPatient extends JDialog {
         setLocationRelativeTo(null);
     }
 
+    public boolean isValidDate(String date) {
+        //set the format to use as a constructor argument
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dateFormat.setLenient(false);
+        
+        try {
+          //parse the inDate parameter
+          dateFormat.parse(date.trim());
+        }
+        catch (ParseException pe) {
+          return false;
+        }
+        
+        return true;
+    }
+    
     /**
      * Launch the application.
      */
@@ -320,7 +268,5 @@ public class EditPatient extends JDialog {
             }
         });
     }
-
-    private enum title {MR, MRS, MS, MISS}
 
 }
