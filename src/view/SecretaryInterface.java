@@ -99,13 +99,14 @@ public class SecretaryInterface extends JFrame {
         });
 
         dentistTable = new JTable();
+        dentistTable.setCellSelectionEnabled(true);
+        dentistTable.setGridColor(Color.GRAY);
+        dentistTable.getTableHeader().setReorderingAllowed(false);
         dentistTable.setRowHeight(20);
         dentistTable.setFillsViewportHeight(true);
         JScrollPane dentistScrollPane = new JScrollPane(dentistTable);
         dentistAppointment.add(dentistScrollPane, BorderLayout.CENTER);
         generateDentistAppointmentTable(todayAsString);
-
-        System.out.println(String.valueOf(dentistTable.getSelectedRow()));
 
         JPanel dentistAppointmentPanel = new JPanel();
         dentistAppointment.add(dentistAppointmentPanel, BorderLayout.SOUTH);
@@ -119,8 +120,6 @@ public class SecretaryInterface extends JFrame {
 
         JButton dentistCancelButton = new JButton("Cancel Appointment");
         dentistCancelButton.addActionListener(e -> {
-            System.out.println(String.valueOf(dentistTable.getSelectedRow()));
-            System.out.println(String.valueOf(dentistTable.getSelectedColumn()));
             int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
             if (a == JOptionPane.YES_OPTION) {
                 // insert delete plan SQL stuff here
@@ -182,6 +181,8 @@ public class SecretaryInterface extends JFrame {
 
         hygienistTable = new JTable();
         hygienistTable.setRowHeight(20);
+        hygienistTable.setCellSelectionEnabled(true);
+        hygienistTable.setGridColor(Color.GRAY);
         hygienistTable.setFillsViewportHeight(true);
         JScrollPane hygienistScrollPane = new JScrollPane(hygienistTable);
         hygienistAppointment.add(hygienistScrollPane, BorderLayout.CENTER);
@@ -189,6 +190,18 @@ public class SecretaryInterface extends JFrame {
 
         JPanel hygienistAppointmentPanel = new JPanel();
         hygienistAppointment.add(hygienistAppointmentPanel, BorderLayout.SOUTH);
+
+        JButton hygienistBookButton = new JButton("Book Appointment");
+        hygienistAppointmentPanel.add(hygienistBookButton);
+
+        JButton hygienistCancelButton = new JButton("Cancel Appointment");
+        hygienistAppointmentPanel.add(hygienistCancelButton);
+
+        JButton hygienistViewButton = new JButton("View Appointment");
+        hygienistAppointmentPanel.add(hygienistViewButton);
+
+        JButton hygienistSearchButton = new JButton("Search Appointment");
+        hygienistAppointmentPanel.add(hygienistSearchButton);
 
         // UI for patient
         JPanel patient = new JPanel();

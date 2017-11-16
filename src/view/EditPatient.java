@@ -122,7 +122,6 @@ public class EditPatient extends JDialog {
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
         comboMonth.addActionListener(e -> {
-            System.out.println("called");
             String currentlySelected = String.valueOf(comboDay.getSelectedItem());
             String selectedMonth = String.valueOf(comboMonth.getSelectedItem());
             Calendar tempCal = new GregorianCalendar((int) comboYear.getSelectedItem(),
