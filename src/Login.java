@@ -52,6 +52,21 @@ public class Login extends JFrame {
         // Button for hygienist login
         JButton HygienistLogin = new JButton("Hygienist");
         HygienistLogin.setBounds(253, 168, 115, 71);
+        HygienistLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	 dispose();
+                 PartnerHome partnerFrame = new PartnerHome("Hygienist");
+                 partnerFrame.setVisible(true);
+                 partnerFrame.addWindowListener(new WindowAdapter() {
+                     @Override
+                     public void windowClosing(WindowEvent e) {
+                         partnerFrame.dispose();
+                         Login welcome = new Login();
+                         welcome.setVisible(true);
+                     }
+                 });
+            }
+        });
         contentPane.add(HygienistLogin);
 
         // Button for dentist login
@@ -59,6 +74,17 @@ public class Login extends JFrame {
         DentistLogin.setBounds(438, 168, 115, 71);
         DentistLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	 dispose();
+                 PartnerHome partnerFrame = new PartnerHome("Dentist");
+                 partnerFrame.setVisible(true);
+                 partnerFrame.addWindowListener(new WindowAdapter() {
+                     @Override
+                     public void windowClosing(WindowEvent e) {
+                         partnerFrame.dispose();
+                         Login welcome = new Login();
+                         welcome.setVisible(true);
+                     }
+                 });
             }
         });
         contentPane.add(DentistLogin);
