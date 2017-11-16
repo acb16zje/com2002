@@ -70,6 +70,21 @@ public class Welcome extends JFrame {
         });
 
         JButton HygienistLogin = new JButton("Hygienist");
+        HygienistLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	dispose();
+                PartnerHome homeFrame = new PartnerHome("Hygienist");
+                homeFrame.setVisible(true);
+                homeFrame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        homeFrame.dispose();
+                        Welcome welcome = new Welcome();
+                        welcome.setVisible(true);
+                    }
+                });
+            }
+        });
         GridBagConstraints gbc_HygienistLogin = new GridBagConstraints();
         gbc_HygienistLogin.fill = GridBagConstraints.BOTH;
         gbc_HygienistLogin.insets = new Insets(0, 0, 0, 5);
@@ -80,6 +95,17 @@ public class Welcome extends JFrame {
         JButton DentistLogin = new JButton("Dentist");
         DentistLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	dispose();
+                PartnerHome homeFrame = new PartnerHome("Dentist");
+                homeFrame.setVisible(true);
+                homeFrame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        homeFrame.dispose();
+                        Welcome welcome = new Welcome();
+                        welcome.setVisible(true);
+                    }
+                });
             }
         });
         GridBagConstraints gbc_DentistLogin = new GridBagConstraints();
