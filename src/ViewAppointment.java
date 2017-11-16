@@ -215,7 +215,7 @@ public class ViewAppointment extends JDialog {
         fl_totalCostPanel.setAlignment(FlowLayout.RIGHT);
         treatmentPanel.add(totalCostPanel, BorderLayout.SOUTH);
 
-        totalCostLabel = new JLabel("Total Cost: £");
+        totalCostLabel = new JLabel("Total Cost: \u00A3");
         totalCostPanel.add(totalCostLabel);
 
         totalCostTextField = new JTextField();
