@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -105,7 +106,7 @@ public class BookAppointment extends JDialog {
         JLabel typeLabel = new JLabel("Type:");
         typeLabel.setBounds(42, 154, 39, 15);
         contentPanel.add(typeLabel);
-
+    
         // Label for Check-up / hygiene
         JRadioButton checkUpRadioButton = new JRadioButton("Check-up");
         checkUpRadioButton.setBounds(123, 150, 90, 23);
@@ -116,6 +117,10 @@ public class BookAppointment extends JDialog {
         treatmentRadioButton.setBounds(218, 150, 99, 23);
         contentPanel.add(treatmentRadioButton);
 
+        ButtonGroup treatmentGroup = new ButtonGroup();
+        treatmentGroup.add(checkUpRadioButton);
+        treatmentGroup.add(treatmentRadioButton);
+        
         // Label for patient ID
         JLabel patientIDLabel = new JLabel("Patient ID:");
         patientIDLabel.setBounds(42, 194, 75, 15);

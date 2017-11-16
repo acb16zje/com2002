@@ -96,9 +96,18 @@ public class EditPatient extends JDialog {
         dobLabel.setBounds(30, 170, 97, 15);
         panel.add(dobLabel);
 
-        //calendar object to create date combobox
+        // calendar object to create date combobox
         Calendar tempCal = new GregorianCalendar();
 
+        // ComboBox for day
+        JComboBox comboDay = new JComboBox();
+        comboDay.setBounds(154, 165, 50, 24);
+        panel.add(comboDay);
+        for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+            comboDay.addItem(i);
+        }
+        comboDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
+        
         // ComboBox for month
         JComboBox comboMonth = new JComboBox();
         comboMonth.setBounds(216, 165, 50, 24);
@@ -118,26 +127,10 @@ public class EditPatient extends JDialog {
         }
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
-        comboMonth.addActionListener(e -> {
-            String currentlySelected = String.valueOf(comboDay.getSelectedItem());
-            String selectedMonth = String.valueOf(comboMonth.getSelectedItem());
-            Calendar tempCal = new GregorianCalendar((int) comboYear.getSelectedItem(),
-                Integer.parseInt(selectedMonth) - 1, 1);
-            String[] newArray = new String[tempCal.getActualMaximum(Calendar.DAY_OF_MONTH)];
-            for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-                newArray[i - 1] = String.valueOf(i);
-            }
-            comboDay.setModel(new DefaultComboBoxModel(newArray));
-            if (tempCal.getActualMaximum(Calendar.DAY_OF_MONTH) >= Integer
-                .parseInt(currentlySelected)) {
-                comboDay.setSelectedItem(currentlySelected);
-            } else {
-                comboDay.setSelectedItem(tempCal.getActualMaximum(Calendar.DAY_OF_MONTH));
-            }
-        });
-
+        comboMonth.addActionListener(new DateListener(comboDay,comboMonth,comboYear));
+        
         comboYear.addActionListener(new DateListener(comboDay,comboMonth,comboYear));
-
+        
         // Label for phone number
         JLabel phoneNoLabel = new JLabel("Phone No:");
         phoneNoLabel.setBounds(30, 210, 73, 15);
