@@ -23,6 +23,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -33,8 +34,9 @@ import javax.swing.table.DefaultTableModel;
 public class SecretaryInterface extends JFrame {
 
     private Date monDate;
-    private JTable appointmentTable;
+    private JTable dentistTable;
     private SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private JTable hygienistTable;
 
     /**
      * Create the frame.
@@ -51,112 +53,142 @@ public class SecretaryInterface extends JFrame {
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
         // UI for appointment
-        JPanel appointment = new JPanel();
+        JPanel dentistAppointment = new JPanel();
+        tabbedPane.addTab("Dentist Appointment", null, dentistAppointment, null);
+        dentistAppointment.setLayout(new BorderLayout(0, 0));
 
-        tabbedPane.addTab("Appointment", null, appointment, null);
-
-        ButtonGroup partnerGroup = new ButtonGroup();
-        appointment.setLayout(new BorderLayout(0, 0));
-
-        JPanel tableControlPanel = new JPanel();
-        appointment.add(tableControlPanel, BorderLayout.NORTH);
-        tableControlPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-        JRadioButton Hygienist = new JRadioButton("Hygienist");
-        tableControlPanel.add(Hygienist);
-
-        JRadioButton Dentist = new JRadioButton("Dentist");
-        tableControlPanel.add(Dentist);
-        partnerGroup.add(Hygienist);
-        partnerGroup.add(Dentist);
-        Hygienist.setSelected(true);
+        JPanel dentistControlPanel = new JPanel();
+        dentistAppointment.add(dentistControlPanel, BorderLayout.NORTH);
+        dentistControlPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
         // reminder that month works as 0-11(JAN,FEB,...,DEC)
         Calendar currentCalendar = Calendar.getInstance();
         int currentYear = currentCalendar.get(Calendar.YEAR);
         int currentMonth = currentCalendar.get(Calendar.MONTH);
+        String todayAsString = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
-        JSpinner year = new JSpinner();
-        year.setModel(new SpinnerNumberModel(currentYear, currentYear - 20, currentYear + 1, 1));
+        JSpinner dentistYear = new JSpinner();
+        dentistYear.setModel(new SpinnerNumberModel(currentYear, currentYear - 20, currentYear + 1, 1));
+        JSpinner.NumberEditor dentistEditor = new JSpinner.NumberEditor(dentistYear, "#");
+        dentistYear.setEditor(dentistEditor);
+        
+        JSpinner dentistMonth = new JSpinner();
+        dentistMonth.setModel(new SpinnerNumberModel(currentMonth + 1, 1, 12, 1));
 
-        JSpinner month = new JSpinner();
-        month.setModel(new SpinnerNumberModel(currentMonth + 1, 1, 12, 1));
+        JComboBox dentistWeek = WeekGenerator.weekSpinner(currentCalendar);
 
-        JComboBox week = WeekGenerator.weekSpinner(currentCalendar);
-
-        tableControlPanel.add(week);
-        tableControlPanel.add(month);
-        tableControlPanel.add(year);
+        dentistControlPanel.add(dentistWeek);
+        dentistControlPanel.add(dentistMonth);
+        dentistControlPanel.add(dentistYear);
 
         // Listeners for dates
-        month.addChangeListener(e -> {
-            currentCalendar.set(Calendar.MONTH, (int) month.getValue() - 1);
-            week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
-            String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
-            generateAppointmentTable(selectedWeek);
+        dentistMonth.addChangeListener(e -> {
+            currentCalendar.set(Calendar.MONTH, (int) dentistMonth.getValue() - 1);
+            dentistWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
+            String selectedWeek = ((String) dentistWeek.getSelectedItem()).substring(0, 10);
+            generateDentistAppointmentTable(selectedWeek);
         });
 
-        year.addChangeListener(e -> {
-            currentCalendar.set(Calendar.YEAR, (int) year.getValue());
-            week.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
-            String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
-            generateAppointmentTable(selectedWeek);
+        dentistYear.addChangeListener(e -> {
+            currentCalendar.set(Calendar.YEAR, (int) dentistYear.getValue());
+            dentistWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
+            String selectedWeek = ((String) dentistWeek.getSelectedItem()).substring(0, 10);
+            generateDentistAppointmentTable(selectedWeek);
         });
 
-        week.addActionListener(e -> {
-            String selectedWeek = ((String) week.getSelectedItem()).substring(0, 10);
-            generateAppointmentTable(selectedWeek);
+        dentistWeek.addActionListener(e -> {
+            String selectedWeek = ((String) dentistWeek.getSelectedItem()).substring(0, 10);
+            generateDentistAppointmentTable(selectedWeek);
         });
 
-        appointmentTable = new JTable();
-        appointmentTable.setRowHeight(20);
-        appointmentTable.setFillsViewportHeight(true);
-        JScrollPane appointmentScrollPane = new JScrollPane(appointmentTable);
-        appointment.add(appointmentScrollPane, BorderLayout.CENTER);
+        dentistTable = new JTable();
+        dentistTable.setRowHeight(20);
+        dentistTable.setFillsViewportHeight(true);
+        JScrollPane dentistScrollPane = new JScrollPane(dentistTable);
+        dentistAppointment.add(dentistScrollPane, BorderLayout.CENTER);
+        generateDentistAppointmentTable(todayAsString);
+       
+        System.out.println(String.valueOf(dentistTable.getSelectedRow()));
+        
+        JPanel dentistAppointmentPanel = new JPanel();
+        dentistAppointment.add(dentistAppointmentPanel, BorderLayout.SOUTH);
 
-        Date[] daysInWeekList = WeekGenerator.daysInWeekList(currentCalendar.getTime());
-        appointmentTable
-            .setModel(new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
-                          "Mon " + timeFormat.format(daysInWeekList[0]),
-                          "Tue " + timeFormat.format(daysInWeekList[1]),
-                          "Wed " + timeFormat.format(daysInWeekList[2]),
-                          "Thu " + timeFormat.format(daysInWeekList[3]),
-                          "Fri " + timeFormat.format(daysInWeekList[4])}) {
-                          @Override
-                          public boolean isCellEditable(int row, int column) {
-                              return false;
-                          }
-                      }
-            );
-
-        appointmentTable.getColumnModel().getColumn(0).setPreferredWidth(15);
-        JPanel appointmentPanel = new JPanel();
-        appointment.add(appointmentPanel, BorderLayout.SOUTH);
-
-        JButton bookAppointmentButton = new JButton("Book Appointment");
-        bookAppointmentButton.addActionListener(e -> {
+        JButton dentistBookButton = new JButton("Book Appointment");
+        dentistBookButton.addActionListener(e -> {
             BookAppointment.main(null);
         });
-        appointmentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        appointmentPanel.add(bookAppointmentButton);
+        dentistAppointmentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        dentistAppointmentPanel.add(dentistBookButton);
 
-        JButton cancelAppointmentButton = new JButton("Cancel Appointment");
-        cancelAppointmentButton.addActionListener(e -> {
+        JButton dentistCancelButton = new JButton("Cancel Appointment");
+        dentistCancelButton.addActionListener(e -> {
+        	System.out.println(String.valueOf(dentistTable.getSelectedRow()));
+        	System.out.println(String.valueOf(dentistTable.getSelectedColumn()));
             int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
             if (a == JOptionPane.YES_OPTION) {
                 // insert delete plan SQL stuff here
             }
         });
-        appointmentPanel.add(cancelAppointmentButton);
+        dentistAppointmentPanel.add(dentistCancelButton);
 
-        JButton viewAppointmentButton = new JButton("View Appointment");
-        viewAppointmentButton.addActionListener(e -> ViewAppointment.main(null));
-        appointmentPanel.add(viewAppointmentButton);
+        JButton dentistViewButton = new JButton("View Appointment");
+        dentistViewButton.addActionListener(e -> ViewAppointment.main(null));
+        dentistAppointmentPanel.add(dentistViewButton);
 
-        JButton searchAppointmentButton = new JButton("Search Appointment");
-        appointmentPanel.add(searchAppointmentButton);
-        searchAppointmentButton.setFont(new Font("Dialog", Font.BOLD, 12));
-        searchAppointmentButton.addActionListener(e -> AppointmentSearch.main(null));
+        JButton dentistSearchButton = new JButton("Search Appointment");
+        dentistAppointmentPanel.add(dentistSearchButton);
+        dentistSearchButton.setFont(new Font("Dialog", Font.BOLD, 12));
+        dentistSearchButton.addActionListener(e -> AppointmentSearch.main(null));
+        
+        JPanel hygienistAppointment = new JPanel();
+        tabbedPane.addTab("Hygienist Appointment", null, hygienistAppointment, null);
+        hygienistAppointment.setLayout(new BorderLayout(0, 0));
+        
+        JPanel hygienistControlPanel = new JPanel();
+        hygienistAppointment.add(hygienistControlPanel, BorderLayout.NORTH);
+        
+        JComboBox hygienistWeek = WeekGenerator.weekSpinner(currentCalendar);
+        hygienistControlPanel.add(hygienistWeek);
+        
+        JSpinner hygienistMonth = new JSpinner();
+        hygienistMonth.setModel(new SpinnerNumberModel(currentMonth + 1, 1, 12, 1));
+        hygienistControlPanel.add(hygienistMonth);
+        
+        JSpinner hygienistYear = new JSpinner();
+        hygienistYear.setModel(new SpinnerNumberModel(currentYear, currentYear - 20, currentYear + 1, 1));
+        hygienistControlPanel.add(hygienistYear);
+        JSpinner.NumberEditor hygienistEditor = new JSpinner.NumberEditor(hygienistYear, "#");
+        hygienistYear.setEditor(hygienistEditor);
+        
+        // Listeners for dates
+        hygienistMonth.addChangeListener(e -> {
+            currentCalendar.set(Calendar.MONTH, (int) hygienistMonth.getValue() - 1);
+            hygienistWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
+            String selectedWeek = ((String) hygienistWeek.getSelectedItem()).substring(0, 10);
+            generateHygienistAppointmentTable(selectedWeek);
+        });
+
+        hygienistYear.addChangeListener(e -> {
+            currentCalendar.set(Calendar.YEAR, (int) dentistYear.getValue());
+            hygienistWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(currentCalendar)));
+            String selectedWeek = ((String) hygienistWeek.getSelectedItem()).substring(0, 10);
+            generateHygienistAppointmentTable(selectedWeek);
+        });
+
+        hygienistWeek.addActionListener(e -> {
+            String selectedWeek = ((String) hygienistWeek.getSelectedItem()).substring(0, 10);
+            generateHygienistAppointmentTable(selectedWeek);
+        });
+        
+        hygienistTable = new JTable();
+        hygienistTable.setRowHeight(20);
+        hygienistTable.setFillsViewportHeight(true);
+        JScrollPane hygienistScrollPane = new JScrollPane(hygienistTable);
+        hygienistAppointment.add(hygienistScrollPane, BorderLayout.CENTER);
+        generateHygienistAppointmentTable(todayAsString);
+        
+        JPanel hygienistAppointmentPanel = new JPanel();
+        hygienistAppointment.add(hygienistAppointmentPanel, BorderLayout.SOUTH);
 
         // UI for patient
         JPanel patient = new JPanel();
@@ -321,7 +353,7 @@ public class SecretaryInterface extends JFrame {
      * Generate the days in the week
      * @param selectedWeek The selected week
      */
-    private void generateAppointmentTable(String selectedWeek) {
+    private void generateDentistAppointmentTable(String selectedWeek) {
         try {
             monDate = timeFormat.parse(selectedWeek);
         } catch (ParseException e1) {
@@ -329,7 +361,7 @@ public class SecretaryInterface extends JFrame {
         }
 
         Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
-        appointmentTable.setModel(
+        dentistTable.setModel(
             new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
                 "Mon " + timeFormat.format(daysInWeekList[0]),
                 "Tue " + timeFormat.format(daysInWeekList[1]),
@@ -342,5 +374,36 @@ public class SecretaryInterface extends JFrame {
                 }
             }
         );
+        
+        dentistTable.getColumnModel().getColumn(0).setPreferredWidth(15);
+    }
+    
+    /**
+     * Generate the days in the week
+     * @param selectedWeek The selected week
+     */
+    private void generateHygienistAppointmentTable(String selectedWeek) {
+        try {
+            monDate = timeFormat.parse(selectedWeek);
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
+
+        Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+        hygienistTable.setModel(
+            new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
+                "Mon " + timeFormat.format(daysInWeekList[0]),
+                "Tue " + timeFormat.format(daysInWeekList[1]),
+                "Wed " + timeFormat.format(daysInWeekList[2]),
+                "Thu " + timeFormat.format(daysInWeekList[3]),
+                "Fri " + timeFormat.format(daysInWeekList[4])}) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            }
+        );
+        
+        hygienistTable.getColumnModel().getColumn(0).setPreferredWidth(15);
     }
 }
