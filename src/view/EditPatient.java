@@ -1,5 +1,6 @@
 package view;
 
+import controller.DateListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -11,7 +12,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -23,7 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
 import util.IntegerFilter;
-import controller.DateListener;
 
 public class EditPatient extends JDialog {
 
@@ -107,7 +106,7 @@ public class EditPatient extends JDialog {
             comboDay.addItem(i);
         }
         comboDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
-        
+
         // ComboBox for month
         JComboBox comboMonth = new JComboBox();
         comboMonth.setBounds(216, 165, 50, 24);
@@ -115,7 +114,7 @@ public class EditPatient extends JDialog {
         for (int i = 1; i <= 12; i++) {
             comboMonth.addItem(i);
         }
-        comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH)+1);
+        comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
 
         // ComboBox for year
         JComboBox comboYear = new JComboBox();
@@ -127,10 +126,10 @@ public class EditPatient extends JDialog {
         }
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
-        comboMonth.addActionListener(new DateListener(comboDay,comboMonth,comboYear));
-        
-        comboYear.addActionListener(new DateListener(comboDay,comboMonth,comboYear));
-        
+        comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
+
+        comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
+
         // Label for phone number
         JLabel phoneNoLabel = new JLabel("Phone No:");
         phoneNoLabel.setBounds(30, 210, 73, 15);

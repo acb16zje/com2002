@@ -1,5 +1,6 @@
 package view;
 
+import controller.DateListener;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -7,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,8 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
-import controller.DateListener;
 
 public class BookAppointment extends JDialog {
 
@@ -67,7 +65,7 @@ public class BookAppointment extends JDialog {
         for (int i = 1; i <= 12; i++) {
             comboMonth.addItem(i);
         }
-        comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH)+1);
+        comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
 
         // ComboBox for year
         JComboBox comboYear = new JComboBox();
@@ -79,8 +77,8 @@ public class BookAppointment extends JDialog {
         }
         comboYear.setSelectedItem(tempCal.get(Calendar.YEAR));
 
-        comboMonth.addActionListener(new DateListener(comboDay,comboMonth,comboYear));
-        comboYear.addActionListener(new DateListener(comboDay,comboMonth,comboYear));
+        comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
+        comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
         // Label for Start Time
         JLabel startTimeLabel = new JLabel("Start time:");
         startTimeLabel.setBounds(42, 114, 76, 15);
@@ -106,7 +104,7 @@ public class BookAppointment extends JDialog {
         JLabel typeLabel = new JLabel("Type:");
         typeLabel.setBounds(42, 154, 39, 15);
         contentPanel.add(typeLabel);
-    
+
         // Label for Check-up / hygiene
         JRadioButton checkUpRadioButton = new JRadioButton("Check-up");
         checkUpRadioButton.setBounds(123, 150, 90, 23);
@@ -120,7 +118,7 @@ public class BookAppointment extends JDialog {
         ButtonGroup treatmentGroup = new ButtonGroup();
         treatmentGroup.add(checkUpRadioButton);
         treatmentGroup.add(treatmentRadioButton);
-        
+
         // Label for patient ID
         JLabel patientIDLabel = new JLabel("Patient ID:");
         patientIDLabel.setBounds(42, 194, 75, 15);
