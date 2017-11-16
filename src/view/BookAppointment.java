@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -15,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import controller.DateListener;
 
 public class BookAppointment extends JDialog {
 
@@ -42,15 +46,18 @@ public class BookAppointment extends JDialog {
         dateLabel.setBounds(42, 74, 39, 15);
         contentPanel.add(dateLabel);
 
+        //calendar object to create date combobox
+        Calendar tempCal = new GregorianCalendar();
+
         // ComboBox for day
         JComboBox comboDay = new JComboBox();
         comboDay.setBounds(123, 69, 50, 24);
         contentPanel.add(comboDay);
         int today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        for (int i = 1; i <= 31; i++) {
+        for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             comboDay.addItem(i);
         }
-        comboDay.setSelectedIndex(today - 1);
+        comboDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
 
         // ComboBox for month
         JComboBox comboMonth = new JComboBox();
@@ -59,7 +66,7 @@ public class BookAppointment extends JDialog {
         for (int i = 1; i <= 12; i++) {
             comboMonth.addItem(i);
         }
-        comboMonth.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
+        comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH)+1);
 
         // ComboBox for year
         JComboBox comboYear = new JComboBox();
@@ -69,8 +76,10 @@ public class BookAppointment extends JDialog {
         for (int i = currentYear; i <= currentYear + 2; i++) {
             comboYear.addItem(i);
         }
-        comboYear.setSelectedIndex(0);
+        comboYear.setSelectedItem(tempCal.get(Calendar.YEAR));
 
+        comboMonth.addActionListener(new DateListener(comboDay,comboMonth,comboYear));
+        comboYear.addActionListener(new DateListener(comboDay,comboMonth,comboYear));
         // Label for Start Time
         JLabel startTimeLabel = new JLabel("Start time:");
         startTimeLabel.setBounds(42, 114, 76, 15);
@@ -79,7 +88,7 @@ public class BookAppointment extends JDialog {
         // ComboBox for start time, 20 minutes interval
         JComboBox comboStartTime = new JComboBox();
         comboStartTime.setBounds(123, 109, 68, 24);
-        comboStartTime.setEditable(true);
+        comboStartTime.setEditable(false);
         for (int hour = 9; hour < 17; hour++) {
             for (int min = 0; min < 6; min += 2) {
                 if (hour == 9) {
