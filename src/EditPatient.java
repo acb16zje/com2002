@@ -8,6 +8,10 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -115,6 +119,42 @@ public class EditPatient extends JDialog {
             comboYear.addItem(i);
         }
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
+        
+        comboMonth.addActionListener(e -> {
+        	System.out.println("called");
+        	String currentlySelected = String.valueOf(comboDay.getSelectedItem());
+        	String selectedMonth = String.valueOf(comboMonth.getSelectedItem());
+        	Calendar tempCal = new GregorianCalendar((int)comboYear.getSelectedItem(),Integer.parseInt(selectedMonth)-1,1);
+        	String[] newArray =  new String[tempCal.getActualMaximum(Calendar.DAY_OF_MONTH)];
+        	for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+                newArray[i-1] = String.valueOf(i);
+            }
+        	comboDay.setModel(new DefaultComboBoxModel(newArray));
+        	if (tempCal.getActualMaximum(Calendar.DAY_OF_MONTH) >= Integer.parseInt(currentlySelected)) {
+        		comboDay.setSelectedItem(currentlySelected);
+        	}
+        	else {
+        		comboDay.setSelectedItem(tempCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        	}
+        });
+        
+        comboYear.addActionListener(e -> {
+        	System.out.println("called");
+        	String currentlySelected = String.valueOf(comboDay.getSelectedItem());
+        	String selectedMonth = String.valueOf(comboMonth.getSelectedItem());
+        	Calendar tempCal = new GregorianCalendar((int)comboYear.getSelectedItem(),Integer.parseInt(selectedMonth)-1,1);
+        	String[] newArray =  new String[tempCal.getActualMaximum(Calendar.DAY_OF_MONTH)];
+        	for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+                newArray[i-1] = String.valueOf(i);
+            }
+        	comboDay.setModel(new DefaultComboBoxModel(newArray));
+        	if (tempCal.getActualMaximum(Calendar.DAY_OF_MONTH) >= Integer.parseInt(currentlySelected)) {
+        		comboDay.setSelectedItem(currentlySelected);
+        	}
+        	else {
+        		comboDay.setSelectedItem(tempCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        	}
+        });
 
         // Label for phone number
         JLabel phoneNoLabel = new JLabel("Phone No:");
