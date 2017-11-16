@@ -1,12 +1,11 @@
+package view;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -185,8 +184,6 @@ public class ViewAppointment extends JDialog {
         gbc_patientID.gridy = 6;
         infoPanel.add(patientID, gbc_patientID);
 
-        ButtonGroup partnerGroup = new ButtonGroup();
-
         treatmentPanel = new JPanel();
         contentPanel.add(treatmentPanel, BorderLayout.EAST);
         treatmentPanel.setLayout(new BorderLayout(0, 0));
@@ -228,21 +225,13 @@ public class ViewAppointment extends JDialog {
         getContentPane().add(buttonPane, BorderLayout.SOUTH);
 
         JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        saveButton.addActionListener(e -> dispose());
         saveButton.setActionCommand("OK");
         buttonPane.add(saveButton);
         getRootPane().setDefaultButton(saveButton);
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        cancelButton.addActionListener(e -> dispose());
         cancelButton.setActionCommand("Cancel");
         buttonPane.add(cancelButton);
 

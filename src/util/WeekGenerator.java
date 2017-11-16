@@ -1,3 +1,5 @@
+package util;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -73,13 +75,13 @@ public class WeekGenerator {
             for (int j = 0; j <= 4; j += 2) {
                 if (j == 4) {
                     String[] tempArray = {
-                        (String) (Integer.toString(i) + ":" + Integer.toString(j) + "0 - " + Integer
-                            .toString(i + 1) + ":00"), null, null, null, null, null};
+                        Integer.toString(i) + ":" + Integer.toString(j) + "0 - " + Integer
+                            .toString(i + 1) + ":00", null, null, null, null, null};
                     appointmentList[row] = tempArray;
                 } else {
                     String[] tempArray = {
-                        (String) (Integer.toString(i) + ":" + Integer.toString(j) + "0 - " + Integer
-                            .toString(i + 1) + ":" + Integer.toString(j + 2) + "0"), null, null,
+                        Integer.toString(i) + ":" + Integer.toString(j) + "0 - " + Integer
+                            .toString(i + 1) + ":" + Integer.toString(j + 2) + "0", null, null,
                         null, null, null};
                     appointmentList[row] = tempArray;
                 }
