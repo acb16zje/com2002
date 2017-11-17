@@ -14,3 +14,6 @@ INSERT INTO Treatment VALUES ("Check Up", 45);
 INSERT INTO Treatment VALUES ("Silver Amalgam Filling", 90);
 INSERT INTO Treatment VALUES ("White Composite Resin Filling", 150);
 INSERT INTO Treatment VALUES ("Gold Crown Fitting", 500);
+
+#Example appointments
+INSERT INTO Appointment VALUES (DATE "2017-12-25", "12:00:00", 0, 0);

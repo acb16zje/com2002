@@ -34,7 +34,6 @@ CREATE TABLE HealthCarePlan (
 	hygieneVist INT NOT NULL,
 	repairWork INT NOT NULL,
 	PRIMARY KEY (planName)
-
 );
 	
 CREATE TABLE Subscription (
@@ -74,6 +73,4 @@ CREATE TABLE Record (
 	PRIMARY KEY (treatmentGiven, date, startTime, partnerID),
 	FOREIGN KEY (date, startTime, partnerID) REFERENCES Appointment(date, startTime, partnerID),
 	FOREIGN KEY (treatmentGiven) REFERENCES Treatment(name)
-
-);
-	
+);	

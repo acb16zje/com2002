@@ -24,7 +24,7 @@ JOIN HealthCarePlan ON Subscription.planName = HealthCarePlan.planName
 WHERE Subscription.patientID = ?;
 
 #Get appointment details for a date, time and partner
-SELECT date, startTime, patientID, Patient.title, Patient.forename, Patient.surname, partnerID, Partner.forename, Partner.surname FROM Appointment
+SELECT date, startTime, Patient.patientID, Patient.title, Patient.forename, Patient.surname, Partner.partnerID, Partner.forename, Partner.surname FROM Appointment
 JOIN Patient ON Appointment.patientID = Patient.patientID
 JOIN Partner ON Appointment.partnerID = Partner.partnerID
 WHERE date = ? 
@@ -32,13 +32,13 @@ AND startTime = ?
 AND Appointment.partnerID = ?;
 
 #Get all appointments for a particular patient
-SELECT date, startTime, patientID, Patient.title, Patient.forename, Patient.surname, partnerID, Partner.forename, Partner.surname FROM Appointment
+SELECT date, startTime, Patient.patientID, Patient.title, Patient.forename, Patient.surname, Partner.partnerID, Partner.forename, Partner.surname FROM Appointment
 JOIN Patient ON Appointment.patientID = Patient.patientID
 JOIN Partner ON Appointment.partnerID = Partner.partnerID
 WHERE Appointment.patientID = ?;
 
 #Get all appointments for a particular partner
-SELECT date, startTime, patientID, Patient.title, Patient.forename, Patient.surname, partnerID, Partner.forename, Partner.surname FROM Appointment
+SELECT date, startTime, Patient.patientID, Patient.title, Patient.forename, Patient.surname, Partner.partnerID, Partner.forename, Partner.surname FROM Appointment
 JOIN Patient ON Appointment.patientID = Patient.patientID
 JOIN Partner ON Appointment.partnerID = Partner.partnerID
 WHERE Appointment.partnerID = ?;
