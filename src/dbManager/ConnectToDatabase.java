@@ -11,7 +11,10 @@ public class ConnectToDatabase {
     Connection con;  //Connect to db
     public ConnectToDatabase() {
         con = null;
+
         connect();
+
+        close();
     }
 
     private void connect() {
@@ -20,15 +23,17 @@ public class ConnectToDatabase {
             con = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team006", "team006", "72b1d11b");
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("closed");
+        }
+    }
+
+    private void close() {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
+            System.out.println("closed");
         }
     }
 
