@@ -4,10 +4,7 @@ import controller.DateListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,7 +21,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
 import util.IntegerFilter;
 
-public class EditPatient extends JDialog {
+public class PatientEditor extends JDialog {
 
     private JPanel contentPane;
     private JTextField foreName;
@@ -39,7 +36,7 @@ public class EditPatient extends JDialog {
     /**
      * Create the frame.
      */
-    public EditPatient() {
+    public PatientEditor(String label) {
         // Main content panel
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -51,9 +48,9 @@ public class EditPatient extends JDialog {
         panel.setLayout(null);
 
         // Main label for Edit Patient
-        JLabel mainLabel = new JLabel("Edit Patient");
+        JLabel mainLabel = new JLabel(label + " Patient");
         mainLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        mainLabel.setBounds(140, 12, 111, 15);
+        mainLabel.setBounds(155, 12, 111, 15);
         panel.add(mainLabel);
 
         // Title label
@@ -95,7 +92,7 @@ public class EditPatient extends JDialog {
         dobLabel.setBounds(30, 170, 97, 15);
         panel.add(dobLabel);
 
-        // calendar object to create date combobox
+        // Calendar object to create date ComboBox
         Calendar tempCal = new GregorianCalendar();
 
         // ComboBox for day
@@ -126,8 +123,8 @@ public class EditPatient extends JDialog {
         }
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
+        // Add listener for ComboBox Month and Year
         comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
-
         comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
 
         // Label for phone number
@@ -226,41 +223,39 @@ public class EditPatient extends JDialog {
 
         // Save button
         JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                boolean completed = true;
+        saveButton.addActionListener(e -> {
+            boolean completed = true;
 
-                // Check if birth date is valid
-                String inputDay = comboDay.getSelectedItem().toString();
-                String inputMonth = comboMonth.getSelectedItem().toString();
-                String inputYear = comboYear.getSelectedItem().toString();
-                String inputDate = inputDay + "-" + inputMonth + "-" + inputYear;
+            // Check if birth date is valid
+            String inputDay = comboDay.getSelectedItem().toString();
+            String inputMonth = comboMonth.getSelectedItem().toString();
+            String inputYear = comboYear.getSelectedItem().toString();
+            String inputDate = inputDay + "-" + inputMonth + "-" + inputYear;
 
-                if (isValidDate(inputDate)) {
-                    // insert SQL query here
+            if (isValidDate(inputDate)) {
+                // insert SQL query here
 
-                } else {
-                    JOptionPane.showMessageDialog(null, "Please enter a valid date");
-                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Please enter a valid date");
+            }
 
-                // Check if all field are filled in
-                Component[] components = panel.getComponents();
-                for (Component comp : components) {
-                    // Cast comp to JComboBox / JTextField to get the values
-                    if (comp instanceof JTextField) {
-                        if (((JTextField) comp).getText().isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Please Complete");
-                            completed = false;
-                            break;
-                        } else {
-                            JOptionPane.showMessageDialog(null, ((JTextField) comp).getText());
-                        }
+            // Check if all field are filled in
+            Component[] components = panel.getComponents();
+            for (Component comp : components) {
+                // Cast comp to JComboBox / JTextField to get the values
+                if (comp instanceof JTextField) {
+                    if (((JTextField) comp).getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Please Complete");
+                        completed = false;
+                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(null, ((JTextField) comp).getText());
                     }
                 }
+            }
 
-                if (completed) {
-                    dispose();
-                }
+            if (completed) {
+                dispose();
             }
         });
         confirmPanel.add(saveButton);
@@ -271,26 +266,11 @@ public class EditPatient extends JDialog {
         confirmPanel.add(cancelButton);
 
         // Settings for the frame
-        setTitle("Edit Patient");
+        setTitle(label + " Patient");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 411, 609);
         setResizable(false);
         setLocationRelativeTo(null);
-    }
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                EditPatient frame = new EditPatient();
-                frame.setModal(true);
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     /**

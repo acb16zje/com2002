@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,12 +8,12 @@ import java.awt.Insets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import util.WeekGenerator;
@@ -149,27 +148,13 @@ public class PartnerHome extends JFrame {
         panel.setLayout(new GridLayout(0, 1, 0, 0));
 
         JButton btnNewButton = new JButton("Edit Appointment");
-        btnNewButton.addActionListener(e -> AppointmentEditorPartner.main(null));
+        btnNewButton.addActionListener(e -> {
+            AppointmentEditorPartner dialog = new AppointmentEditorPartner();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
         panel.add(btnNewButton);
 
     }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        EventQueue.invokeLater(() -> {
-            try {
-                PartnerHome frame = new PartnerHome(null);
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
 }

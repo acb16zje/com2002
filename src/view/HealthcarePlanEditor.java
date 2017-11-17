@@ -2,7 +2,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -177,20 +176,4 @@ public class HealthcarePlanEditor extends JDialog {
         setResizable(false);
         setLocationRelativeTo(null);
     }
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                HealthcarePlanEditor frame = new HealthcarePlanEditor();
-                frame.setModal(true);
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
 }

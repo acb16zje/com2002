@@ -2,9 +2,10 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,6 +13,7 @@ import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,7 +24,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import util.WeekGenerator;
@@ -113,7 +114,9 @@ public class SecretaryInterface extends JFrame {
 
         JButton dentistBookButton = new JButton("Book Appointment");
         dentistBookButton.addActionListener(e -> {
-            BookAppointment.main(null);
+            BookAppointment dialog = new BookAppointment();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
         });
         dentistAppointmentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         dentistAppointmentPanel.add(dentistBookButton);
@@ -128,13 +131,21 @@ public class SecretaryInterface extends JFrame {
         dentistAppointmentPanel.add(dentistCancelButton);
 
         JButton dentistViewButton = new JButton("View Appointment");
-        dentistViewButton.addActionListener(e -> ViewAppointment.main(null));
+        dentistViewButton.addActionListener(e -> {
+            ViewAppointment dialog = new ViewAppointment();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        });
         dentistAppointmentPanel.add(dentistViewButton);
 
         JButton dentistSearchButton = new JButton("Search Appointment");
         dentistAppointmentPanel.add(dentistSearchButton);
         dentistSearchButton.setFont(new Font("Dialog", Font.BOLD, 12));
-        dentistSearchButton.addActionListener(e -> AppointmentSearch.main(null));
+        dentistSearchButton.addActionListener(e -> {
+            AppointmentSearch dialog = new AppointmentSearch();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        });
 
         JPanel hygienistAppointment = new JPanel();
         tabbedPane.addTab("Hygienist Appointment", null, hygienistAppointment, null);
@@ -228,11 +239,20 @@ public class SecretaryInterface extends JFrame {
         fl_patientEditPanel.setAlignOnBaseline(true);
 
         JButton viewPatientPlanButton = new JButton("View Healthcare Plan");
-        viewPatientPlanButton.addActionListener(e -> HealthcarePlan.main(null));
+        viewPatientPlanButton.addActionListener(e -> {
+            HealthcarePlan dialog = new HealthcarePlan();
+            dialog.setModal(true);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        });
         patientEditPanel.add(viewPatientPlanButton);
 
         JButton editPatientButton = new JButton("Edit");
-        editPatientButton.addActionListener(e -> EditPatient.main(null));
+        editPatientButton.addActionListener(e -> {
+            PatientEditor frame = new PatientEditor("Edit");
+            frame.setModal(true);
+            frame.setVisible(true);
+        });
         patientEditPanel.add(editPatientButton);
 
         JButton deletePatientButton = new JButton("Delete");
@@ -248,7 +268,13 @@ public class SecretaryInterface extends JFrame {
         patient.add(patientPanel, BorderLayout.EAST);
 
         JButton addPatientButton = new JButton("Add Patient");
-        addPatientButton.addActionListener(e -> EditPatient.main(null));
+        addPatientButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                PatientEditor frame = new PatientEditor("Add");
+                frame.setModal(true);
+                frame.setVisible(true);
+            }
+        });
         patientPanel.add(addPatientButton);
 
         JTable patientTable = new JTable();
@@ -293,45 +319,6 @@ public class SecretaryInterface extends JFrame {
         JTable planTable = new JTable();
         planTable.setFillsViewportHeight(true);
         healthcarePlan.add(planTable, BorderLayout.CENTER);
-        /**
-
-         JPanel planPanel = new JPanel();
-         healthcarePlan.add(planPanel, BorderLayout.EAST);
-         planPanel.setLayout(new BoxLayout(planPanel, BoxLayout.Y_AXIS));
-
-         JButton btnCreateNewPlan = new JButton("Create New Plan");
-         btnCreateNewPlan.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {
-         HealthcarePlanEditors.main(null);
-         }
-         });
-         planPanel.add(btnCreateNewPlan);
-
-         JPanel planEditPanel = new JPanel();
-         FlowLayout fl_planEditPanel = (FlowLayout) planEditPanel.getLayout();
-         fl_planEditPanel.setAlignment(FlowLayout.LEFT);
-         fl_planEditPanel.setAlignOnBaseline(true);
-         healthcarePlan.add(planEditPanel, BorderLayout.SOUTH);
-
-         JButton removePlan = new JButton("Remove Healthcare Plan");
-         removePlan.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {
-         int a=JOptionPane.showConfirmDialog(null,"Are you sure?");
-         if(a==JOptionPane.YES_OPTION){
-         //insert delete plan sql stuff here
-         }
-         }
-         });
-
-         JButton editPlan = new JButton("Edit Healthcare Plan");
-         editPlan.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {
-         HealthcarePlanEditor.main(null);
-         }
-         });
-         planEditPanel.add(editPlan);
-         planEditPanel.add(removePlan);
-         **/
 
         // Basic settings
         setTitle("Sheffield Dental Care - Secretary");
@@ -339,26 +326,6 @@ public class SecretaryInterface extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 914, 638);
         setLocationRelativeTo(null);
-    }
-
-    /**
-     * Main method for creating the secretary interface frame
-     */
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        EventQueue.invokeLater(() -> {
-            try {
-                SecretaryInterface frame = new SecretaryInterface();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     /**

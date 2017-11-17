@@ -187,18 +187,4 @@ public class HealthcarePlan extends JDialog {
         setLocationRelativeTo(null);
     }
 
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        try {
-            HealthcarePlan dialog = new HealthcarePlan();
-            dialog.setModal(true);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

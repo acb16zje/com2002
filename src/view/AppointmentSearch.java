@@ -76,20 +76,4 @@ public class AppointmentSearch extends JDialog {
         setResizable(false);
         setLocationRelativeTo(null);
     }
-
-    /**
-     * Main method for running the appointment search frame
-     *
-     * @param args Command line arguments, not used
-     */
-    public static void main(String[] args) {
-        try {
-            AppointmentSearch dialog = new AppointmentSearch();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

@@ -173,21 +173,6 @@ public class BookAppointment extends JDialog {
     }
 
     /**
-     * Main method for creating the BookAppointment dialog
-     *
-     * @param args Command line arguments, not used
-     */
-    public static void main(String[] args) {
-        try {
-            BookAppointment dialog = new BookAppointment();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Check if the input date is valid
      *
      * @param date The date to check
