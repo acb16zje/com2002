@@ -1,9 +1,9 @@
 CREATE TABLE Address (
 	houseNumber VARCHAR (10) NOT NULL,
 	postCode VARCHAR (7) NOT NULL,
-	streetName VARCHAR (20) NOT NULL,
-	districtName VARCHAR (20) NOT NULL,
-	cityName VARCHAR (20) NOT NULL,
+	street VARCHAR (20) NOT NULL,
+	district VARCHAR (20) NOT NULL,
+	city VARCHAR (20) NOT NULL,
 	PRIMARY KEY (houseNumber, postCode)
 );
 
@@ -11,7 +11,7 @@ CREATE TABLE Patient (
 	patientID INT NOT NULL,
 	title VARCHAR (15) NOT NULL,
 	forename VARCHAR (20) NOT NULL,
-	familyName VARCHAR (30) NOT NULL,
+	surname VARCHAR (30) NOT NULL,
 	dateOfBirth DATE NOT NULL,
 	phone VARCHAR (11) NOT NULL,
 	houseNumber VARCHAR (10) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE Patient (
 CREATE TABLE Partner (
 	partnerID INT NOT NULL,
 	forename VARCHAR (20) NULL,
-	familyName VARCHAR (30) NOT NULL, 
+	surname VARCHAR (30) NOT NULL, 
 	PRIMARY KEY (partnerID)
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE Subscription (
 	hygieneVisitLeft INT DEFAULT 0,
 	repairWorkLeft INT DEFAULT 0,
 	PRIMARY KEY (patientID, planName),
-	FOREIGN KEY (patientID) REFERENCES Patient(PatientID),
+	FOREIGN KEY (patientID) REFERENCES Patient(patientID),
 	FOREIGN KEY (planName) REFERENCES HealthCarePlan(planName)
 );
 
@@ -56,8 +56,8 @@ CREATE TABLE Appointment (
 	patientID INT NOT NULL,
 	partnerID INT NOT NULL,
 	PRIMARY KEY (date, startTime, partnerID),
-	FOREIGN KEY (partnerID) REFERENCES Partner(PartnerID),
-	FOREIGN KEY (patientID) REFERENCES Patient(PatientID)
+	FOREIGN KEY (partnerID) REFERENCES Partner(partnerID),
+	FOREIGN KEY (patientID) REFERENCES Patient(patientID)
 );
 
 CREATE TABLE Treatment (
