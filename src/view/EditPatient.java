@@ -1,5 +1,6 @@
 package view;
 
+import controller.DateListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -11,7 +12,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -95,21 +95,26 @@ public class EditPatient extends JDialog {
         dobLabel.setBounds(30, 170, 97, 15);
         panel.add(dobLabel);
 
+        // calendar object to create date combobox
+        Calendar tempCal = new GregorianCalendar();
+
         // ComboBox for day
         JComboBox comboDay = new JComboBox();
         comboDay.setBounds(154, 165, 50, 24);
         panel.add(comboDay);
-        for (int i = 1; i <= 31; i++) {
+        for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             comboDay.addItem(i);
         }
+        comboDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
 
-        // ComboBox fo rmonth
+        // ComboBox for month
         JComboBox comboMonth = new JComboBox();
         comboMonth.setBounds(216, 165, 50, 24);
         panel.add(comboMonth);
         for (int i = 1; i <= 12; i++) {
             comboMonth.addItem(i);
         }
+        comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
 
         // ComboBox for year
         JComboBox comboYear = new JComboBox();
@@ -121,43 +126,9 @@ public class EditPatient extends JDialog {
         }
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
-        comboMonth.addActionListener(e -> {
-            System.out.println("called");
-            String currentlySelected = String.valueOf(comboDay.getSelectedItem());
-            String selectedMonth = String.valueOf(comboMonth.getSelectedItem());
-            Calendar tempCal = new GregorianCalendar((int) comboYear.getSelectedItem(),
-                Integer.parseInt(selectedMonth) - 1, 1);
-            String[] newArray = new String[tempCal.getActualMaximum(Calendar.DAY_OF_MONTH)];
-            for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-                newArray[i - 1] = String.valueOf(i);
-            }
-            comboDay.setModel(new DefaultComboBoxModel(newArray));
-            if (tempCal.getActualMaximum(Calendar.DAY_OF_MONTH) >= Integer
-                .parseInt(currentlySelected)) {
-                comboDay.setSelectedItem(currentlySelected);
-            } else {
-                comboDay.setSelectedItem(tempCal.getActualMaximum(Calendar.DAY_OF_MONTH));
-            }
-        });
+        comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
 
-        comboYear.addActionListener(e -> {
-            System.out.println("called");
-            String currentlySelected = String.valueOf(comboDay.getSelectedItem());
-            String selectedMonth = String.valueOf(comboMonth.getSelectedItem());
-            Calendar tempCal = new GregorianCalendar((int) comboYear.getSelectedItem(),
-                Integer.parseInt(selectedMonth) - 1, 1);
-            String[] newArray = new String[tempCal.getActualMaximum(Calendar.DAY_OF_MONTH)];
-            for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-                newArray[i - 1] = String.valueOf(i);
-            }
-            comboDay.setModel(new DefaultComboBoxModel(newArray));
-            if (tempCal.getActualMaximum(Calendar.DAY_OF_MONTH) >= Integer
-                .parseInt(currentlySelected)) {
-                comboDay.setSelectedItem(currentlySelected);
-            } else {
-                comboDay.setSelectedItem(tempCal.getActualMaximum(Calendar.DAY_OF_MONTH));
-            }
-        });
+        comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
 
         // Label for phone number
         JLabel phoneNoLabel = new JLabel("Phone No:");
@@ -259,19 +230,6 @@ public class EditPatient extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 boolean completed = true;
 
-                // Check if birth date is valid
-                String inputDay = comboDay.getSelectedItem().toString();
-                String inputMonth = comboMonth.getSelectedItem().toString();
-                String inputYear = comboYear.getSelectedItem().toString();
-                String inputDate = inputDay + "-" + inputMonth + "-" + inputYear;
-
-                if (isValidDate(inputDate)) {
-                    // insert SQL query here
-
-                } else {
-                    JOptionPane.showMessageDialog(null, "Please enter a valid date");
-                }
-
                 // Check if all field are filled in
                 Component[] components = panel.getComponents();
                 for (Component comp : components) {
@@ -320,27 +278,6 @@ public class EditPatient extends JDialog {
                 e.printStackTrace();
             }
         });
-    }
-
-    /**
-     * Check if the input date is valid
-     *
-     * @param date The date to check
-     * @return True if the date is valid
-     */
-    private boolean isValidDate(String date) {
-        // set the format to use as a constructor argument
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false);
-
-        try {
-            // parse the inDate parameter
-            dateFormat.parse(date.trim());
-        } catch (ParseException pe) {
-            return false;
-        }
-
-        return true;
     }
 
     private enum title {MR, MRS, MS, MISS}

@@ -1,11 +1,14 @@
 package view;
 
+import controller.DateListener;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -33,54 +36,58 @@ public class BookAppointment extends JDialog {
 
         // Main label for "Book Appointment" in the top middle
         JLabel mainLabel = new JLabel("Book Appointment");
-        mainLabel.setBounds(152, 12, 165, 19);
+        mainLabel.setBounds(110, 23, 165, 19);
         mainLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         contentPanel.add(mainLabel);
 
         // Date label
         JLabel dateLabel = new JLabel("Date:");
-        dateLabel.setBounds(41, 71, 39, 15);
+        dateLabel.setBounds(42, 74, 39, 15);
         contentPanel.add(dateLabel);
+
+        //calendar object to create date combobox
+        Calendar tempCal = new GregorianCalendar();
 
         // ComboBox for day
         JComboBox comboDay = new JComboBox();
-        comboDay.setBounds(142, 66, 50, 24);
+        comboDay.setBounds(123, 69, 50, 24);
         contentPanel.add(comboDay);
         int today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        for (int i = 1; i <= 31; i++) {
+        for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             comboDay.addItem(i);
         }
-        comboDay.setSelectedIndex(today - 1);
+        comboDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
 
         // ComboBox for month
         JComboBox comboMonth = new JComboBox();
-        comboMonth.setBounds(204, 66, 50, 24);
+        comboMonth.setBounds(185, 69, 50, 24);
         contentPanel.add(comboMonth);
         for (int i = 1; i <= 12; i++) {
             comboMonth.addItem(i);
         }
-        comboMonth.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
+        comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
 
         // ComboBox for year
         JComboBox comboYear = new JComboBox();
-        comboYear.setBounds(266, 66, 76, 24);
+        comboYear.setBounds(247, 69, 76, 24);
         contentPanel.add(comboYear);
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for (int i = currentYear; i <= currentYear + 2; i++) {
             comboYear.addItem(i);
         }
-        comboYear.setSelectedIndex(0);
+        comboYear.setSelectedItem(tempCal.get(Calendar.YEAR));
 
+        comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
+        comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
         // Label for Start Time
         JLabel startTimeLabel = new JLabel("Start time:");
-        startTimeLabel.setBounds(41, 111, 76, 15);
+        startTimeLabel.setBounds(42, 114, 76, 15);
         contentPanel.add(startTimeLabel);
 
         // ComboBox for start time, 20 minutes interval
         JComboBox comboStartTime = new JComboBox();
-        comboStartTime.setBounds(142, 106, 68, 24);
-        comboStartTime.setEditable(true);
-        contentPanel.add(comboStartTime);
+        comboStartTime.setBounds(123, 109, 68, 24);
+        comboStartTime.setEditable(false);
         for (int hour = 9; hour < 17; hour++) {
             for (int min = 0; min < 6; min += 2) {
                 if (hour == 9) {
@@ -91,45 +98,35 @@ public class BookAppointment extends JDialog {
                 }
             }
         }
-
-        // Label for partner
-        JLabel partnerLabel = new JLabel("Partner:");
-        partnerLabel.setBounds(41, 151, 59, 15);
-        contentPanel.add(partnerLabel);
-
-        // Radio button for dentist
-        JRadioButton dentistRadioButton = new JRadioButton("Dentist");
-        dentistRadioButton.setBounds(142, 147, 77, 23);
-        contentPanel.add(dentistRadioButton);
-
-        // Radio button for hygienist
-        JRadioButton hygienistRadioButton = new JRadioButton("Hygienist");
-        hygienistRadioButton.setBounds(321, 147, 92, 23);
-        contentPanel.add(hygienistRadioButton);
+        contentPanel.add(comboStartTime);
 
         // Label for type
         JLabel typeLabel = new JLabel("Type:");
-        typeLabel.setBounds(41, 191, 39, 15);
+        typeLabel.setBounds(42, 154, 39, 15);
         contentPanel.add(typeLabel);
 
         // Label for Check-up / hygiene
-        JRadioButton checkUpRadioButton = new JRadioButton("Check-up / hygiene");
-        checkUpRadioButton.setBounds(142, 187, 159, 23);
+        JRadioButton checkUpRadioButton = new JRadioButton("Check-up");
+        checkUpRadioButton.setBounds(123, 150, 90, 23);
         contentPanel.add(checkUpRadioButton);
 
         // Label for treatment
         JRadioButton treatmentRadioButton = new JRadioButton("Treatment");
-        treatmentRadioButton.setBounds(321, 187, 99, 23);
+        treatmentRadioButton.setBounds(218, 150, 99, 23);
         contentPanel.add(treatmentRadioButton);
+
+        ButtonGroup treatmentGroup = new ButtonGroup();
+        treatmentGroup.add(checkUpRadioButton);
+        treatmentGroup.add(treatmentRadioButton);
 
         // Label for patient ID
         JLabel patientIDLabel = new JLabel("Patient ID:");
-        patientIDLabel.setBounds(41, 233, 75, 15);
+        patientIDLabel.setBounds(42, 194, 75, 15);
         contentPanel.add(patientIDLabel);
 
         // Text field for patient ID input
         patientIDTextField = new JTextField();
-        patientIDTextField.setBounds(142, 229, 83, 23);
+        patientIDTextField.setBounds(123, 190, 194, 23);
         patientIDTextField.setFont(new Font("Dialog", Font.PLAIN, 16));
         contentPanel.add(patientIDTextField);
         patientIDTextField.setColumns(10);
@@ -145,19 +142,16 @@ public class BookAppointment extends JDialog {
             // insert SQL query here
 
             // Check if appointment date is valid
-            String inputDay = comboDay.getSelectedItem().toString();
-            String inputMonth = comboMonth.getSelectedItem().toString();
-            String inputYear = comboYear.getSelectedItem().toString();
-            String inputDate = inputDay + "-" + inputMonth + "-" + inputYear;
+            Calendar inputDate = new GregorianCalendar((int)comboYear.getSelectedItem(), ((int)comboMonth.getSelectedItem())-1,(int)comboDay.getSelectedItem());
 
             if (isValidDate(inputDate)) {
                 // insert SQL query here
-
+            	 dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Please enter a valid date");
             }
 
-            dispose();
+           
         });
         okButton.setActionCommand("OK");
         buttonPane.add(okButton);
@@ -171,7 +165,7 @@ public class BookAppointment extends JDialog {
 
         // Basic settings
         setTitle("Book Appointment");
-        setBounds(100, 100, 474, 350);
+        setBounds(100, 100, 395, 306);
         setResizable(false);
     }
 
@@ -196,18 +190,11 @@ public class BookAppointment extends JDialog {
      * @param date The date to check
      * @return True if the date is valid
      */
-    private boolean isValidDate(String date) {
-        // set the format to use as a constructor argument
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false);
-
-        try {
-            // parse the inDate parameter
-            dateFormat.parse(date.trim());
-        } catch (ParseException pe) {
-            return false;
-        }
-
-        return true;
+    private boolean isValidDate(Calendar date) {
+    	if (date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+    		return false;
+    	}
+    	else
+    		return true;
     }
 }

@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import controller.LoginListener;
 
 public class Login extends JFrame {
 
@@ -41,14 +42,7 @@ public class Login extends JFrame {
             dispose();
             SecretaryInterface secretaryFrame = new SecretaryInterface();
             secretaryFrame.setVisible(true);
-            secretaryFrame.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    secretaryFrame.dispose();
-                    Login welcome = new Login();
-                    welcome.setVisible(true);
-                }
-            });
+            secretaryFrame.addWindowListener(new LoginListener(secretaryFrame));
         });
 
         // Button for hygienist login
@@ -59,14 +53,7 @@ public class Login extends JFrame {
                 dispose();
                 PartnerHome partnerFrame = new PartnerHome("Hygienist");
                 partnerFrame.setVisible(true);
-                partnerFrame.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        partnerFrame.dispose();
-                        Login welcome = new Login();
-                        welcome.setVisible(true);
-                    }
-                });
+                partnerFrame.addWindowListener(new LoginListener(partnerFrame));
             }
         });
         contentPane.add(HygienistLogin);
@@ -79,14 +66,7 @@ public class Login extends JFrame {
                 dispose();
                 PartnerHome partnerFrame = new PartnerHome("Dentist");
                 partnerFrame.setVisible(true);
-                partnerFrame.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        partnerFrame.dispose();
-                        Login welcome = new Login();
-                        welcome.setVisible(true);
-                    }
-                });
+                partnerFrame.addWindowListener(new LoginListener(partnerFrame));
             }
         });
         contentPane.add(DentistLogin);
