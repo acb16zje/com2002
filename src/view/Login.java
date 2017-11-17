@@ -1,9 +1,8 @@
 package view;
 
+import controller.LoginListener;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,7 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import controller.LoginListener;
 
 public class Login extends JFrame {
 
@@ -46,26 +44,22 @@ public class Login extends JFrame {
         // Button for hygienist login
         JButton HygienistLogin = new JButton("Hygienist");
         HygienistLogin.setBounds(253, 168, 115, 71);
-        HygienistLogin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                PartnerHome partnerFrame = new PartnerHome("Hygienist");
-                partnerFrame.setVisible(true);
-                partnerFrame.addWindowListener(new LoginListener(partnerFrame));
-            }
+        HygienistLogin.addActionListener(e -> {
+            dispose();
+            PartnerHome partnerFrame = new PartnerHome("Hygienist");
+            partnerFrame.setVisible(true);
+            partnerFrame.addWindowListener(new LoginListener(partnerFrame));
         });
         contentPane.add(HygienistLogin);
 
         // Button for dentist login
         JButton DentistLogin = new JButton("Dentist");
         DentistLogin.setBounds(438, 168, 115, 71);
-        DentistLogin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                PartnerHome partnerFrame = new PartnerHome("Dentist");
-                partnerFrame.setVisible(true);
-                partnerFrame.addWindowListener(new LoginListener(partnerFrame));
-            }
+        DentistLogin.addActionListener(e -> {
+            dispose();
+            PartnerHome partnerFrame = new PartnerHome("Dentist");
+            partnerFrame.setVisible(true);
+            partnerFrame.addWindowListener(new LoginListener(partnerFrame));
         });
         contentPane.add(DentistLogin);
 

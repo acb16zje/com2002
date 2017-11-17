@@ -1,16 +1,16 @@
 package view;
 
+import controller.AppointmentListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -24,10 +24,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
-import controller.AppointmentListener;
 import util.WeekGenerator;
 
 public class SecretaryInterface extends JFrame {
@@ -82,13 +81,17 @@ public class SecretaryInterface extends JFrame {
         dentistControlPanel.add(dentistYear);
 
         // Listeners for dates
-        dentistMonth.addChangeListener((new AppointmentListener(dentistWeek,dentistMonth,dentistYear,currentCalendar,dentistTable,"year")));
+        dentistMonth.addChangeListener(
+            (new AppointmentListener(dentistWeek, dentistMonth, dentistYear, currentCalendar,
+                dentistTable, "year")));
 
-        dentistYear.addChangeListener((new AppointmentListener(dentistWeek,dentistMonth,dentistYear,currentCalendar,dentistTable,"month")));
+        dentistYear.addChangeListener(
+            (new AppointmentListener(dentistWeek, dentistMonth, dentistYear, currentCalendar,
+                dentistTable, "month")));
 
         dentistWeek.addActionListener(e -> {
             String selectedWeek = ((String) dentistWeek.getSelectedItem()).substring(0, 10);
-            AppointmentListener.generateAppointmentTable(selectedWeek,dentistTable);
+            AppointmentListener.generateAppointmentTable(selectedWeek, dentistTable);
         });
 
         dentistTable = new JTable();
@@ -100,7 +103,7 @@ public class SecretaryInterface extends JFrame {
         JScrollPane dentistScrollPane = new JScrollPane(dentistTable);
         dentistAppointment.add(dentistScrollPane, BorderLayout.CENTER);
 
-        AppointmentListener.generateAppointmentTable(todayAsString,dentistTable);
+        AppointmentListener.generateAppointmentTable(todayAsString, dentistTable);
 
         JPanel dentistAppointmentPanel = new JPanel();
         dentistAppointment.add(dentistAppointmentPanel, BorderLayout.SOUTH);
@@ -155,19 +158,24 @@ public class SecretaryInterface extends JFrame {
         hygienistControlPanel.add(hygienistMonth);
 
         JSpinner hygienistYear = new JSpinner();
-        hygienistYear.setModel(new SpinnerNumberModel(currentYear, currentYear - 20, currentYear + 1, 1));
+        hygienistYear
+            .setModel(new SpinnerNumberModel(currentYear, currentYear - 20, currentYear + 1, 1));
         hygienistControlPanel.add(hygienistYear);
         JSpinner.NumberEditor hygienistEditor = new JSpinner.NumberEditor(hygienistYear, "#");
         hygienistYear.setEditor(hygienistEditor);
 
         // Listeners for dates
-        hygienistMonth.addChangeListener(new AppointmentListener(hygienistWeek,hygienistMonth,hygienistYear,currentCalendar,hygienistTable,"year"));
+        hygienistMonth.addChangeListener(
+            new AppointmentListener(hygienistWeek, hygienistMonth, hygienistYear, currentCalendar,
+                hygienistTable, "year"));
 
-        hygienistYear.addChangeListener(new AppointmentListener(hygienistWeek,hygienistMonth,hygienistYear,currentCalendar,hygienistTable,"month"));
+        hygienistYear.addChangeListener(
+            new AppointmentListener(hygienistWeek, hygienistMonth, hygienistYear, currentCalendar,
+                hygienistTable, "month"));
 
         hygienistWeek.addActionListener(e -> {
             String selectedWeek = ((String) hygienistWeek.getSelectedItem()).substring(0, 10);
-            AppointmentListener.generateAppointmentTable(selectedWeek,hygienistTable);
+            AppointmentListener.generateAppointmentTable(selectedWeek, hygienistTable);
         });
 
         hygienistTable = new JTable();
@@ -177,7 +185,7 @@ public class SecretaryInterface extends JFrame {
         hygienistTable.setFillsViewportHeight(true);
         JScrollPane hygienistScrollPane = new JScrollPane(hygienistTable);
         hygienistAppointment.add(hygienistScrollPane, BorderLayout.CENTER);
-        AppointmentListener.generateAppointmentTable(todayAsString,hygienistTable);
+        AppointmentListener.generateAppointmentTable(todayAsString, hygienistTable);
 
         JPanel hygienistAppointmentPanel = new JPanel();
         hygienistAppointment.add(hygienistAppointmentPanel, BorderLayout.SOUTH);

@@ -1,5 +1,6 @@
 package view;
 
+import controller.PartnerListener;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,8 +17,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
-import controller.PartnerListener;
 import util.WeekGenerator;
 
 public class PartnerHome extends JFrame {
@@ -59,7 +58,9 @@ public class PartnerHome extends JFrame {
         gbl_tableControlPanel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
         tableControlPanel.setLayout(gbl_tableControlPanel);
 
-        JLabel lblWeek = new JLabel(new SimpleDateFormat("EEEE").format(currentCalendar.getTime())+" "+timeFormat.format(currentCalendar.getTime()));
+        JLabel lblWeek = new JLabel(
+            new SimpleDateFormat("EEEE").format(currentCalendar.getTime()) + " " + timeFormat
+                .format(currentCalendar.getTime()));
         lblWeek.setFont(new Font("Tahoma", Font.PLAIN, 18));
         GridBagConstraints gbc_lblWeek = new GridBagConstraints();
         gbc_lblWeek.anchor = GridBagConstraints.NORTH;
@@ -101,7 +102,7 @@ public class PartnerHome extends JFrame {
 
         JButton lastWeekButton = new JButton("Yesterday");
         lastWeekButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lastWeekButton.addActionListener(new PartnerListener(-1,currentCalendar,table,lblWeek));
+        lastWeekButton.addActionListener(new PartnerListener(-1, currentCalendar, table, lblWeek));
         GridBagConstraints gbc_lastWeekButton = new GridBagConstraints();
         gbc_lastWeekButton.fill = GridBagConstraints.BOTH;
         gbc_lastWeekButton.insets = new Insets(0, 0, 0, 5);
@@ -111,7 +112,7 @@ public class PartnerHome extends JFrame {
 
         JButton nextWeekButton = new JButton("Tomorrow");
         nextWeekButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        nextWeekButton.addActionListener(new PartnerListener(1,currentCalendar,table,lblWeek));
+        nextWeekButton.addActionListener(new PartnerListener(1, currentCalendar, table, lblWeek));
         GridBagConstraints gbc_nextWeekButton = new GridBagConstraints();
         gbc_nextWeekButton.fill = GridBagConstraints.BOTH;
         gbc_nextWeekButton.gridx = 4;

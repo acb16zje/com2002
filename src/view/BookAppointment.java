@@ -4,8 +4,6 @@ import controller.DateListener;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.ButtonGroup;
@@ -142,16 +140,17 @@ public class BookAppointment extends JDialog {
             // insert SQL query here
 
             // Check if appointment date is valid
-            Calendar inputDate = new GregorianCalendar((int)comboYear.getSelectedItem(), ((int)comboMonth.getSelectedItem())-1,(int)comboDay.getSelectedItem());
+            Calendar inputDate = new GregorianCalendar((int) comboYear.getSelectedItem(),
+                ((int) comboMonth.getSelectedItem()) - 1, (int) comboDay.getSelectedItem());
 
             if (isValidDate(inputDate)) {
                 // insert SQL query here
-            	 dispose();
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Please enter a valid date");
             }
 
-           
+
         });
         okButton.setActionCommand("OK");
         buttonPane.add(okButton);
@@ -176,10 +175,11 @@ public class BookAppointment extends JDialog {
      * @return True if the date is valid
      */
     private boolean isValidDate(Calendar date) {
-    	if (date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-    		return false;
-    	}
-    	else
-    		return true;
+        if (date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
+            || date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

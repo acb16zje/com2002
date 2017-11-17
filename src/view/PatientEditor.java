@@ -5,8 +5,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JButton;
@@ -50,7 +48,7 @@ public class PatientEditor extends JDialog {
         // Main label for Edit Patient
         JLabel mainLabel = new JLabel(label + " Patient");
         mainLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        mainLabel.setBounds(155, 12, 111, 15);
+        mainLabel.setBounds(150, 12, 111, 15);
         panel.add(mainLabel);
 
         // Title label
@@ -92,7 +90,7 @@ public class PatientEditor extends JDialog {
         dobLabel.setBounds(30, 170, 97, 15);
         panel.add(dobLabel);
 
-        // Calendar object to create date ComboBox
+        // calendar object to create date combobox
         Calendar tempCal = new GregorianCalendar();
 
         // ComboBox for day
@@ -123,8 +121,8 @@ public class PatientEditor extends JDialog {
         }
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
-        // Add listener for ComboBox Month and Year
         comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
+
         comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
 
         // Label for phone number
@@ -226,18 +224,17 @@ public class PatientEditor extends JDialog {
         saveButton.addActionListener(e -> {
             boolean completed = true;
 
-                // Check if all field are filled in
-                Component[] components = panel.getComponents();
-                for (Component comp : components) {
-                    // Cast comp to JComboBox / JTextField to get the values
-                    if (comp instanceof JTextField) {
-                        if (((JTextField) comp).getText().isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Please Complete");
-                            completed = false;
-                            break;
-                        } else {
-                            JOptionPane.showMessageDialog(null, ((JTextField) comp).getText());
-                        }
+            // Check if all field are filled in
+            Component[] components = panel.getComponents();
+            for (Component comp : components) {
+                // Cast comp to JComboBox / JTextField to get the values
+                if (comp instanceof JTextField) {
+                    if (((JTextField) comp).getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Please Complete");
+                        completed = false;
+                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(null, ((JTextField) comp).getText());
                     }
                 }
             }
@@ -259,21 +256,6 @@ public class PatientEditor extends JDialog {
         setBounds(100, 100, 411, 609);
         setResizable(false);
         setLocationRelativeTo(null);
-    }
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                EditPatient frame = new EditPatient();
-                frame.setModal(true);
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     private enum title {MR, MRS, MS, MISS}
