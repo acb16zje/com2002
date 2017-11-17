@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import controller.LoginListener;
 
 public class Login extends JFrame {
 
@@ -39,49 +40,32 @@ public class Login extends JFrame {
             dispose();
             SecretaryInterface secretaryFrame = new SecretaryInterface();
             secretaryFrame.setVisible(true);
-            secretaryFrame.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    secretaryFrame.dispose();
-                    Login login = new Login();
-                    login.setVisible(true);
-                }
-            });
+            secretaryFrame.addWindowListener(new LoginListener(secretaryFrame));
         });
 
         // Button for hygienist login
         JButton HygienistLogin = new JButton("Hygienist");
         HygienistLogin.setBounds(253, 168, 115, 71);
-        HygienistLogin.addActionListener(e -> {
-            dispose();
-            PartnerHome partnerFrame = new PartnerHome("Hygienist");
-            partnerFrame.setVisible(true);
-            partnerFrame.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    partnerFrame.dispose();
-                    Login login = new Login();
-                    login.setVisible(true);
-                }
-            });
+        HygienistLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                PartnerHome partnerFrame = new PartnerHome("Hygienist");
+                partnerFrame.setVisible(true);
+                partnerFrame.addWindowListener(new LoginListener(partnerFrame));
+            }
         });
         contentPane.add(HygienistLogin);
 
         // Button for dentist login
         JButton DentistLogin = new JButton("Dentist");
         DentistLogin.setBounds(438, 168, 115, 71);
-        DentistLogin.addActionListener(e -> {
-            dispose();
-            PartnerHome partnerFrame = new PartnerHome("Dentist");
-            partnerFrame.setVisible(true);
-            partnerFrame.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    partnerFrame.dispose();
-                    Login login = new Login();
-                    login.setVisible(true);
-                }
-            });
+        DentistLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                PartnerHome partnerFrame = new PartnerHome("Dentist");
+                partnerFrame.setVisible(true);
+                partnerFrame.addWindowListener(new LoginListener(partnerFrame));
+            }
         });
         contentPane.add(DentistLogin);
 

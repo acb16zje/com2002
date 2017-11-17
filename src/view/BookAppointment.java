@@ -142,19 +142,16 @@ public class BookAppointment extends JDialog {
             // insert SQL query here
 
             // Check if appointment date is valid
-            String inputDay = comboDay.getSelectedItem().toString();
-            String inputMonth = comboMonth.getSelectedItem().toString();
-            String inputYear = comboYear.getSelectedItem().toString();
-            String inputDate = inputDay + "-" + inputMonth + "-" + inputYear;
+            Calendar inputDate = new GregorianCalendar((int)comboYear.getSelectedItem(), ((int)comboMonth.getSelectedItem())-1,(int)comboDay.getSelectedItem());
 
             if (isValidDate(inputDate)) {
                 // insert SQL query here
-
+            	 dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Please enter a valid date");
             }
 
-            dispose();
+           
         });
         okButton.setActionCommand("OK");
         buttonPane.add(okButton);
@@ -178,18 +175,11 @@ public class BookAppointment extends JDialog {
      * @param date The date to check
      * @return True if the date is valid
      */
-    private boolean isValidDate(String date) {
-        // set the format to use as a constructor argument
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false);
-
-        try {
-            // parse the inDate parameter
-            dateFormat.parse(date.trim());
-        } catch (ParseException pe) {
-            return false;
-        }
-
-        return true;
+    private boolean isValidDate(Calendar date) {
+    	if (date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+    		return false;
+    	}
+    	else
+    		return true;
     }
 }

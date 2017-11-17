@@ -226,30 +226,18 @@ public class PatientEditor extends JDialog {
         saveButton.addActionListener(e -> {
             boolean completed = true;
 
-            // Check if birth date is valid
-            String inputDay = comboDay.getSelectedItem().toString();
-            String inputMonth = comboMonth.getSelectedItem().toString();
-            String inputYear = comboYear.getSelectedItem().toString();
-            String inputDate = inputDay + "-" + inputMonth + "-" + inputYear;
-
-            if (isValidDate(inputDate)) {
-                // insert SQL query here
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Please enter a valid date");
-            }
-
-            // Check if all field are filled in
-            Component[] components = panel.getComponents();
-            for (Component comp : components) {
-                // Cast comp to JComboBox / JTextField to get the values
-                if (comp instanceof JTextField) {
-                    if (((JTextField) comp).getText().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Please Complete");
-                        completed = false;
-                        break;
-                    } else {
-                        JOptionPane.showMessageDialog(null, ((JTextField) comp).getText());
+                // Check if all field are filled in
+                Component[] components = panel.getComponents();
+                for (Component comp : components) {
+                    // Cast comp to JComboBox / JTextField to get the values
+                    if (comp instanceof JTextField) {
+                        if (((JTextField) comp).getText().isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "Please Complete");
+                            completed = false;
+                            break;
+                        } else {
+                            JOptionPane.showMessageDialog(null, ((JTextField) comp).getText());
+                        }
                     }
                 }
             }
@@ -274,24 +262,18 @@ public class PatientEditor extends JDialog {
     }
 
     /**
-     * Check if the input date is valid
-     *
-     * @param date The date to check
-     * @return True if the date is valid
+     * Launch the application.
      */
-    private boolean isValidDate(String date) {
-        // set the format to use as a constructor argument
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        dateFormat.setLenient(false);
-
-        try {
-            // parse the inDate parameter
-            dateFormat.parse(date.trim());
-        } catch (ParseException pe) {
-            return false;
-        }
-
-        return true;
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                EditPatient frame = new EditPatient();
+                frame.setModal(true);
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private enum title {MR, MRS, MS, MISS}
