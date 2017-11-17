@@ -117,6 +117,7 @@ public class SecretaryInterface extends JFrame {
         dentistBookButton.addActionListener(e -> {
             BookAppointment dialog = new BookAppointment();
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setModal(true);
             dialog.setVisible(true);
         });
         dentistAppointmentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -124,27 +125,41 @@ public class SecretaryInterface extends JFrame {
 
         JButton dentistCancelButton = new JButton("Cancel Appointment");
         dentistCancelButton.addActionListener(e -> {
-            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
-            if (a == JOptionPane.YES_OPTION) {
-                // insert delete plan SQL stuff here
-            }
+        	int rowSelected = dentistTable.getSelectedRow();
+        	if (rowSelected == -1) {
+        		JOptionPane.showMessageDialog(null, "Select an appointment!");
+        	}
+        	else {
+	            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+	            if (a == JOptionPane.YES_OPTION) {
+	                // insert delete plan SQL stuff here
+	            }
+        	}
         });
         dentistAppointmentPanel.add(dentistCancelButton);
 
         JButton dentistViewButton = new JButton("View Appointment");
         dentistViewButton.addActionListener(e -> {
-            ViewAppointment dialog = new ViewAppointment();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
+        	int rowSelected = dentistTable.getSelectedRow();
+        	if (rowSelected == -1) {
+        		JOptionPane.showMessageDialog(null, "Select an appointment!");
+        	}
+        	else {
+        		ViewAppointment dialog = new ViewAppointment();
+        		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        		dialog.setModal(true);
+        		dialog.setVisible(true);
+        	}
         });
         dentistAppointmentPanel.add(dentistViewButton);
 
         JButton dentistSearchButton = new JButton("Search Appointment");
         dentistAppointmentPanel.add(dentistSearchButton);
-        dentistSearchButton.setFont(new Font("Dialog", Font.BOLD, 12));
+        dentistSearchButton.setFont(new Font("Dialog", Font.PLAIN, 11));
         dentistSearchButton.addActionListener(e -> {
             AppointmentSearch dialog = new AppointmentSearch();
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setModal(true);
             dialog.setVisible(true);
         });
 
@@ -201,24 +216,38 @@ public class SecretaryInterface extends JFrame {
         hygienistBookButton.addActionListener(e -> {
             BookAppointment dialog = new BookAppointment();
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setModal(true);
             dialog.setVisible(true);
         });
         hygienistAppointmentPanel.add(hygienistBookButton);
 
         JButton hygienistCancelButton = new JButton("Cancel Appointment");
         hygienistCancelButton.addActionListener(e -> {
-            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
-            if (a == JOptionPane.YES_OPTION) {
+        	int rowSelected = hygienistTable.getSelectedRow();
+        	if (rowSelected == -1) {
+        		JOptionPane.showMessageDialog(null, "Select an appointment!");
+        	}
+        	else {
+        		int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+        		if (a == JOptionPane.YES_OPTION) {
                 // insert delete plan SQL stuff here
-            }
+        		}
+        	}
         });
         hygienistAppointmentPanel.add(hygienistCancelButton);
 
         JButton hygienistViewButton = new JButton("View Appointment");
         hygienistViewButton.addActionListener(e -> {
-            ViewAppointment dialog = new ViewAppointment();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
+        	int rowSelected = hygienistTable.getSelectedRow();
+        	if (rowSelected == -1) {
+        		JOptionPane.showMessageDialog(null, "Select an appointment!");
+        	}
+        	else {
+        		ViewAppointment dialog = new ViewAppointment();
+        		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        		dialog.setModal(true);
+        		dialog.setVisible(true);
+        	}
         });
         hygienistAppointmentPanel.add(hygienistViewButton);
 
@@ -226,6 +255,7 @@ public class SecretaryInterface extends JFrame {
         hygienistSearchButton.addActionListener(e -> {
             AppointmentSearch dialog = new AppointmentSearch();
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setModal(true);
             dialog.setVisible(true);
         });
         hygienistAppointmentPanel.add(hygienistSearchButton);
@@ -262,37 +292,7 @@ public class SecretaryInterface extends JFrame {
             dialog.setVisible(true);
         });
         patientEditPanel.add(viewPatientPlanButton);
-
-        JButton editPatientButton = new JButton("Edit");
-        editPatientButton.addActionListener(e -> {
-            PatientEditor frame = new PatientEditor("Edit");
-            frame.setModal(true);
-            frame.setVisible(true);
-        });
-        patientEditPanel.add(editPatientButton);
-
-        JButton deletePatientButton = new JButton("Delete");
-        deletePatientButton.addActionListener(e -> {
-            int a = JOptionPane.showConfirmDialog(deletePatientButton, "Are you sure?");
-            if (a == JOptionPane.YES_OPTION) {
-                // insert delete patient sql stuff here
-            }
-        });
-        patientEditPanel.add(deletePatientButton);
-
-        JPanel patientPanel = new JPanel();
-        patient.add(patientPanel, BorderLayout.EAST);
-
-        JButton addPatientButton = new JButton("Add Patient");
-        addPatientButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                PatientEditor frame = new PatientEditor("Add");
-                frame.setModal(true);
-                frame.setVisible(true);
-            }
-        });
-        patientPanel.add(addPatientButton);
-
+        
         JTable patientTable = new JTable();
         patientTable.setRowHeight(20);
         patient.add(new JScrollPane(patientTable), BorderLayout.CENTER);
@@ -314,6 +314,49 @@ public class SecretaryInterface extends JFrame {
             }
         });
         patientTable.setFillsViewportHeight(true);
+
+
+        JButton editPatientButton = new JButton("Edit");
+        editPatientButton.addActionListener(e -> {
+        	int rowSelected = patientTable.getSelectedRow();
+        	if (rowSelected == -1) {
+        		JOptionPane.showMessageDialog(null, "Select an appointment!");
+        	}
+        	else {
+	            PatientEditor frame = new PatientEditor("Edit");
+	            frame.setModal(true);
+	            frame.setVisible(true);
+        	}
+        });
+        patientEditPanel.add(editPatientButton);
+
+        JButton deletePatientButton = new JButton("Delete");
+        deletePatientButton.addActionListener(e -> {
+        	int rowSelected = patientTable.getSelectedRow();
+        	if (rowSelected == -1) {
+        		JOptionPane.showMessageDialog(null, "Select an appointment!");
+        	}
+        	else {
+        		int a = JOptionPane.showConfirmDialog(deletePatientButton, "Are you sure?");
+        		if (a == JOptionPane.YES_OPTION) {
+                // insert delete patient sql stuff here
+        		}
+            }
+        });
+        patientEditPanel.add(deletePatientButton);
+
+        JPanel patientPanel = new JPanel();
+        patient.add(patientPanel, BorderLayout.EAST);
+
+        JButton addPatientButton = new JButton("Add Patient");
+        addPatientButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                PatientEditor frame = new PatientEditor("Add");
+                frame.setModal(true);
+                frame.setVisible(true);
+            }
+        });
+        patientPanel.add(addPatientButton);
 
         // UI for healthcare plan tab (work in progress)
         JPanel healthcarePlan = new JPanel();
