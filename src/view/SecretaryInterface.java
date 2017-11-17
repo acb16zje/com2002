@@ -198,15 +198,36 @@ public class SecretaryInterface extends JFrame {
         hygienistAppointment.add(hygienistAppointmentPanel, BorderLayout.SOUTH);
 
         JButton hygienistBookButton = new JButton("Book Appointment");
+        hygienistBookButton.addActionListener(e -> {
+            BookAppointment dialog = new BookAppointment();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        });
         hygienistAppointmentPanel.add(hygienistBookButton);
 
         JButton hygienistCancelButton = new JButton("Cancel Appointment");
+        hygienistCancelButton.addActionListener(e -> {
+            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+            if (a == JOptionPane.YES_OPTION) {
+                // insert delete plan SQL stuff here
+            }
+        });
         hygienistAppointmentPanel.add(hygienistCancelButton);
 
         JButton hygienistViewButton = new JButton("View Appointment");
+        hygienistViewButton.addActionListener(e -> {
+            ViewAppointment dialog = new ViewAppointment();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        });
         hygienistAppointmentPanel.add(hygienistViewButton);
 
         JButton hygienistSearchButton = new JButton("Search Appointment");
+        hygienistSearchButton.addActionListener(e -> {
+            AppointmentSearch dialog = new AppointmentSearch();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        });
         hygienistAppointmentPanel.add(hygienistSearchButton);
 
         // UI for patient
