@@ -3,6 +3,7 @@ package model;
 import java.util.Date;
 
 public class Subscription {
+
     private int patientID;
     private String planName;
     private Date startDate;
@@ -13,6 +14,7 @@ public class Subscription {
 
     /**
      * Constructr for Subscription
+     *
      * @param patientID The ID of the patient
      * @param planName The name of the healthcare plan
      * @param startDate The start date of the subscription
@@ -35,6 +37,7 @@ public class Subscription {
 
     /**
      * Get the patient ID of the subscription
+     *
      * @return The patient ID of the subscription
      */
     public int getPatientID() {
@@ -43,6 +46,7 @@ public class Subscription {
 
     /**
      * Set the patient ID for the subscription
+     *
      * @param patientID The patient ID for the subscription
      */
     public void setPatientID(int patientID) {
@@ -51,6 +55,7 @@ public class Subscription {
 
     /**
      * Get the name of the healthcare plan of the subscription
+     *
      * @return The name of the healthcare plan of the subscription
      */
     public String getPlanName() {
@@ -59,6 +64,7 @@ public class Subscription {
 
     /**
      * Set the name of the healthcare plan for the subscription
+     *
      * @param planName The name of the healthcare plan for the subscription
      */
     public void setPlanName(String planName) {
@@ -67,6 +73,7 @@ public class Subscription {
 
     /**
      * Get the start date of the subscription
+     *
      * @return The start date of the subscription
      */
     public Date getStartDate() {
@@ -75,6 +82,7 @@ public class Subscription {
 
     /**
      * Set the start date for the subscription
+     *
      * @param startDate The start date for the subscription
      */
     public void setStartDate(Date startDate) {
@@ -83,6 +91,7 @@ public class Subscription {
 
     /**
      * Get the end date of the subscription
+     *
      * @return The end date of the subscription
      */
     public Date getEndDate() {
@@ -91,6 +100,7 @@ public class Subscription {
 
     /**
      * Set the end date of the subscription
+     *
      * @param endDate The end date of the subscription
      */
     public void setEndDate(Date endDate) {
@@ -99,6 +109,7 @@ public class Subscription {
 
     /**
      * Get the amount of check up left in the subscription
+     *
      * @return The amount of check up left in the subscription
      */
     public int getCheckUpLeft() {
@@ -107,6 +118,7 @@ public class Subscription {
 
     /**
      * Set the amount of check up left in the subscription
+     *
      * @param checkUpLeft The amount of check up left in the subscription
      */
     public void setCheckUpLeft(int checkUpLeft) {
@@ -115,6 +127,7 @@ public class Subscription {
 
     /**
      * Get the amount of hygiene visit left in the subscription
+     *
      * @return The amount of hygiene visit left in the subscription
      */
     public int getHygieneVisitLeft() {
@@ -123,6 +136,7 @@ public class Subscription {
 
     /**
      * Set the amount of hygiene visit left in the subscription
+     *
      * @param hygieneVisitLeft The amount of hygiene vist left in the subscription
      */
     public void setHygieneVisitLeft(int hygieneVisitLeft) {
@@ -131,6 +145,7 @@ public class Subscription {
 
     /**
      * Get the amount of repair work left in the subscription
+     *
      * @return The amount of repair work left in the subscription
      */
     public int getRepairWorkLeft() {
@@ -139,6 +154,7 @@ public class Subscription {
 
     /**
      * Set the amount of repair work left in the subscription
+     *
      * @param repairWorkLeft The amount of repair work left in the subscription
      */
     public void setRepairWorkLeft(int repairWorkLeft) {

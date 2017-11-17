@@ -1,37 +1,38 @@
 package model;
 
 public class Treatment {
-	private String name;
-	private String type;
-	private int cost;
-	
-	public Treatment(String name, String type, int cost) {
-		this.name = name;
-		this.type = type;
-		this.cost= cost;
-	}
 
-	public String getName() {
-		return name;
-	}
+    private String name;
+    private String type;
+    private int cost;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Treatment(String name, String type, int cost) {
+        this.name = name;
+        this.type = type;
+        this.cost = cost;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getCost() {
-		return cost;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setCost(int cost) {
-		this.cost = cost;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
 }
