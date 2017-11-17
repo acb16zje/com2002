@@ -7,7 +7,7 @@ public class Appointment {
 
     private Date date;
     private Time startTime;
-    private int partnerID;
+    private String partner;
     private int patientID;
 
     /**
@@ -15,13 +15,13 @@ public class Appointment {
      *
      * @param date The date
      * @param startTime The start time
-     * @param partnerID The ID of the partner
+     * @param partner The partner, dentist or hygienist
      * @param patientID The ID of the patient
      */
-    public Appointment(Date date, Time startTime, int partnerID, int patientID) {
+    public Appointment(Date date, Time startTime, String partner, int patientID) {
         this.date = date;
         this.startTime = startTime;
-        this.partnerID = partnerID;
+        this.partner = partner;
         this.patientID = patientID;
     }
 
@@ -62,21 +62,21 @@ public class Appointment {
     }
 
     /**
-     * Get the ID of the partner of a appointment
+     * Get the partner of a appointment
      *
-     * @return The ID of the partner of a appointment
+     * @return The partner of a appointment
      */
-    public int getPartnerID() {
-        return partnerID;
+    public String getPartner() {
+        return this.partner;
     }
 
     /**
-     * Set the ID of the partner for a appointment
+     * Set the partner for a appointment
      *
-     * @param partnerID The ID of the partner for a appointment
+     * @param partnerID The partner for a appointment
      */
-    public void setPartnerID(int partnerID) {
-        this.partnerID = partnerID;
+    public void setPartner(int partnerID) {
+        this.partner = partner;
     }
 
     /**
