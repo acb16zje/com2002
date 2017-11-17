@@ -1,58 +1,60 @@
 package model;
 
 public class HealthcarePlan {
-	private String planName;
-	private int monthlyPayment;
-	private int checkUp;
-	private int hygieneVisit;
-	private int repairWork;
-	
-	public HealthcarePlan(String planName,int monthlyPayment, int checkUp, int hygieneVisit,int repairWork) {
-		this.planName = planName;
-		this.monthlyPayment = monthlyPayment;
-		this.checkUp = checkUp;
-		this.hygieneVisit = hygieneVisit;
-		this.repairWork = repairWork;
-	}
 
-	public String getPlanName() {
-		return planName;
-	}
+    private String planName;
+    private int monthlyPayment;
+    private int checkUp;
+    private int hygieneVisit;
+    private int repairWork;
 
-	public void setPlanName(String planName) {
-		this.planName = planName;
-	}
+    public HealthcarePlan(String planName, int monthlyPayment, int checkUp, int hygieneVisit,
+        int repairWork) {
+        this.planName = planName;
+        this.monthlyPayment = monthlyPayment;
+        this.checkUp = checkUp;
+        this.hygieneVisit = hygieneVisit;
+        this.repairWork = repairWork;
+    }
 
-	public int getMonthlyPayment() {
-		return monthlyPayment;
-	}
+    public String getPlanName() {
+        return planName;
+    }
 
-	public void setMonthlyPayment(int monthlyPayment) {
-		this.monthlyPayment = monthlyPayment;
-	}
+    public void setPlanName(String planName) {
+        this.planName = planName;
+    }
 
-	public int getCheckUp() {
-		return checkUp;
-	}
+    public int getMonthlyPayment() {
+        return monthlyPayment;
+    }
 
-	public void setCheckUp(int checkUp) {
-		this.checkUp = checkUp;
-	}
+    public void setMonthlyPayment(int monthlyPayment) {
+        this.monthlyPayment = monthlyPayment;
+    }
 
-	public int getHygieneVisit() {
-		return hygieneVisit;
-	}
+    public int getCheckUp() {
+        return checkUp;
+    }
 
-	public void setHygieneVisit(int hygieneVisit) {
-		this.hygieneVisit = hygieneVisit;
-	}
+    public void setCheckUp(int checkUp) {
+        this.checkUp = checkUp;
+    }
 
-	public int getRepairWork() {
-		return repairWork;
-	}
+    public int getHygieneVisit() {
+        return hygieneVisit;
+    }
 
-	public void setRepairWork(int repairWork) {
-		this.repairWork = repairWork;
-	}
-	
+    public void setHygieneVisit(int hygieneVisit) {
+        this.hygieneVisit = hygieneVisit;
+    }
+
+    public int getRepairWork() {
+        return repairWork;
+    }
+
+    public void setRepairWork(int repairWork) {
+        this.repairWork = repairWork;
+    }
+
 }

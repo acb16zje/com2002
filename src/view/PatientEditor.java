@@ -233,7 +233,7 @@ public class PatientEditor extends JDialog {
                         JOptionPane.showMessageDialog(null, "Please Complete");
                         completed = false;
                         break;
-                    } 
+                    }
                 }
             }
 

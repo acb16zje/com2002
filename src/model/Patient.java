@@ -3,91 +3,93 @@ package model;
 import java.util.Date;
 
 public class Patient {
-	private String title;
-	private String surName;
-	private String foreName;
-	private int phone;
-	private Date dateOfBirth;
-	private String houseNo;
-	private String postcode;
-	private int patientID;
-	
-	public Patient(String title, String surName, String foreName, int phone, Date dateOfBirth, String houseNo, String postcode) {
-		this.title = title;
-		this.surName = surName;
-		this.foreName = foreName;
-		this.phone = phone;
-		this.dateOfBirth = dateOfBirth;
-		this.houseNo = houseNo;
-		this.postcode = postcode;
-		this.patientID = patientID;
-	}
 
-	public String getTitle() {
-		return title;
-	}
+    private String title;
+    private String surName;
+    private String foreName;
+    private int phone;
+    private Date dateOfBirth;
+    private String houseNo;
+    private String postcode;
+    private int patientID;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public Patient(String title, String surName, String foreName, int phone, Date dateOfBirth,
+        String houseNo, String postcode) {
+        this.title = title;
+        this.surName = surName;
+        this.foreName = foreName;
+        this.phone = phone;
+        this.dateOfBirth = dateOfBirth;
+        this.houseNo = houseNo;
+        this.postcode = postcode;
+        this.patientID = patientID;
+    }
 
-	public String getSurName() {
-		return surName;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setSurName(String surName) {
-		this.surName = surName;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getForeName() {
-		return foreName;
-	}
+    public String getSurName() {
+        return surName;
+    }
 
-	public void setForeName(String foreName) {
-		this.foreName = foreName;
-	}
+    public void setSurName(String surName) {
+        this.surName = surName;
+    }
 
-	public int getPhone() {
-		return phone;
-	}
+    public String getForeName() {
+        return foreName;
+    }
 
-	public void setPhone(int phone) {
-		this.phone = phone;
-	}
+    public void setForeName(String foreName) {
+        this.foreName = foreName;
+    }
 
-	public Date getDateOfBirth() {
-		return dateOfBirth;
-	}
+    public int getPhone() {
+        return phone;
+    }
 
-	public void setDateOfBirth(Date dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
+    public void setPhone(int phone) {
+        this.phone = phone;
+    }
 
-	public String getHouseNo() {
-		return houseNo;
-	}
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
 
-	public void setHouseNo(String houseNo) {
-		this.houseNo = houseNo;
-	}
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
-	public String getPostcode() {
-		return postcode;
-	}
+    public String getHouseNo() {
+        return houseNo;
+    }
 
-	public void setPostcode(String postcode) {
-		this.postcode = postcode;
-	}
-	
-	public int getPatientID() {
-		return patientID;
-	}
+    public void setHouseNo(String houseNo) {
+        this.houseNo = houseNo;
+    }
 
-	public void setPatientID(int patientID) {
-		this.patientID = patientID;
-	}
+    public String getPostcode() {
+        return postcode;
+    }
 
-	public String getFullName() {
-		return title+" "+foreName+" "+surName;
-	}
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public int getPatientID() {
+        return patientID;
+    }
+
+    public void setPatientID(int patientID) {
+        this.patientID = patientID;
+    }
+
+    public String getFullName() {
+        return title + " " + foreName + " " + surName;
+    }
 }

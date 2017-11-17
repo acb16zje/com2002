@@ -19,11 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -64,11 +62,11 @@ public class SecretaryInterface extends JFrame {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
         Calendar hygienistCalendar = Calendar.getInstance();
-        
+
         String todayAsString = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
         JComboBox dentistYear = new JComboBox();
-        for (int i = 2000; i <= currentYear+2; i++) {
+        for (int i = 2000; i <= currentYear + 2; i++) {
             dentistYear.addItem(i);
         }
         dentistYear.setSelectedItem(currentYear);
@@ -77,15 +75,14 @@ public class SecretaryInterface extends JFrame {
         for (int i = 1; i <= 12; i++) {
             dentistMonth.addItem(i);
         }
-        dentistMonth.setSelectedItem(currentMonth+1);
+        dentistMonth.setSelectedItem(currentMonth + 1);
         dentistControlPanel.add(dentistMonth);
-        
+
         JComboBox dentistWeek = WeekGenerator.weekSpinner(dentistCalendar);
-        
+
         dentistControlPanel.add(dentistWeek);
         dentistControlPanel.add(dentistMonth);
         dentistControlPanel.add(dentistYear);
-
 
         dentistTable = new JTable();
         dentistTable.setCellSelectionEnabled(true);
@@ -96,19 +93,19 @@ public class SecretaryInterface extends JFrame {
         JScrollPane dentistScrollPane = new JScrollPane(dentistTable);
         dentistAppointment.add(dentistScrollPane, BorderLayout.CENTER);
         AppointmentListener.generateAppointmentTable(todayAsString, dentistTable);
-        
+
         // Listeners for dates
         dentistMonth.addActionListener(
-        		new AppointmentListener(dentistWeek,dentistMonth, dentistYear, dentistCalendar,
-        				dentistTable, "month"));
-        
-        dentistYear.addActionListener(
-        		new AppointmentListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-        				dentistTable, "year"));
-        
-        dentistWeek.addActionListener(new AppointmentListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-				dentistTable, "week"));
+            new AppointmentListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
+                dentistTable, "month"));
 
+        dentistYear.addActionListener(
+            new AppointmentListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
+                dentistTable, "year"));
+
+        dentistWeek.addActionListener(
+            new AppointmentListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
+                dentistTable, "week"));
 
         JPanel dentistAppointmentPanel = new JPanel();
         dentistAppointment.add(dentistAppointmentPanel, BorderLayout.SOUTH);
@@ -125,31 +122,29 @@ public class SecretaryInterface extends JFrame {
 
         JButton dentistCancelButton = new JButton("Cancel Appointment");
         dentistCancelButton.addActionListener(e -> {
-        	int rowSelected = dentistTable.getSelectedRow();
-        	if (rowSelected == -1) {
-        		JOptionPane.showMessageDialog(null, "Select an appointment!");
-        	}
-        	else {
-	            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
-	            if (a == JOptionPane.YES_OPTION) {
-	                // insert delete plan SQL stuff here
-	            }
-        	}
+            int rowSelected = dentistTable.getSelectedRow();
+            if (rowSelected == -1) {
+                JOptionPane.showMessageDialog(null, "Select an appointment!");
+            } else {
+                int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+                if (a == JOptionPane.YES_OPTION) {
+                    // insert delete plan SQL stuff here
+                }
+            }
         });
         dentistAppointmentPanel.add(dentistCancelButton);
 
         JButton dentistViewButton = new JButton("View Appointment");
         dentistViewButton.addActionListener(e -> {
-        	int rowSelected = dentistTable.getSelectedRow();
-        	if (rowSelected == -1) {
-        		JOptionPane.showMessageDialog(null, "Select an appointment!");
-        	}
-        	else {
-        		ViewAppointment dialog = new ViewAppointment();
-        		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        		dialog.setModal(true);
-        		dialog.setVisible(true);
-        	}
+            int rowSelected = dentistTable.getSelectedRow();
+            if (rowSelected == -1) {
+                JOptionPane.showMessageDialog(null, "Select an appointment!");
+            } else {
+                ViewAppointment dialog = new ViewAppointment();
+                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                dialog.setModal(true);
+                dialog.setVisible(true);
+            }
         });
         dentistAppointmentPanel.add(dentistViewButton);
 
@@ -177,16 +172,15 @@ public class SecretaryInterface extends JFrame {
         for (int i = 1; i <= 12; i++) {
             hygienistMonth.addItem(i);
         }
-        hygienistMonth.setSelectedItem(hygienistCalendar.get(Calendar.MONTH)+1);
+        hygienistMonth.setSelectedItem(hygienistCalendar.get(Calendar.MONTH) + 1);
         hygienistControlPanel.add(hygienistMonth);
 
         JComboBox hygienistYear = new JComboBox();
-        for (int i = 2000; i <= currentYear+2; i++) {
+        for (int i = 2000; i <= currentYear + 2; i++) {
             hygienistYear.addItem(i);
         }
         hygienistYear.setSelectedItem(currentYear);
         hygienistControlPanel.add(hygienistYear);
-
 
         hygienistTable = new JTable();
         hygienistTable.setRowHeight(20);
@@ -196,18 +190,19 @@ public class SecretaryInterface extends JFrame {
         JScrollPane hygienistScrollPane = new JScrollPane(hygienistTable);
         hygienistAppointment.add(hygienistScrollPane, BorderLayout.CENTER);
         AppointmentListener.generateAppointmentTable(todayAsString, hygienistTable);
-        
+
         // Listeners for dates
         hygienistMonth.addActionListener(
-        		new AppointmentListener(hygienistWeek,hygienistMonth, hygienistYear, hygienistCalendar,
-        				hygienistTable, "month"));
-        
+            new AppointmentListener(hygienistWeek, hygienistMonth, hygienistYear, hygienistCalendar,
+                hygienistTable, "month"));
+
         hygienistYear.addActionListener(
-        		new AppointmentListener(hygienistWeek, hygienistMonth, hygienistYear, hygienistCalendar,
-        				hygienistTable, "year"));
-        
-        hygienistWeek.addActionListener(new AppointmentListener(hygienistWeek, hygienistMonth, hygienistYear, hygienistCalendar,
-				hygienistTable, "week"));
+            new AppointmentListener(hygienistWeek, hygienistMonth, hygienistYear, hygienistCalendar,
+                hygienistTable, "year"));
+
+        hygienistWeek.addActionListener(
+            new AppointmentListener(hygienistWeek, hygienistMonth, hygienistYear, hygienistCalendar,
+                hygienistTable, "week"));
 
         JPanel hygienistAppointmentPanel = new JPanel();
         hygienistAppointment.add(hygienistAppointmentPanel, BorderLayout.SOUTH);
@@ -223,31 +218,29 @@ public class SecretaryInterface extends JFrame {
 
         JButton hygienistCancelButton = new JButton("Cancel Appointment");
         hygienistCancelButton.addActionListener(e -> {
-        	int rowSelected = hygienistTable.getSelectedRow();
-        	if (rowSelected == -1) {
-        		JOptionPane.showMessageDialog(null, "Select an appointment!");
-        	}
-        	else {
-        		int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
-        		if (a == JOptionPane.YES_OPTION) {
-                // insert delete plan SQL stuff here
-        		}
-        	}
+            int rowSelected = hygienistTable.getSelectedRow();
+            if (rowSelected == -1) {
+                JOptionPane.showMessageDialog(null, "Select an appointment!");
+            } else {
+                int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+                if (a == JOptionPane.YES_OPTION) {
+                    // insert delete plan SQL stuff here
+                }
+            }
         });
         hygienistAppointmentPanel.add(hygienistCancelButton);
 
         JButton hygienistViewButton = new JButton("View Appointment");
         hygienistViewButton.addActionListener(e -> {
-        	int rowSelected = hygienistTable.getSelectedRow();
-        	if (rowSelected == -1) {
-        		JOptionPane.showMessageDialog(null, "Select an appointment!");
-        	}
-        	else {
-        		ViewAppointment dialog = new ViewAppointment();
-        		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        		dialog.setModal(true);
-        		dialog.setVisible(true);
-        	}
+            int rowSelected = hygienistTable.getSelectedRow();
+            if (rowSelected == -1) {
+                JOptionPane.showMessageDialog(null, "Select an appointment!");
+            } else {
+                ViewAppointment dialog = new ViewAppointment();
+                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                dialog.setModal(true);
+                dialog.setVisible(true);
+            }
         });
         hygienistAppointmentPanel.add(hygienistViewButton);
 
@@ -292,7 +285,7 @@ public class SecretaryInterface extends JFrame {
             dialog.setVisible(true);
         });
         patientEditPanel.add(viewPatientPlanButton);
-        
+
         JTable patientTable = new JTable();
         patientTable.setRowHeight(20);
         patient.add(new JScrollPane(patientTable), BorderLayout.CENTER);
@@ -315,32 +308,29 @@ public class SecretaryInterface extends JFrame {
         });
         patientTable.setFillsViewportHeight(true);
 
-
         JButton editPatientButton = new JButton("Edit");
         editPatientButton.addActionListener(e -> {
-        	int rowSelected = patientTable.getSelectedRow();
-        	if (rowSelected == -1) {
-        		JOptionPane.showMessageDialog(null, "Select a patient!");
-        	}
-        	else {
-	            PatientEditor frame = new PatientEditor("Edit");
-	            frame.setModal(true);
-	            frame.setVisible(true);
-        	}
+            int rowSelected = patientTable.getSelectedRow();
+            if (rowSelected == -1) {
+                JOptionPane.showMessageDialog(null, "Select a patient!");
+            } else {
+                PatientEditor frame = new PatientEditor("Edit");
+                frame.setModal(true);
+                frame.setVisible(true);
+            }
         });
         patientEditPanel.add(editPatientButton);
 
         JButton deletePatientButton = new JButton("Delete");
         deletePatientButton.addActionListener(e -> {
-        	int rowSelected = patientTable.getSelectedRow();
-        	if (rowSelected == -1) {
-        		JOptionPane.showMessageDialog(null, "Select a patient!");
-        	}
-        	else {
-        		int a = JOptionPane.showConfirmDialog(deletePatientButton, "Are you sure?");
-        		if (a == JOptionPane.YES_OPTION) {
-                // insert delete patient sql stuff here
-        		}
+            int rowSelected = patientTable.getSelectedRow();
+            if (rowSelected == -1) {
+                JOptionPane.showMessageDialog(null, "Select a patient!");
+            } else {
+                int a = JOptionPane.showConfirmDialog(deletePatientButton, "Are you sure?");
+                if (a == JOptionPane.YES_OPTION) {
+                    // insert delete patient sql stuff here
+                }
             }
         });
         patientEditPanel.add(deletePatientButton);

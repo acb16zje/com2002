@@ -6,26 +6,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import util.WeekGenerator;
 
 public class AppointmentListener implements ActionListener {
 
+    private static Date monDate;
+    private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
     private JTable table;
     private JComboBox partnerYear;
     private JComboBox partnerMonth;
     private JComboBox partnerWeek;
     private Calendar calendar;
     private String changingSpinner;
-    private static Date monDate;
-    private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     public AppointmentListener(JComboBox w, JComboBox m, JComboBox y, Calendar c, JTable table,
         String s) {
@@ -69,11 +65,11 @@ public class AppointmentListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-    	if (changingSpinner == "year") {
-            calendar.set(Calendar.YEAR, (int)partnerYear.getSelectedItem());
+        if (changingSpinner == "year") {
+            calendar.set(Calendar.YEAR, (int) partnerYear.getSelectedItem());
             partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
         } else if (changingSpinner == "month") {
-            calendar.set(Calendar.MONTH, (int)partnerMonth.getSelectedItem() - 1 );
+            calendar.set(Calendar.MONTH, (int) partnerMonth.getSelectedItem() - 1);
             partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
         }
         String selectedWeek = ((String) partnerWeek.getSelectedItem()).substring(0, 10);

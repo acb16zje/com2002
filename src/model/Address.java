@@ -1,6 +1,7 @@
 package model;
 
 public class Address {
+
     private String houseNo;
     private String street;
     private String district;
@@ -9,6 +10,7 @@ public class Address {
 
     /**
      * Constructor for Address
+     *
      * @param houseNo The house number
      * @param street The street name
      * @param district The district name
@@ -25,6 +27,7 @@ public class Address {
 
     /**
      * Get the house number
+     *
      * @return The house number
      */
     public String getHouseNo() {
@@ -33,6 +36,7 @@ public class Address {
 
     /**
      * Set the new house number
+     *
      * @param houseNo The new house number
      */
     public void setHouseNo(String houseNo) {
@@ -41,6 +45,7 @@ public class Address {
 
     /**
      * Get the street name
+     *
      * @return The street name
      */
     public String getStreet() {
@@ -49,6 +54,7 @@ public class Address {
 
     /**
      * Set the street name
+     *
      * @param street The new street name
      */
     public void setStreet(String street) {
@@ -57,6 +63,7 @@ public class Address {
 
     /**
      * Get the district name
+     *
      * @return The district name
      */
     public String getDistrict() {
@@ -65,6 +72,7 @@ public class Address {
 
     /**
      * Set the new district name
+     *
      * @param district The new district name
      */
     public void setDistrict(String district) {
@@ -73,6 +81,7 @@ public class Address {
 
     /**
      * Get the city name
+     *
      * @return The city name
      */
     public String getCity() {
@@ -81,6 +90,7 @@ public class Address {
 
     /**
      * Set the new city name
+     *
      * @param city The new city name
      */
     public void setCity(String city) {
@@ -89,6 +99,7 @@ public class Address {
 
     /**
      * Get the postcode
+     *
      * @return The postcode
      */
     public String getPostcode() {
@@ -97,6 +108,7 @@ public class Address {
 
     /**
      * Set the new postcode
+     *
      * @param postcode The new postcode
      */
     public void setPostcode(String postcode) {

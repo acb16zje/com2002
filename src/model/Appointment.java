@@ -4,6 +4,7 @@ import java.sql.Time;
 import java.util.Date;
 
 public class Appointment {
+
     private Date date;
     private Time startTime;
     private int partnerID;
@@ -11,6 +12,7 @@ public class Appointment {
 
     /**
      * Constructor for Appointment
+     *
      * @param date The date
      * @param startTime The start time
      * @param partnerID The ID of the partner
@@ -25,6 +27,7 @@ public class Appointment {
 
     /**
      * Get the date of the appointment
+     *
      * @return The date of the appointment
      */
     public Date getDate() {
@@ -33,6 +36,7 @@ public class Appointment {
 
     /**
      * Set the date of the appointment
+     *
      * @param date The new date appointment
      */
     public void setDate(Date date) {
@@ -41,6 +45,7 @@ public class Appointment {
 
     /**
      * Get the start time of the appointment
+     *
      * @return The start time of the appointment
      */
     public Time getStartTime() {
@@ -49,6 +54,7 @@ public class Appointment {
 
     /**
      * Set the start time of the appointment
+     *
      * @param startTime The start time of a appointment
      */
     public void setStartTime(Time startTime) {
@@ -57,6 +63,7 @@ public class Appointment {
 
     /**
      * Get the ID of the partner of a appointment
+     *
      * @return The ID of the partner of a appointment
      */
     public int getPartnerID() {
@@ -65,6 +72,7 @@ public class Appointment {
 
     /**
      * Set the ID of the partner for a appointment
+     *
      * @param partnerID The ID of the partner for a appointment
      */
     public void setPartnerID(int partnerID) {
@@ -73,6 +81,7 @@ public class Appointment {
 
     /**
      * Get the patient ID of a appointment
+     *
      * @return The patient ID of a appointment
      */
     public int getPatientID() {
@@ -81,6 +90,7 @@ public class Appointment {
 
     /**
      * Set the patient ID for a appointment
+     *
      * @param patientID The patient ID for a appointment
      */
     public void setPatientID(int patientID) {
