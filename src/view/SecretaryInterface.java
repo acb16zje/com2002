@@ -320,7 +320,7 @@ public class SecretaryInterface extends JFrame {
         editPatientButton.addActionListener(e -> {
         	int rowSelected = patientTable.getSelectedRow();
         	if (rowSelected == -1) {
-        		JOptionPane.showMessageDialog(null, "Select an appointment!");
+        		JOptionPane.showMessageDialog(null, "Select a patient!");
         	}
         	else {
 	            PatientEditor frame = new PatientEditor("Edit");
@@ -334,7 +334,7 @@ public class SecretaryInterface extends JFrame {
         deletePatientButton.addActionListener(e -> {
         	int rowSelected = patientTable.getSelectedRow();
         	if (rowSelected == -1) {
-        		JOptionPane.showMessageDialog(null, "Select an appointment!");
+        		JOptionPane.showMessageDialog(null, "Select a patient!");
         	}
         	else {
         		int a = JOptionPane.showConfirmDialog(deletePatientButton, "Are you sure?");
