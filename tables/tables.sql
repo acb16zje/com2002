@@ -1,5 +1,3 @@
-PRAGMA foreign_keys = 1;
-
 CREATE TABLE Address (
 	houseNumber VARCHAR (10) NOT NULL,
 	postCode VARCHAR (7) NOT NULL,
@@ -15,11 +13,18 @@ CREATE TABLE Patient (
 	forename VARCHAR (20) NOT NULL,
 	familyName VARCHAR (30) NOT NULL,
 	dateOfBirth DATE NOT NULL,
-	phone VARCHAR (12) NOT NULL,
+	phone VARCHAR (11) NOT NULL,
 	houseNumber VARCHAR (10) NOT NULL,
-	postCode VARCHAR (7) NOT NULL,
+	postCode VARCHAR (8) NOT NULL,
 	PRIMARY KEY (patientID),
 	FOREIGN KEY (houseNumber, postCode) REFERENCES Address(houseNumber, postCode)
+);
+
+CREATE TABLE Partner (
+	partnerID INT NOT NULL,
+	forename VARCHAR (20) NULL,
+	familyName VARCHAR (30) NOT NULL, 
+	PRIMARY KEY (partnerID)
 );
 
 CREATE TABLE HealthCarePlan (
@@ -45,13 +50,6 @@ CREATE TABLE Subscription (
 	FOREIGN KEY (planName) REFERENCES HealthCarePlan(planName)
 );
 
-CREATE TABLE Partner (
-	partnerID INT NOT NULL,
-	forename VARCHAR (20) NULL,
-	familyName VARCHAR (30) NOT NULL, 
-	PRIMARY KEY (partnerID)
-);
-
 CREATE TABLE Appointment (
 	date DATE NOT NULL,
 	startTime TIME NOT NULL,
@@ -64,7 +62,6 @@ CREATE TABLE Appointment (
 
 CREATE TABLE Treatment (
 	name VARCHAR (30) NOT NULL,
-	type VARCHAR (10) NOT NULL,
 	cost INT NOT NULL,
 	PRIMARY KEY (name)
 );
