@@ -81,7 +81,7 @@ public class WeekGenerator {
                 } else {
                     String[] tempArray = {
                         Integer.toString(i) + ":" + Integer.toString(j) + "0 - " + Integer
-                            .toString(i + 1) + ":" + Integer.toString(j + 2) + "0", null, null,
+                            .toString(i) + ":" + Integer.toString(j + 2) + "0", null, null,
                         null, null, null};
                     appointmentList[row] = tempArray;
                 }

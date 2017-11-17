@@ -1,9 +1,13 @@
 package controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -12,28 +16,25 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import util.WeekGenerator;
 
-public class AppointmentListener implements ChangeListener {
+public class AppointmentListener implements ActionListener {
 
-    private static JTable table;
-    private static JSpinner dentistYear;
-    private static JSpinner dentistMonth;
-    private static JComboBox dentistWeek;
-    private static Calendar calendar;
+    private JTable table;
+    private JComboBox partnerYear;
+    private JComboBox partnerMonth;
+    private JComboBox partnerWeek;
+    private Calendar calendar;
+    private String changingSpinner;
     private static Date monDate;
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-    public AppointmentListener(JComboBox w, JSpinner m, JSpinner y, Calendar c, JTable table,
+    public AppointmentListener(JComboBox w, JComboBox m, JComboBox y, Calendar c, JTable table,
         String s) {
-        this.dentistWeek = w;
-        this.dentistMonth = m;
-        this.dentistYear = y;
+        this.partnerWeek = w;
+        this.partnerMonth = m;
+        this.partnerYear = y;
         this.table = table;
-        if (s == "year") {
-            c.set(Calendar.YEAR, (int) y.getValue());
-        } else if (s == "month") {
-            c.set(Calendar.MONTH, (int) m.getValue() - 1);
-        }
         this.calendar = c;
+        this.changingSpinner = s;
     }
 
     /**
@@ -67,8 +68,15 @@ public class AppointmentListener implements ChangeListener {
     }
 
     @Override
-    public void stateChanged(ChangeEvent e) {
-        String selectedWeek = ((String) dentistWeek.getSelectedItem()).substring(0, 10);
+    public void actionPerformed(ActionEvent e) {
+    	if (changingSpinner == "year") {
+            calendar.set(Calendar.YEAR, (int)partnerYear.getSelectedItem());
+            partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
+        } else if (changingSpinner == "month") {
+            calendar.set(Calendar.MONTH, (int)partnerMonth.getSelectedItem() - 1 );
+            partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
+        }
+        String selectedWeek = ((String) partnerWeek.getSelectedItem()).substring(0, 10);
         generateAppointmentTable(selectedWeek, table);
     }
 }
