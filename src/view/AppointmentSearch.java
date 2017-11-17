@@ -1,3 +1,5 @@
+package view;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -71,20 +73,7 @@ public class AppointmentSearch extends JDialog {
 
         setTitle("Search Appointment");
         setBounds(100, 100, 450, 300);
+        setResizable(false);
         setLocationRelativeTo(null);
     }
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        try {
-            AppointmentSearch dialog = new AppointmentSearch();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

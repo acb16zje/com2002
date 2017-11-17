@@ -1,11 +1,10 @@
+package view;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,10 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
+import util.IntegerFilter;
+import util.MoneyFilter;
 
 public class HealthcarePlanEditor extends JDialog {
-
-    private JPanel contentPane;
 
     /**
      * Create the frame.
@@ -74,7 +73,7 @@ public class HealthcarePlanEditor extends JDialog {
 
         JTextField cost = new JTextField();
         cost.setColumns(10);
-        ((AbstractDocument) cost.getDocument()).setDocumentFilter(new MoneyFlt());
+        ((AbstractDocument) cost.getDocument()).setDocumentFilter(new MoneyFilter());
         GridBagConstraints gbc_cost = new GridBagConstraints();
         gbc_cost.anchor = GridBagConstraints.WEST;
         gbc_cost.insets = new Insets(0, 0, 5, 5);
@@ -91,7 +90,7 @@ public class HealthcarePlanEditor extends JDialog {
         editPanel.add(lblCheckUp, gbc_lblCheckUp);
 
         JTextField checkUp = new JTextField();
-        ((AbstractDocument) checkUp.getDocument()).setDocumentFilter(new IntegerFlt());
+        ((AbstractDocument) checkUp.getDocument()).setDocumentFilter(new IntegerFilter());
         checkUp.setColumns(5);
         GridBagConstraints gbc_checkUp = new GridBagConstraints();
         gbc_checkUp.anchor = GridBagConstraints.WEST;
@@ -109,7 +108,7 @@ public class HealthcarePlanEditor extends JDialog {
         editPanel.add(lblHygienevisit, gbc_lblHygienevisit);
 
         JTextField hygieneVisit = new JTextField();
-        ((AbstractDocument) hygieneVisit.getDocument()).setDocumentFilter(new IntegerFlt());
+        ((AbstractDocument) hygieneVisit.getDocument()).setDocumentFilter(new IntegerFilter());
         hygieneVisit.setColumns(5);
         GridBagConstraints gbc_hygieneVisit = new GridBagConstraints();
         gbc_hygieneVisit.anchor = GridBagConstraints.WEST;
@@ -127,7 +126,7 @@ public class HealthcarePlanEditor extends JDialog {
         editPanel.add(lblRepairWork, gbc_lblRepairWork);
 
         JTextField repairVisit = new JTextField();
-        ((AbstractDocument) repairVisit.getDocument()).setDocumentFilter(new IntegerFlt());
+        ((AbstractDocument) repairVisit.getDocument()).setDocumentFilter(new IntegerFilter());
         repairVisit.setColumns(5);
         GridBagConstraints gbc_repairVisit = new GridBagConstraints();
         gbc_repairVisit.anchor = GridBagConstraints.WEST;
@@ -146,58 +145,35 @@ public class HealthcarePlanEditor extends JDialog {
         contentPane.add(selectPanel, BorderLayout.SOUTH);
 
         JButton doneButton = new JButton("Done");
-        doneButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                boolean completed = true;
-                Component[] components = editPanel.getComponents();
-                for (Component comp : components) {
-                    // Cast comp to JComboBox / JTextField to get the values
-                    if ((comp instanceof JTextField)) {
-                        if (((JTextField) comp).getText().equals("")) {
-                            JOptionPane.showMessageDialog(null, "Please Complete");
-                            completed = false;
-                            break;
-                        } else {
-                            JOptionPane.showMessageDialog(null, ((JTextField) comp).getText());
-                        }
+        doneButton.addActionListener(e -> {
+            boolean completed = true;
+            Component[] components = editPanel.getComponents();
+            for (Component comp : components) {
+                // Cast comp to JComboBox / JTextField to get the values
+                if ((comp instanceof JTextField)) {
+                    if (((JTextField) comp).getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "Please Complete");
+                        completed = false;
+                        break;
+                    } else {
+                        JOptionPane.showMessageDialog(null, ((JTextField) comp).getText());
                     }
                 }
-                if (completed) {
-                    dispose();
-                }
+            }
+            if (completed) {
+                dispose();
             }
         });
         selectPanel.add(doneButton);
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        cancelButton.addActionListener(e -> dispose());
         selectPanel.add(cancelButton);
 
         setTitle("Healthcare Plan Editor");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 500, 500);
+        setResizable(false);
         setLocationRelativeTo(null);
     }
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    HealthcarePlanEditor frame = new HealthcarePlanEditor();
-                    frame.setModal(true);
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
 }

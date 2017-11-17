@@ -1,3 +1,5 @@
+package view;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -181,21 +183,8 @@ public class HealthcarePlan extends JDialog {
 
         setTitle("View Healthcare Plan");
         setBounds(100, 100, 450, 300);
+        setResizable(false);
         setLocationRelativeTo(null);
-    }
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        try {
-            HealthcarePlan dialog = new HealthcarePlan();
-            dialog.setModal(true);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 }
