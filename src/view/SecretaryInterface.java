@@ -98,6 +98,7 @@ public class SecretaryInterface extends JFrame {
         dentistTable.setFillsViewportHeight(true);
         JScrollPane dentistScrollPane = new JScrollPane(dentistTable);
         dentistAppointment.add(dentistScrollPane, BorderLayout.CENTER);
+
         AppointmentListener.generateAppointmentTable(todayAsString,dentistTable);
 
         JPanel dentistAppointmentPanel = new JPanel();
