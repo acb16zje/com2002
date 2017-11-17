@@ -10,6 +10,7 @@ public class Patient {
 	private Date dateOfBirth;
 	private String houseNo;
 	private String postcode;
+	private int patientID;
 	
 	public Patient(String title, String surName, String foreName, int phone, Date dateOfBirth, String houseNo, String postcode) {
 		this.title = title;
@@ -19,6 +20,7 @@ public class Patient {
 		this.dateOfBirth = dateOfBirth;
 		this.houseNo = houseNo;
 		this.postcode = postcode;
+		this.patientID = patientID;
 	}
 
 	public String getTitle() {
@@ -77,6 +79,14 @@ public class Patient {
 		this.postcode = postcode;
 	}
 	
+	public int getPatientID() {
+		return patientID;
+	}
+
+	public void setPatientID(int patientID) {
+		this.patientID = patientID;
+	}
+
 	public String getFullName() {
 		return title+" "+foreName+" "+surName;
 	}
