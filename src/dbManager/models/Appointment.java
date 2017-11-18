@@ -1,7 +1,7 @@
 package dbManager.models;
 
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @author Jake Sturgeon
@@ -35,5 +35,15 @@ public class Appointment {
 
     public int getPatientID() {
         return patientID;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+            "date=" + date +
+            ", partnerID=" + partnerID +
+            ", startTime=" + startTime +
+            ", patientID=" + patientID +
+            '}';
     }
 }
