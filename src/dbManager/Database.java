@@ -6,11 +6,15 @@ import java.sql.*;
  * @author Jake Sturgeon
  * @version 1.0 on 17/11/2017
  */
-public class InterfaceToDatabase {
+public class Database {
 
     Connection con;  //Connect to db
-    public InterfaceToDatabase() {
+    public Database() {
         this.con = connect();
+    }
+    
+    public Connection getCon()	{
+    	return con;
     }
 
     private java.sql.Connection connect() {
@@ -50,7 +54,7 @@ public class InterfaceToDatabase {
     }
 
     public static void main(String[] args) {
-        InterfaceToDatabase c = new InterfaceToDatabase();
+        Database c = new Database();
         c.closeConnection();
     }
 

@@ -1,4 +1,4 @@
-package dbManager;
+package dbManager.models;
 
 /**
  * @author Jake Sturgeon

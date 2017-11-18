@@ -1,4 +1,4 @@
-package dbManager;
+package dbManager.models;
 import java.sql.Date;
 
 public class Partner {
