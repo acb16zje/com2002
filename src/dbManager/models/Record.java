@@ -14,7 +14,7 @@ public class Record {
     private Time startTime;
     private String treatmentGiven;
 
-    public Record(Date date, int partnerID, Time startTime, String treatmentGiven) {
+    public Record(String treatmentGiven, Time startTime, Date date, int partnerID) {
         this.date = date;
         this.partnerID = partnerID;
         this.startTime = startTime;
