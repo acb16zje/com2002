@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import dbManager.Database;
 import dbManager.models.Address;
-import dbManager.models.Patient;
 
 public class AddressQueries {
 

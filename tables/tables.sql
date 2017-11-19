@@ -29,9 +29,9 @@ CREATE TABLE Partner (
 
 CREATE TABLE HealthCarePlan (
 	planName VARCHAR (30) NOT NULL,
-	monthlyPayment INT NOT NULL,
+	monthlyFee INT NOT NULL,
 	checkUp INT NOT NULL,
-	hygieneVist INT NOT NULL,
+	hygieneVisit INT NOT NULL,
 	repairWork INT NOT NULL,
 	PRIMARY KEY (planName)
 );
