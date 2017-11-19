@@ -7,9 +7,9 @@ package dbManager.models;
 public class Treatment {
 
     private String name;
-    private float cost;
+    private int cost;
 
-    public Treatment(String name, float cost) {
+    public Treatment(String name, int cost) {
         this.name = name;
         this.cost = cost;
     }
@@ -18,7 +18,15 @@ public class Treatment {
         return name;
     }
 
-    public float getCost() {
+    public int getCost() {
         return cost;
+    }
+
+    @Override
+    public String toString() {
+        return "Treatment{" +
+            "name='" + name + '\'' +
+            ", cost=" + cost +
+            '}';
     }
 }
