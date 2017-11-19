@@ -132,7 +132,7 @@ public class AppointmentQueries {
         }
     }
 
-    public static void updatePatient(Appointment appointment) {
+    public static void updateAppointment(Appointment appointment) {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
@@ -172,7 +172,7 @@ public class AppointmentQueries {
         PatientQueries.insertPatient(new Patient(1, "Miss", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
             "0783649208", "-", "-"));
         app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"),1,0);
-        AppointmentQueries.updatePatient(app);
+        AppointmentQueries.updateAppointment(app);
         System.out.println(AppointmentQueries.getAllAppointments());
 
         AppointmentQueries.deleteAppointment(app.getDate(), app.getPartnerID(), app.getStartTime());
