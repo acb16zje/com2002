@@ -100,7 +100,6 @@ public class TreatmentQueries {
             pstmt = con.prepareStatement("DELETE FROM Treatment WHERE name = ?");
             pstmt.setString(1, name);
             pstmt.executeUpdate();
-            pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

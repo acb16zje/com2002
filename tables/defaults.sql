@@ -17,4 +17,5 @@ INSERT INTO Treatment VALUES ("Gold Crown Fitting", 500);
 
 #Example appointments
 INSERT INTO Appointment VALUES (DATE "2017-12-25", "12:00:00", 0, 0);
-INSERT INTO Record VALUES("Check UP", "12:00:00", DATE "2017-12-25",0);
+
+INSERT INTO Record VALUES("Check UP", "12:00:00", DATE "2017-12-25", 0);
