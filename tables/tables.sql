@@ -3,7 +3,7 @@ CREATE TABLE Address (
 	street VARCHAR (20) NOT NULL,
 	district VARCHAR (20) NOT NULL,
 	city VARCHAR (20) NOT NULL,
-	postCode VARCHAR (7) NOT NULL,
+	postCode VARCHAR (8) NOT NULL,
 	PRIMARY KEY (houseNumber, postCode)
 );
 
