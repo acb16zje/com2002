@@ -36,4 +36,13 @@ public class Record {
     public String getTreatmentGiven() {
         return treatmentGiven;
     }
+
+	@Override
+	public String toString() {
+		return "Record [date=" + date + ", partnerID=" + partnerID + ", startTime=" + startTime + ", treatmentGiven="
+				+ treatmentGiven + "]";
+	}
+    
+    
+    
 }

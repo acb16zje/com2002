@@ -50,5 +50,14 @@ public class Subscription {
 	public int getRepairWorksLeft() {
 		return repairWorksLeft;
 	}
+
+	@Override
+	public String toString() {
+		return "Subscription [patientID=" + patientID + ", name=" + name + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", checkUpsLeft=" + checkUpsLeft + ", hygieneVisitsLeft=" + hygieneVisitsLeft
+				+ ", repairWorksLeft=" + repairWorksLeft + "]";
+	}
+	
+	
 	
 }

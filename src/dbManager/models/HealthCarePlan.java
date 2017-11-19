@@ -35,5 +35,13 @@ public class HealthCarePlan {
 	public int getRepairWorks() {
 		return repairWorks;
 	}
+
+	@Override
+	public String toString() {
+		return "HealthCarePlan [name=" + name + ", monthlyFee=" + monthlyFee + ", checkUps=" + checkUps
+				+ ", hygieneVisits=" + hygieneVisits + ", repairWorks=" + repairWorks + "]";
+	}
+	
+	
 	
 }
