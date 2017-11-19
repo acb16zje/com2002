@@ -1,5 +1,4 @@
 package dbManager.models;
-import java.sql.Date;
 
 public class Partner {
 
@@ -25,4 +24,12 @@ public class Partner {
 		return surname;
 	}
 
+	@Override
+	public String toString() {
+		return "Partner{" +
+			"ID=" + ID +
+			", forename='" + forename + '\'' +
+			", surname='" + surname + '\'' +
+			'}';
+	}
 }
