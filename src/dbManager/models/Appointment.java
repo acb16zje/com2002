@@ -14,7 +14,7 @@ public class Appointment {
     private Time startTime;
     private int patientID;
 
-    public Appointment(Date date, int partnerID, Time startTime, int patientID) {
+    public Appointment(Date date, Time startTime, int patientID, int partnerID) {
         this.date = date;
         this.partnerID = partnerID;
         this.startTime = startTime;
