@@ -19,12 +19,10 @@ import javax.swing.border.EmptyBorder;
 
 public class BookAppointment extends JDialog {
 
-    private JTextField patientIDTextField;
-
     /**
      * Create the dialog.
      */
-    public BookAppointment() {
+    public BookAppointment(String radioButton) {
         // Main content panel
         JPanel contentPanel = new JPanel();
         getContentPane().setLayout(new BorderLayout());
@@ -104,7 +102,7 @@ public class BookAppointment extends JDialog {
         contentPanel.add(typeLabel);
 
         // Label for Check-up / hygiene
-        JRadioButton checkUpRadioButton = new JRadioButton("Check-up");
+        JRadioButton checkUpRadioButton = new JRadioButton(radioButton);
         checkUpRadioButton.setBounds(123, 150, 90, 23);
         contentPanel.add(checkUpRadioButton);
 
@@ -123,7 +121,7 @@ public class BookAppointment extends JDialog {
         contentPanel.add(patientIDLabel);
 
         // Text field for patient ID input
-        patientIDTextField = new JTextField();
+        JTextField patientIDTextField = new JTextField();
         patientIDTextField.setBounds(123, 190, 194, 23);
         patientIDTextField.setFont(new Font("Dialog", Font.PLAIN, 16));
         contentPanel.add(patientIDTextField);
@@ -147,7 +145,7 @@ public class BookAppointment extends JDialog {
                 // insert SQL query here
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(null, "Please enter a valid date");
+                JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
             }
 
 
@@ -175,11 +173,7 @@ public class BookAppointment extends JDialog {
      * @return True if the date is valid
      */
     private boolean isValidDate(Calendar date) {
-        if (date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
-            || date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
+            || date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY);
     }
 }

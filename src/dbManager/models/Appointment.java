@@ -1,7 +1,7 @@
 package dbManager.models;
 
-import java.sql.Time;
 import java.sql.Date;
+import java.sql.Time;
 
 /**
  * @author Jake Sturgeon

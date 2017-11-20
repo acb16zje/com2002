@@ -19,21 +19,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import util.WeekGenerator;
 
-public class PartnerHome extends JFrame {
-
-    private JPanel contentPane;
-    private JTable table;
+public class PartnerInterface extends JFrame {
 
     /**
      * Create the frame.
      */
-    public PartnerHome(String partner) {
-        setTitle("Sheffield Dentist Management Program");
+    public PartnerInterface(String partner) {
         SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
         Calendar currentCalendar = Calendar.getInstance();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 800, 550);
-        contentPane = new JPanel();
+
+        // Main content panel
+        JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -43,6 +39,7 @@ public class PartnerHome extends JFrame {
         gbl_contentPane.rowWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
         contentPane.setLayout(gbl_contentPane);
 
+        // Panel for Yesterday and Tomorrow button
         JPanel tableControlPanel = new JPanel();
         GridBagConstraints gbc_tableControlPanel = new GridBagConstraints();
         gbc_tableControlPanel.fill = GridBagConstraints.BOTH;
@@ -58,26 +55,29 @@ public class PartnerHome extends JFrame {
         gbl_tableControlPanel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
         tableControlPanel.setLayout(gbl_tableControlPanel);
 
-        JLabel lblWeek = new JLabel(
+        // Label for the current day
+        JLabel dayLabel = new JLabel(
             new SimpleDateFormat("EEEE").format(currentCalendar.getTime()) + " " + timeFormat
                 .format(currentCalendar.getTime()));
-        lblWeek.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        GridBagConstraints gbc_lblWeek = new GridBagConstraints();
-        gbc_lblWeek.anchor = GridBagConstraints.NORTH;
-        gbc_lblWeek.insets = new Insets(0, 0, 0, 5);
-        gbc_lblWeek.gridx = 2;
-        gbc_lblWeek.gridy = 1;
-        tableControlPanel.add(lblWeek, gbc_lblWeek);
+        dayLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        GridBagConstraints gbc_dayLabel = new GridBagConstraints();
+        gbc_dayLabel.anchor = GridBagConstraints.NORTH;
+        gbc_dayLabel.insets = new Insets(0, 0, 0, 5);
+        gbc_dayLabel.gridx = 2;
+        gbc_dayLabel.gridy = 1;
+        tableControlPanel.add(dayLabel, gbc_dayLabel);
 
-        JLabel lblPartner = new JLabel(partner);
-        lblPartner.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        GridBagConstraints gbc_lblPartner = new GridBagConstraints();
-        gbc_lblPartner.anchor = GridBagConstraints.NORTH;
-        gbc_lblPartner.insets = new Insets(0, 0, 5, 5);
-        gbc_lblPartner.gridx = 2;
-        gbc_lblPartner.gridy = 0;
-        tableControlPanel.add(lblPartner, gbc_lblPartner);
+        // Label for dentist or hygienist
+        JLabel partnerLabel = new JLabel(partner);
+        partnerLabel.setFont(new Font("Dialog", Font.BOLD, 16));
+        GridBagConstraints gbc_partnerLabel = new GridBagConstraints();
+        gbc_partnerLabel.anchor = GridBagConstraints.NORTH;
+        gbc_partnerLabel.insets = new Insets(0, 0, 5, 5);
+        gbc_partnerLabel.gridx = 2;
+        gbc_partnerLabel.gridy = 0;
+        tableControlPanel.add(partnerLabel, gbc_partnerLabel);
 
+        // Scroll pane for the timetable
         JScrollPane scrollPane = new JScrollPane();
         GridBagConstraints gbc_scrollPane = new GridBagConstraints();
         gbc_scrollPane.fill = GridBagConstraints.BOTH;
@@ -86,11 +86,12 @@ public class PartnerHome extends JFrame {
         gbc_scrollPane.gridy = 1;
         contentPane.add(scrollPane, gbc_scrollPane);
 
-        table = new JTable();
-        table.setCellSelectionEnabled(true);
-        table.setFillsViewportHeight(true);
-        table.setRowHeight(20);
-        table.setModel(new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
+        // A table of today appointments
+        JTable timetable = new JTable();
+        timetable.setCellSelectionEnabled(true);
+        timetable.setFillsViewportHeight(true);
+        timetable.setRowHeight(20);
+        timetable.setModel(new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
                            timeFormat.format(currentCalendar.getTime())}) {
                            @Override
                            public boolean isCellEditable(int row, int column) {
@@ -98,27 +99,30 @@ public class PartnerHome extends JFrame {
                            }
                        }
         );
-        scrollPane.setViewportView(table);
+        scrollPane.setViewportView(timetable);
 
-        JButton lastWeekButton = new JButton("Yesterday");
-        lastWeekButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lastWeekButton.addActionListener(new PartnerListener(-1, currentCalendar, table, lblWeek));
-        GridBagConstraints gbc_lastWeekButton = new GridBagConstraints();
-        gbc_lastWeekButton.fill = GridBagConstraints.BOTH;
-        gbc_lastWeekButton.insets = new Insets(0, 0, 0, 5);
-        gbc_lastWeekButton.gridx = 0;
-        gbc_lastWeekButton.gridy = 1;
-        tableControlPanel.add(lastWeekButton, gbc_lastWeekButton);
+        // Yesterday button
+        JButton yesterdayButton = new JButton("Yesterday");
+        yesterdayButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        yesterdayButton.addActionListener(new PartnerListener(-1, currentCalendar, timetable, dayLabel));
+        GridBagConstraints gbc_yesterdayButton = new GridBagConstraints();
+        gbc_yesterdayButton.fill = GridBagConstraints.BOTH;
+        gbc_yesterdayButton.insets = new Insets(0, 0, 0, 5);
+        gbc_yesterdayButton.gridx = 0;
+        gbc_yesterdayButton.gridy = 1;
+        tableControlPanel.add(yesterdayButton, gbc_yesterdayButton);
 
-        JButton nextWeekButton = new JButton("Tomorrow");
-        nextWeekButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        nextWeekButton.addActionListener(new PartnerListener(1, currentCalendar, table, lblWeek));
-        GridBagConstraints gbc_nextWeekButton = new GridBagConstraints();
-        gbc_nextWeekButton.fill = GridBagConstraints.BOTH;
-        gbc_nextWeekButton.gridx = 4;
-        gbc_nextWeekButton.gridy = 1;
-        tableControlPanel.add(nextWeekButton, gbc_nextWeekButton);
+        // Tomorrow button
+        JButton tomorrowButton = new JButton("Tomorrow");
+        tomorrowButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        tomorrowButton.addActionListener(new PartnerListener(1, currentCalendar, timetable, dayLabel));
+        GridBagConstraints gbc_tomorrowButton = new GridBagConstraints();
+        gbc_tomorrowButton.fill = GridBagConstraints.BOTH;
+        gbc_tomorrowButton.gridx = 4;
+        gbc_tomorrowButton.gridy = 1;
+        tableControlPanel.add(tomorrowButton, gbc_tomorrowButton);
 
+        // Bottom panel for Edit Appointment button
         JPanel panel = new JPanel();
         GridBagConstraints gbc_panel = new GridBagConstraints();
         gbc_panel.fill = GridBagConstraints.BOTH;
@@ -127,14 +131,19 @@ public class PartnerHome extends JFrame {
         contentPane.add(panel, gbc_panel);
         panel.setLayout(new GridLayout(0, 1, 0, 0));
 
-        JButton btnNewButton = new JButton("Edit Appointment");
-        btnNewButton.addActionListener(e -> {
+        JButton editAppointmentButton = new JButton("Edit Appointment");
+        editAppointmentButton.addActionListener(e -> {
             AppointmentEditorPartner dialog = new AppointmentEditorPartner();
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setVisible(true);
         });
-        btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        panel.add(btnNewButton);
+        editAppointmentButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        panel.add(editAppointmentButton);
 
+        // Basic settings
+        setTitle("Sheffield Dental Care");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 800, 550);
+        setLocationRelativeTo(null);
     }
 }

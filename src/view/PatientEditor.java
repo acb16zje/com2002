@@ -21,22 +21,12 @@ import util.IntegerFilter;
 
 public class PatientEditor extends JDialog {
 
-    private JPanel contentPane;
-    private JTextField foreName;
-    private JTextField surName;
-    private JTextField phoneNo;
-    private JTextField houseNo;
-    private JTextField street;
-    private JTextField district;
-    private JTextField city;
-    private JTextField postcode;
-
     /**
      * Create the frame.
      */
     public PatientEditor(String label) {
         // Main content panel
-        contentPane = new JPanel();
+        JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         setContentPane(contentPane);
@@ -67,7 +57,7 @@ public class PatientEditor extends JDialog {
         panel.add(forenameLabel);
 
         // Text field for forename
-        foreName = new JTextField();
+        JTextField foreName = new JTextField();
         foreName.setBounds(154, 86, 200, 23);
         foreName.setFont(new Font("Dialog", Font.PLAIN, 16));
         foreName.setColumns(10);
@@ -79,7 +69,7 @@ public class PatientEditor extends JDialog {
         panel.add(surnameLabel);
 
         // Text field for surname
-        surName = new JTextField();
+        JTextField surName = new JTextField();
         surName.setBounds(154, 126, 200, 23);
         surName.setFont(new Font("Dialog", Font.PLAIN, 16));
         surName.setColumns(10);
@@ -131,7 +121,7 @@ public class PatientEditor extends JDialog {
         panel.add(phoneNoLabel);
 
         // Text field for phone number
-        phoneNo = new JTextField();
+        JTextField phoneNo = new JTextField();
         phoneNo.setBounds(154, 206, 200, 23);
         phoneNo.setFont(new Font("Dialog", Font.PLAIN, 16));
         ((AbstractDocument) phoneNo.getDocument()).setDocumentFilter(new IntegerFilter());
@@ -144,7 +134,7 @@ public class PatientEditor extends JDialog {
         panel.add(houseNoLabel);
 
         // Text field for house number
-        houseNo = new JTextField();
+        JTextField houseNo = new JTextField();
         houseNo.setBounds(154, 246, 200, 23);
         houseNo.setFont(new Font("Dialog", Font.PLAIN, 16));
         ((AbstractDocument) houseNo.getDocument()).setDocumentFilter(new IntegerFilter());
@@ -157,7 +147,7 @@ public class PatientEditor extends JDialog {
         panel.add(streetLabel);
 
         // Text field for street
-        street = new JTextField();
+        JTextField street = new JTextField();
         street.setBounds(154, 286, 200, 23);
         street.setFont(new Font("Dialog", Font.PLAIN, 16));
         street.setColumns(20);
@@ -169,7 +159,7 @@ public class PatientEditor extends JDialog {
         panel.add(districtLabel);
 
         // Text field for district
-        district = new JTextField();
+        JTextField district = new JTextField();
         district.setBounds(154, 326, 200, 23);
         district.setFont(new Font("Dialog", Font.PLAIN, 16));
         district.setColumns(20);
@@ -181,7 +171,7 @@ public class PatientEditor extends JDialog {
         panel.add(cityLabel);
 
         // Text field for city
-        city = new JTextField();
+        JTextField city = new JTextField();
         city.setBounds(154, 366, 200, 23);
         city.setFont(new Font("Dialog", Font.PLAIN, 16));
         city.setColumns(20);
@@ -193,7 +183,7 @@ public class PatientEditor extends JDialog {
         panel.add(postcodeLabel);
 
         // Text field for postcode
-        postcode = new JTextField();
+        JTextField postcode = new JTextField();
         postcode.setBounds(154, 406, 200, 23);
         postcode.setFont(new Font("Dialog", Font.PLAIN, 16));
         postcode.setColumns(20);

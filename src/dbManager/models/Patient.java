@@ -13,7 +13,8 @@ public class Patient {
     private String houseNumber;
     private String postCode;
 
-    public Patient(int ID, String title, String forename, String surname, Date DOB, String phone, String houseNumber, String postCode) {
+    public Patient(int ID, String title, String forename, String surname, Date DOB, String phone,
+        String houseNumber, String postCode) {
         this.ID = ID;
         this.title = title;
         this.forename = forename;
@@ -28,10 +29,10 @@ public class Patient {
         return ID;
     }
 
-    public String getTitle()	{
-    	return title;
+    public String getTitle() {
+        return title;
     }
-    
+
     public String getForename() {
         return forename;
     }
@@ -56,12 +57,13 @@ public class Patient {
         return postCode;
     }
 
-	@Override
-	public String toString() {
-		return "Patient [ID=" + ID + ", title=" + title + ", forename=" + forename + ", surname=" + surname + ", DOB="
-				+ DOB + ", phone=" + phone + ", houseNumber=" + houseNumber + ", postCode=" + postCode + "]";
-	}
+    @Override
+    public String toString() {
+        return "Patient [ID=" + ID + ", title=" + title + ", forename=" + forename + ", surname="
+            + surname + ", DOB="
+            + DOB + ", phone=" + phone + ", houseNumber=" + houseNumber + ", postCode=" + postCode
+            + "]";
+    }
 
-    
-    
+
 }

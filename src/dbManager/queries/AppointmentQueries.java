@@ -25,7 +25,8 @@ public class AppointmentQueries {
         PreparedStatement pstmt = null;
         Appointment appointment = null;
         try {
-            pstmt = con.prepareStatement("SELECT * FROM Appointment WHERE date = ? AND partnerID = ? AND startTime = ?");
+            pstmt = con.prepareStatement(
+                "SELECT * FROM Appointment WHERE date = ? AND partnerID = ? AND startTime = ?");
             pstmt.setDate(1, d);
             pstmt.setInt(2, partnerID);
             pstmt.setTime(3, time);
@@ -113,7 +114,8 @@ public class AppointmentQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("DELETE FROM Appointment WHERE date = ? AND partnerID = ? AND startTime = ?");
+            pstmt = con.prepareStatement(
+                "DELETE FROM Appointment WHERE date = ? AND partnerID = ? AND startTime = ?");
             pstmt.setDate(1, d);
             pstmt.setInt(2, partnerID);
             pstmt.setTime(3, time);
@@ -160,18 +162,20 @@ public class AppointmentQueries {
 
     public static void main(String[] args) {
 
-        System.out.println(AppointmentQueries.getAppointment(DateHandler.newDate(2017, 12,25), 0, Time.valueOf("12:00:00")));
+        System.out.println(AppointmentQueries
+            .getAppointment(DateHandler.newDate(2017, 12, 25), 0, Time.valueOf("12:00:00")));
 
-        Appointment app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"),0,0);
+        Appointment app = new Appointment(DateHandler.newDate(2000, 8, 27),
+            Time.valueOf("03:45:00"), 0, 0);
         System.out.println(app);
         AppointmentQueries.insertAppointment(app);
 
         System.out.println(AppointmentQueries.getAllAppointments());
 
-
-        PatientQueries.insertPatient(new Patient(1, "Miss", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
-            "0783649208", "-", "-"));
-        app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"),1,0);
+        PatientQueries
+            .insertPatient(new Patient(1, "Miss", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
+                "0783649208", "-", "-"));
+        app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"), 1, 0);
         AppointmentQueries.updateAppointment(app);
         System.out.println(AppointmentQueries.getAllAppointments());
 

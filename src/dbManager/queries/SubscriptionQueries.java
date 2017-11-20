@@ -1,25 +1,25 @@
 package dbManager.queries;
 
+import dbManager.Database;
+import dbManager.models.DateHandler;
+import dbManager.models.Subscription;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import dbManager.Database;
-import dbManager.models.DateHandler;
-import dbManager.models.Subscription;
-
 public class SubscriptionQueries {
 
-	public static Subscription getSubscription(int patientID, String planName)	{
-		
-		Database db = new Database();
+    public static Subscription getSubscription(int patientID, String planName) {
+
+        Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         Subscription subscription = null;
         try {
-            pstmt = con.prepareStatement("SELECT * FROM Subscription WHERE patientID = ? AND planName = ?");
+            pstmt = con.prepareStatement(
+                "SELECT * FROM Subscription WHERE patientID = ? AND planName = ?");
             pstmt.setInt(1, patientID);
             pstmt.setString(2, planName);
             ResultSet res = pstmt.executeQuery();
@@ -46,10 +46,10 @@ public class SubscriptionQueries {
         }
 
         return subscription;
-		
-	}
-	
-	public static ArrayList<Subscription> getAllSubscriptions() {
+
+    }
+
+    public static ArrayList<Subscription> getAllSubscriptions() {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
@@ -59,12 +59,12 @@ public class SubscriptionQueries {
             ResultSet res = pstmt.executeQuery();
             while (res.next()) {
                 subscriptions.add(new Subscription(res.getInt(1),
-                        res.getString(2),
-                        res.getDate(3),
-                        res.getDate(4),
-                        res.getInt(5),
-                        res.getInt(6),
-                        res.getInt(7)));
+                    res.getString(2),
+                    res.getDate(3),
+                    res.getDate(4),
+                    res.getInt(5),
+                    res.getInt(6),
+                    res.getInt(7)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,7 +115,8 @@ public class SubscriptionQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("DELETE FROM Subscription WHERE patientID = ? AND planName = ?");
+            pstmt = con
+                .prepareStatement("DELETE FROM Subscription WHERE patientID = ? AND planName = ?");
             pstmt.setInt(1, patientID);
             pstmt.setString(2, planName);
             pstmt.executeUpdate();
@@ -133,7 +134,8 @@ public class SubscriptionQueries {
         }
     }
 
-    public static void updateSubscription(int patientID, String planName, Subscription subscription) {
+    public static void updateSubscription(int patientID, String planName,
+        Subscription subscription) {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
@@ -163,26 +165,28 @@ public class SubscriptionQueries {
             db.closeConnection();
         }
     }
-	
-	public static void main(String[] args)	{
-		
-		Subscription newSubscription = new Subscription(0, "NHS Free Plan", DateHandler.newDate(2017, 11, 18), DateHandler.newDate(2018, 11, 18), 2, 2, 6);
-		SubscriptionQueries.insertSubscription(newSubscription);
-		
-		Subscription subscription = SubscriptionQueries.getSubscription(0, "NHS Free Plan");
-		System.out.println(subscription);
-		
-		System.out.println(SubscriptionQueries.getAllSubscriptions());
-		
-		Subscription updatedSubscription = new Subscription(0, "Maintenance Plan", DateHandler.newDate(2017, 11, 18), DateHandler.newDate(2018, 11, 18), 2, 2, 0);
-		SubscriptionQueries.updateSubscription(0, "NHS Free Plan", updatedSubscription);
-		
-		System.out.println(SubscriptionQueries.getAllSubscriptions());
-		
-		SubscriptionQueries.deleteSubscription(0, "Maintenance Plan");
 
-		System.out.println(SubscriptionQueries.getAllSubscriptions());
-		
-	}
-	
+    public static void main(String[] args) {
+
+        Subscription newSubscription = new Subscription(0, "NHS Free Plan",
+            DateHandler.newDate(2017, 11, 18), DateHandler.newDate(2018, 11, 18), 2, 2, 6);
+        SubscriptionQueries.insertSubscription(newSubscription);
+
+        Subscription subscription = SubscriptionQueries.getSubscription(0, "NHS Free Plan");
+        System.out.println(subscription);
+
+        System.out.println(SubscriptionQueries.getAllSubscriptions());
+
+        Subscription updatedSubscription = new Subscription(0, "Maintenance Plan",
+            DateHandler.newDate(2017, 11, 18), DateHandler.newDate(2018, 11, 18), 2, 2, 0);
+        SubscriptionQueries.updateSubscription(0, "NHS Free Plan", updatedSubscription);
+
+        System.out.println(SubscriptionQueries.getAllSubscriptions());
+
+        SubscriptionQueries.deleteSubscription(0, "Maintenance Plan");
+
+        System.out.println(SubscriptionQueries.getAllSubscriptions());
+
+    }
+
 }

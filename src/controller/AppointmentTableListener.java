@@ -12,7 +12,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import util.WeekGenerator;
 
-public class AppointmentListener implements ActionListener {
+public class AppointmentTableListener implements ActionListener {
 
     private static Date monDate;
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -23,7 +23,7 @@ public class AppointmentListener implements ActionListener {
     private Calendar calendar;
     private String changingSpinner;
 
-    public AppointmentListener(JComboBox w, JComboBox m, JComboBox y, Calendar c, JTable table,
+    public AppointmentTableListener(JComboBox w, JComboBox m, JComboBox y, Calendar c, JTable table,
         String s) {
         this.partnerWeek = w;
         this.partnerMonth = m;

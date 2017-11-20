@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 public class Login extends JFrame {
@@ -46,7 +47,7 @@ public class Login extends JFrame {
         HygienistLogin.setBounds(253, 168, 115, 71);
         HygienistLogin.addActionListener(e -> {
             dispose();
-            PartnerHome partnerFrame = new PartnerHome("Hygienist");
+            PartnerInterface partnerFrame = new PartnerInterface("Hygienist");
             partnerFrame.setVisible(true);
             partnerFrame.addWindowListener(new LoginListener(partnerFrame));
         });
@@ -57,7 +58,7 @@ public class Login extends JFrame {
         DentistLogin.setBounds(438, 168, 115, 71);
         DentistLogin.addActionListener(e -> {
             dispose();
-            PartnerHome partnerFrame = new PartnerHome("Dentist");
+            PartnerInterface partnerFrame = new PartnerInterface("Dentist");
             partnerFrame.setVisible(true);
             partnerFrame.addWindowListener(new LoginListener(partnerFrame));
         });
@@ -66,7 +67,7 @@ public class Login extends JFrame {
         // Settings for the frame
         setTitle("Sheffield Dental Care");
         setBounds(100, 100, 620, 310);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
     }

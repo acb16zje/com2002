@@ -193,6 +193,7 @@ public class ViewAppointment extends JDialog {
 
         table = new JTable();
         table.setRowHeight(20);
+        table.getTableHeader().setReorderingAllowed(false);
         table.setFillsViewportHeight(true);
         scrollPane.setViewportView(table);
         table.setModel(new DefaultTableModel(

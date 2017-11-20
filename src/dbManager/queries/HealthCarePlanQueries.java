@@ -1,21 +1,18 @@
 package dbManager.queries;
 
+import dbManager.Database;
+import dbManager.models.HealthCarePlan;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import dbManager.Database;
-import dbManager.models.Address;
-import dbManager.models.HealthCarePlan;
-import dbManager.models.Patient;
-
 public class HealthCarePlanQueries {
 
-	public static HealthCarePlan getPlan(String planName)	{
-		
-		Database db = new Database();
+    public static HealthCarePlan getPlan(String planName) {
+
+        Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         HealthCarePlan plan = null;
@@ -44,10 +41,10 @@ public class HealthCarePlanQueries {
         }
 
         return plan;
-		
-	}
-	
-	public static ArrayList<HealthCarePlan> getAllPlans() {
+
+    }
+
+    public static ArrayList<HealthCarePlan> getAllPlans() {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
@@ -153,26 +150,26 @@ public class HealthCarePlanQueries {
             db.closeConnection();
         }
     }
-	
-	public static void main(String[] args)	{
-		
-		HealthCarePlan plan = HealthCarePlanQueries.getPlan("NHS Free Plan");
-		System.out.println(plan);
-		
-		HealthCarePlan newPlan = new HealthCarePlan("Test Plan", 69, 8, 7, 6);
-		HealthCarePlanQueries.insertPlan(newPlan);
-		
-		System.out.println(HealthCarePlanQueries.getAllPlans());
-		
-		HealthCarePlan updatedPlan = new HealthCarePlan("Test Plan", 34, 1, 2, 3);
-		HealthCarePlanQueries.updatePlan(updatedPlan);
-		
-		System.out.println(HealthCarePlanQueries.getAllPlans());
-		
-		HealthCarePlanQueries.deletePlan("Test Plan");
 
-		System.out.println(HealthCarePlanQueries.getAllPlans());
-		
-	}
-    
+    public static void main(String[] args) {
+
+        HealthCarePlan plan = HealthCarePlanQueries.getPlan("NHS Free Plan");
+        System.out.println(plan);
+
+        HealthCarePlan newPlan = new HealthCarePlan("Test Plan", 69, 8, 7, 6);
+        HealthCarePlanQueries.insertPlan(newPlan);
+
+        System.out.println(HealthCarePlanQueries.getAllPlans());
+
+        HealthCarePlan updatedPlan = new HealthCarePlan("Test Plan", 34, 1, 2, 3);
+        HealthCarePlanQueries.updatePlan(updatedPlan);
+
+        System.out.println(HealthCarePlanQueries.getAllPlans());
+
+        HealthCarePlanQueries.deletePlan("Test Plan");
+
+        System.out.println(HealthCarePlanQueries.getAllPlans());
+
+    }
+
 }

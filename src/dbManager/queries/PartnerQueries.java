@@ -159,10 +159,10 @@ public class PartnerQueries {
     public static void main(String[] args) {
         System.out.println(PartnerQueries.getByID(0));
 
-        PartnerQueries.insertPartner(new Partner(0,"Jake", "Sturgeon"));
+        PartnerQueries.insertPartner(new Partner(0, "Jake", "Sturgeon"));
         System.out.println(PartnerQueries.getByID(2));
 
-        PartnerQueries.updatePartner(new Partner(2,"Jake", "is the best"));
+        PartnerQueries.updatePartner(new Partner(2, "Jake", "is the best"));
         System.out.println(PartnerQueries.getByID(2));
 
         PartnerQueries.deletePartner(2);

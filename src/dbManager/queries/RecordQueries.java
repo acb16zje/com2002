@@ -4,11 +4,11 @@ import dbManager.Database;
 import dbManager.models.DateHandler;
 import dbManager.models.Record;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.sql.Date;
 import java.util.ArrayList;
 
 /**
@@ -17,13 +17,15 @@ import java.util.ArrayList;
  */
 public class RecordQueries {
 
-    public static Record getByRecord(String treatmentGiven, Time startTime, Date date, int partnerID) {
+    public static Record getByRecord(String treatmentGiven, Time startTime, Date date,
+        int partnerID) {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         Record record = null;
         try {
-            pstmt = con.prepareStatement("SELECT * FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ? AND partnerID = ?");
+            pstmt = con.prepareStatement(
+                "SELECT * FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ? AND partnerID = ?");
             pstmt.setString(1, treatmentGiven);
             pstmt.setTime(2, startTime);
             pstmt.setDate(3, date);
@@ -82,7 +84,8 @@ public class RecordQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("DELETE FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ? AND partnerID = ?");
+            pstmt = con.prepareStatement(
+                "DELETE FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ? AND partnerID = ?");
             pstmt.setString(1, record.getTreatmentGiven());
             pstmt.setTime(2, record.getStartTime());
             pstmt.setDate(3, record.getDate());
@@ -139,11 +142,12 @@ public class RecordQueries {
 
     public static void main(String[] args) {
         Record r = new Record("Check Up", Time.valueOf("12:00:00"), DateHandler
-            .newDate(2017, 12, 25),0);
-        System.out.println(RecordQueries.getByRecord("Check Up", Time.valueOf("12:00:00"), DateHandler
-            .newDate(2017, 12, 25),0));
+            .newDate(2017, 12, 25), 0);
+        System.out
+            .println(RecordQueries.getByRecord("Check Up", Time.valueOf("12:00:00"), DateHandler
+                .newDate(2017, 12, 25), 0));
 
-        RecordQueries.updateRecord(r,r);
+        RecordQueries.updateRecord(r, r);
 
         System.out.println(RecordQueries.getAllRecords());
     }

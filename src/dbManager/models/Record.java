@@ -1,7 +1,7 @@
 package dbManager.models;
 
-import java.sql.Time;
 import java.sql.Date;
+import java.sql.Time;
 
 /**
  * @author Jake Sturgeon
@@ -37,12 +37,12 @@ public class Record {
         return treatmentGiven;
     }
 
-	@Override
-	public String toString() {
-		return "Record [date=" + date + ", partnerID=" + partnerID + ", startTime=" + startTime + ", treatmentGiven="
-				+ treatmentGiven + "]";
-	}
-    
-    
-    
+    @Override
+    public String toString() {
+        return "Record [date=" + date + ", partnerID=" + partnerID + ", startTime=" + startTime
+            + ", treatmentGiven="
+            + treatmentGiven + "]";
+    }
+
+
 }
