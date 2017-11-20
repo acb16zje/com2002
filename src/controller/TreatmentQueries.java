@@ -1,12 +1,12 @@
-package dbManager.queries;
+package controller;
 
 import dbManager.Database;
-import dbManager.models.Treatment;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import model.Treatment;
 
 /**
  * @author Jake Sturgeon
@@ -24,8 +24,7 @@ public class TreatmentQueries {
             pstmt.setString(1, name);
             ResultSet res = pstmt.executeQuery();
             while (res.next()) {
-                treatment = new Treatment(name,
-                    res.getInt(2));
+                treatment = new Treatment(name, res.getString(2),res.getInt(3));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,8 +123,7 @@ public class TreatmentQueries {
             pstmt = con.prepareStatement("SELECT * FROM Treatment");
             ResultSet res = pstmt.executeQuery();
             while (res.next()) {
-                patients.add(new Treatment(res.getString(1),
-                    res.getInt(2)));
+                patients.add(new Treatment(res.getString(1), res.getString(2), res.getInt(3)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -145,9 +143,9 @@ public class TreatmentQueries {
 
     public static void main(String[] args) {
         System.out.println(TreatmentQueries.getByName("Check up"));
-        TreatmentQueries.insertTreatment(new Treatment("bant", 69));
+        TreatmentQueries.insertTreatment(new Treatment("bant", "hygiene",69));
         System.out.println(TreatmentQueries.getByName("bant"));
-        TreatmentQueries.updateTreatment(new Treatment("bant", 169));
+        TreatmentQueries.updateTreatment(new Treatment("bant", "repair",169));
         System.out.println(TreatmentQueries.getByName("bant"));
         TreatmentQueries.deleteTreatment("bant");
 

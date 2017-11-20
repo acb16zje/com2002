@@ -22,8 +22,7 @@ CREATE TABLE Patient (
 
 CREATE TABLE Partner (
   partnerID INT         NOT NULL,
-  forename  VARCHAR(20) NULL,
-  surname   VARCHAR(30) NOT NULL,
+  role      VARCHAR(10) NOT NULL,
   PRIMARY KEY (partnerID)
 );
 
@@ -61,6 +60,7 @@ CREATE TABLE Appointment (
 
 CREATE TABLE Treatment (
   name VARCHAR(30) NOT NULL,
+  type VARCHAR(20) NOT NULL,
   cost INT         NOT NULL,
   PRIMARY KEY (name)
 );

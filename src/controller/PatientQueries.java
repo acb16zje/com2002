@@ -1,13 +1,13 @@
-package dbManager.queries;
+package controller;
 
 import dbManager.Database;
-import dbManager.models.DateHandler;
-import dbManager.models.Patient;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import model.DateHandler;
+import model.Patient;
 
 public class PatientQueries {
 
@@ -98,7 +98,7 @@ public class PatientQueries {
             pstmt.setString(2, patient.getTitle());
             pstmt.setString(3, patient.getForename());
             pstmt.setString(4, patient.getSurname());
-            pstmt.setDate(5, patient.getDOB());
+            pstmt.setDate(5, patient.getDateOfBirth());
             pstmt.setString(6, patient.getPhone());
             pstmt.setString(7, patient.getHouseNumber());
             pstmt.setString(8, patient.getPostCode());
@@ -154,11 +154,11 @@ public class PatientQueries {
             pstmt.setString(1, patient.getTitle());
             pstmt.setString(2, patient.getForename());
             pstmt.setString(3, patient.getSurname());
-            pstmt.setDate(4, patient.getDOB());
+            pstmt.setDate(4, patient.getDateOfBirth());
             pstmt.setString(5, patient.getPhone());
             pstmt.setString(6, patient.getHouseNumber());
             pstmt.setString(7, patient.getPostCode());
-            pstmt.setInt(8, patient.getID());
+            pstmt.setInt(8, patient.getPatientID());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

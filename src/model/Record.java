@@ -1,20 +1,20 @@
 package model;
 
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 
 public class Record {
 
     private String treatmentGiven;
     private Time startTime;
     private Date date;
-    private String partner;
+    private int partnerID;
 
-    public Record(String treatmentGiven, Time startTime, Date date, String partner) {
+    public Record(String treatmentGiven, Time startTime, Date date, int partnerID) {
         this.treatmentGiven = treatmentGiven;
         this.startTime = startTime;
         this.date = date;
-        this.partner = partner;
+        this.partnerID = partnerID;
     }
 
     public String getTreatmentGiven() {
@@ -41,12 +41,12 @@ public class Record {
         this.date = date;
     }
 
-    public String getPartner() {
-        return partner;
+    public int getPartnerID() {
+        return partnerID;
     }
 
-    public void setPartner(String partner) {
-        this.partner = partner;
+    public void setPartnerID(int partnerID) {
+        this.partnerID = partnerID;
     }
 
 

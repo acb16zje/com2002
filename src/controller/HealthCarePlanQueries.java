@@ -1,7 +1,7 @@
-package dbManager.queries;
+package controller;
 
 import dbManager.Database;
-import dbManager.models.HealthCarePlan;
+import model.HealthCarePlan;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -81,11 +81,11 @@ public class HealthCarePlanQueries {
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO HealthCarePlan VALUES (?, ?, ?, ?, ?)");
-            pstmt.setString(1, plan.getName());
+            pstmt.setString(1, plan.getPlanName());
             pstmt.setInt(2, plan.getMonthlyFee());
-            pstmt.setInt(3, plan.getCheckUps());
-            pstmt.setInt(4, plan.getHygieneVisits());
-            pstmt.setInt(5, plan.getRepairWorks());
+            pstmt.setInt(3, plan.getCheckUp());
+            pstmt.setInt(4, plan.getHygieneVisit());
+            pstmt.setInt(5, plan.getRepairWork());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -132,10 +132,10 @@ public class HealthCarePlanQueries {
             pstmt = con.prepareStatement(
                 "UPDATE HealthCarePlan SET monthlyFee = ?, checkUp = ?, hygieneVisit = ?, repairWork = ? WHERE planName = ?");
             pstmt.setInt(1, plan.getMonthlyFee());
-            pstmt.setInt(2, plan.getCheckUps());
-            pstmt.setInt(3, plan.getHygieneVisits());
-            pstmt.setInt(4, plan.getRepairWorks());
-            pstmt.setString(5, plan.getName());
+            pstmt.setInt(2, plan.getCheckUp());
+            pstmt.setInt(3, plan.getHygieneVisit());
+            pstmt.setInt(4, plan.getRepairWork());
+            pstmt.setString(5, plan.getPlanName());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

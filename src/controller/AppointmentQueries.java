@@ -1,9 +1,6 @@
-package dbManager.queries;
+package controller;
 
 import dbManager.Database;
-import dbManager.models.Appointment;
-import dbManager.models.DateHandler;
-import dbManager.models.Patient;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,6 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
+import model.Address;
+import model.Appointment;
+import model.DateHandler;
+import model.Patient;
 
 /**
  * @author Jake Sturgeon
@@ -32,10 +33,7 @@ public class AppointmentQueries {
             pstmt.setTime(3, time);
             ResultSet res = pstmt.executeQuery();
             while (res.next()) {
-                appointment = new Appointment(d,
-                    time,
-                    res.getInt(4),
-                    partnerID);
+                appointment = new Appointment(d, time, res.getInt(4), partnerID);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -172,9 +170,11 @@ public class AppointmentQueries {
 
         System.out.println(AppointmentQueries.getAllAppointments());
 
+        Address testAddress = new Address("-", "-", "-", "-", "-");
+
         PatientQueries
             .insertPatient(new Patient(1, "Miss", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
-                "0783649208", "-", "-"));
+                "0783649208", testAddress));
         app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"), 1, 0);
         AppointmentQueries.updateAppointment(app);
         System.out.println(AppointmentQueries.getAllAppointments());

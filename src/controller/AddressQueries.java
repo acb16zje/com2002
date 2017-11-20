@@ -1,12 +1,12 @@
-package dbManager.queries;
+package controller;
 
 import dbManager.Database;
-import dbManager.models.Address;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import model.Address;
 
 public class AddressQueries {
 
@@ -83,11 +83,11 @@ public class AddressQueries {
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Address VALUES (?, ?, ?, ?, ?)");
-            pstmt.setString(1, address.getHouseNumber());
+            pstmt.setString(1, address.getHouseNo());
             pstmt.setString(2, address.getStreet());
             pstmt.setString(3, address.getDistrict());
             pstmt.setString(4, address.getCity());
-            pstmt.setString(5, address.getPostCode());
+            pstmt.setString(5, address.getPostcode());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,11 +110,11 @@ public class AddressQueries {
         try {
             pstmt = con.prepareStatement(
                 "UPDATE Address SET houseNumber = ?, street = ?, district = ?, city = ?, postCode = ? WHERE houseNumber = ? AND postCode = ?");
-            pstmt.setString(1, address.getHouseNumber());
+            pstmt.setString(1, address.getHouseNo());
             pstmt.setString(2, address.getStreet());
             pstmt.setString(3, address.getDistrict());
             pstmt.setString(4, address.getCity());
-            pstmt.setString(5, address.getPostCode());
+            pstmt.setString(5, address.getPostcode());
             pstmt.setString(6, houseNumber);
             pstmt.setString(7, postCode);
             pstmt.executeUpdate();

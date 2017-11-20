@@ -1,13 +1,13 @@
-package dbManager.queries;
+package controller;
 
 import dbManager.Database;
-import dbManager.models.DateHandler;
-import dbManager.models.Subscription;
+import model.Subscription;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import model.DateHandler;
 
 public class SubscriptionQueries {
 
@@ -89,12 +89,12 @@ public class SubscriptionQueries {
         try {
             pstmt = con.prepareStatement("INSERT INTO Subscription VALUES (?, ?, ?, ?, ?, ?, ?)");
             pstmt.setInt(1, subscription.getPatientID());
-            pstmt.setString(2, subscription.getName());
+            pstmt.setString(2, subscription.getPlanName());
             pstmt.setDate(3, subscription.getStartDate());
             pstmt.setDate(4, subscription.getEndDate());
-            pstmt.setInt(5, subscription.getCheckUpsLeft());
-            pstmt.setInt(6, subscription.getHygieneVisitsLeft());
-            pstmt.setInt(7, subscription.getRepairWorksLeft());
+            pstmt.setInt(5, subscription.getCheckUpLeft());
+            pstmt.setInt(6, subscription.getHygieneVisitLeft());
+            pstmt.setInt(7, subscription.getRepairWorkLeft());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,12 +143,12 @@ public class SubscriptionQueries {
             pstmt = con.prepareStatement(
                 "UPDATE Subscription SET patientID = ?, planName = ?, startDate = ?, endDate = ?, checkUpLeft = ?, hygieneVisitLeft = ?, repairWorkLeft = ? WHERE patientID = ? AND planName = ?");
             pstmt.setInt(1, subscription.getPatientID());
-            pstmt.setString(2, subscription.getName());
+            pstmt.setString(2, subscription.getPlanName());
             pstmt.setDate(3, subscription.getStartDate());
             pstmt.setDate(4, subscription.getEndDate());
-            pstmt.setInt(5, subscription.getCheckUpsLeft());
-            pstmt.setInt(6, subscription.getHygieneVisitsLeft());
-            pstmt.setInt(7, subscription.getRepairWorksLeft());
+            pstmt.setInt(5, subscription.getCheckUpLeft());
+            pstmt.setInt(6, subscription.getHygieneVisitLeft());
+            pstmt.setInt(7, subscription.getRepairWorkLeft());
             pstmt.setInt(8, patientID);
             pstmt.setString(9, planName);
             pstmt.executeUpdate();

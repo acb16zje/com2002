@@ -1,17 +1,17 @@
 package model;
 
-public class HealthcarePlan {
+public class HealthCarePlan {
 
     private String planName;
-    private int monthlyPayment;
+    private int monthlyFee;
     private int checkUp;
     private int hygieneVisit;
     private int repairWork;
 
-    public HealthcarePlan(String planName, int monthlyPayment, int checkUp, int hygieneVisit,
+    public HealthCarePlan(String planName, int monthlyFee, int checkUp, int hygieneVisit,
         int repairWork) {
         this.planName = planName;
-        this.monthlyPayment = monthlyPayment;
+        this.monthlyFee = monthlyFee;
         this.checkUp = checkUp;
         this.hygieneVisit = hygieneVisit;
         this.repairWork = repairWork;
@@ -25,12 +25,12 @@ public class HealthcarePlan {
         this.planName = planName;
     }
 
-    public int getMonthlyPayment() {
-        return monthlyPayment;
+    public int getMonthlyFee() {
+        return monthlyFee;
     }
 
-    public void setMonthlyPayment(int monthlyPayment) {
-        this.monthlyPayment = monthlyPayment;
+    public void setMonthlyFee(int monthlyFee) {
+        this.monthlyFee = monthlyFee;
     }
 
     public int getCheckUp() {

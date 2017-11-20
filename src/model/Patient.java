@@ -1,16 +1,16 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Patient {
 
+    private int patientID;
     private String title;
     private String surname;
     private String forename;
-    private int phone;
+    private String phone;
     private Date dateOfBirth;
     private Address address;
-    private int patientID;
 
     /**
      * Constructor for patient
@@ -23,8 +23,8 @@ public class Patient {
      * @param dateOfBirth The date of birth of the patient
      * @param address The address of the patient
      */
-    public Patient(int patientID, String title, String forename, String surname, int phone,
-        Date dateOfBirth, Address address) {
+    public Patient(int patientID, String title, String forename, String surname, Date dateOfBirth,
+        String phone, Address address) {
         this.patientID = patientID;
         this.title = title;
         this.forename = forename;
@@ -93,7 +93,7 @@ public class Patient {
      *
      * @return The phone number of the patient
      */
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
@@ -102,7 +102,7 @@ public class Patient {
      *
      * @param phone The phone number for the patient
      */
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

@@ -1,8 +1,7 @@
-package dbManager.queries;
+package controller;
 
 import dbManager.Database;
-import dbManager.models.DateHandler;
-import dbManager.models.Record;
+import model.Record;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -10,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
+import model.DateHandler;
 
 /**
  * @author Jake Sturgeon
