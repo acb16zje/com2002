@@ -83,7 +83,7 @@ public class SecretaryInterface extends JFrame {
         dentistTable.setCellSelectionEnabled(true);
         dentistTable.setGridColor(Color.GRAY);
         dentistTable.getTableHeader().setReorderingAllowed(false);
-        dentistTable.setRowHeight(20);
+        dentistTable.setRowHeight(30);
         dentistTable.setFillsViewportHeight(true);
         JScrollPane dentistScrollPane = new JScrollPane(dentistTable);
         dentistAppointment.add(dentistScrollPane, BorderLayout.CENTER);
@@ -178,7 +178,7 @@ public class SecretaryInterface extends JFrame {
         hygienistControlPanel.add(hygienistYear);
 
         hygienistTable = new JTable();
-        hygienistTable.setRowHeight(20);
+        hygienistTable.setRowHeight(30);
         hygienistTable.setCellSelectionEnabled(true);
         hygienistTable.getTableHeader().setReorderingAllowed(false);
         hygienistTable.setGridColor(Color.GRAY);
@@ -271,7 +271,7 @@ public class SecretaryInterface extends JFrame {
         patient.add(patientPanel, BorderLayout.SOUTH);
 
         JTable patientTable = new JTable();
-        patientTable.setRowHeight(20);
+        patientTable.setRowHeight(25);
         patientTable.getTableHeader().setReorderingAllowed(false);
         patient.add(new JScrollPane(patientTable), BorderLayout.CENTER);
         patientTable.setModel(new DefaultTableModel(
@@ -369,7 +369,7 @@ public class SecretaryInterface extends JFrame {
         setTitle("Sheffield Dental Care - Secretary");
         setBackground(Color.WHITE);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 914, 638);
+        setBounds(100, 100, 914, 878);
         setLocationRelativeTo(null);
     }
 }
