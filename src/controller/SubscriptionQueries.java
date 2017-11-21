@@ -1,13 +1,13 @@
 package controller;
 
 import dbManager.Database;
-import model.Subscription;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import model.DateHandler;
+import model.Subscription;
 
 public class SubscriptionQueries {
 

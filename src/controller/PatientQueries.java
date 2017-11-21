@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import model.Address;
 import model.DateHandler;
 import model.Patient;
@@ -30,7 +29,7 @@ public class PatientQueries {
                     res.getString(4),
                     res.getDate(5),
                     res.getString(6),
-                    AddressQueries.getAddress(res.getString(7),res.getString(8)));
+                    AddressQueries.getAddress(res.getString(7), res.getString(8)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,7 +63,7 @@ public class PatientQueries {
                     res.getString(4),
                     res.getDate(5),
                     res.getString(6),
-                    AddressQueries.getAddress(res.getString(7),res.getString(8))));
+                    AddressQueries.getAddress(res.getString(7), res.getString(8))));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -180,22 +179,24 @@ public class PatientQueries {
 
         ArrayList<Patient> patients = PatientQueries.getAllPatients();
         System.out.println(patients);
-        
-        AddressQueries.insertAddress(new Address("1","West Street","Test","Sheffield","S1 4WW"));
+
+        AddressQueries
+            .insertAddress(new Address("1", "West Street", "Test", "Sheffield", "S1 4WW"));
         Patient newPatient = new Patient(0, "Mr", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
-            "0783649208", new Address("1","West Street","Test","Sheffield","S1 4WW"));
+            "0783649208", new Address("1", "West Street", "Test", "Sheffield", "S1 4WW"));
         PatientQueries.insertPatient(newPatient);
 
         patients = PatientQueries.getAllPatients();
         System.out.println(patients);
 
         Patient updatedPatient = new Patient(1, "Mrs", "Curly", "Lass",
-            DateHandler.newDate(1969, 07, 06), "0783649208",  new Address("1","West Street","Test","Sheffield","S1 4WW"));
+            DateHandler.newDate(1969, 07, 06), "0783649208",
+            new Address("1", "West Street", "Test", "Sheffield", "S1 4WW"));
         PatientQueries.updatePatient(updatedPatient);
 
         patients = PatientQueries.getAllPatients();
         System.out.println(patients);
-        
+
         PatientQueries.deletePatient(1);
         AddressQueries.deleteAddress("1", "S1 4WW");
 

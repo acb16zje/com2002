@@ -201,8 +201,8 @@ public class BookAppointment extends JDialog {
             comboEndMonth.setEnabled(false);
             comboEndYear.setVisible(false);
             comboEndYear.setEnabled(false);
-            endDateLabel.setVisible(false);
-            endDateLabel.setEnabled(false);
+            endTimeLabel.setVisible(false);
+            endTimeLabel.setEnabled(false);
             comboEndTime.setVisible(false);
             comboEndTime.setEnabled(false);
         });
@@ -221,8 +221,8 @@ public class BookAppointment extends JDialog {
             comboEndMonth.setEnabled(false);
             comboEndYear.setVisible(false);
             comboEndYear.setEnabled(false);
-            endDateLabel.setVisible(false);
-            endDateLabel.setEnabled(false);
+            endTimeLabel.setVisible(false);
+            endTimeLabel.setEnabled(false);
             comboEndTime.setVisible(false);
             comboEndTime.setEnabled(false);
         });
@@ -242,7 +242,7 @@ public class BookAppointment extends JDialog {
             comboEndYear.setVisible(true);
             comboEndYear.setEnabled(true);
             endTimeLabel.setVisible(true);
-            endDateLabel.setEnabled(true);
+            endTimeLabel.setEnabled(true);
             comboEndTime.setVisible(true);
             comboEndTime.setEnabled(true);
         });

@@ -1,12 +1,12 @@
 package controller;
 
 import dbManager.Database;
-import model.HealthCarePlan;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import model.HealthCarePlan;
 
 public class HealthCarePlanQueries {
 
