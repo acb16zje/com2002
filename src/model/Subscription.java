@@ -160,4 +160,14 @@ public class Subscription {
     public void setRepairWorkLeft(int repairWorkLeft) {
         this.repairWorkLeft = repairWorkLeft;
     }
+    
+    @Override
+    public String toString() {
+        return "Subscription [patientID=" + patientID + ", name=" + planName + ", startDate="
+            + startDate + ", endDate="
+            + endDate + ", checkUpsLeft=" + checkUpLeft + ", hygieneVisitsLeft="
+            + hygieneVisitLeft
+            + ", repairWorksLeft=" + repairWorkLeft + "]";
+    }
+
 }

@@ -57,4 +57,11 @@ public class HealthCarePlan {
         this.repairWork = repairWork;
     }
 
+    @Override
+    public String toString() {
+        return "HealthCarePlan [name=" + planName + ", monthlyFee=" + monthlyFee + ", checkUps="
+            + checkUp
+            + ", hygieneVisits=" + hygieneVisit + ", repairWorks=" + repairWork + "]";
+    }
+
 }
