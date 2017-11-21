@@ -9,6 +9,7 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -82,5 +83,10 @@ public class AppointmentSearch extends JDialog {
         setBounds(100, 100, 332, 226);
         setResizable(false);
         setLocationRelativeTo(null);
+        okButton.addActionListener(e -> {
+	        if (textField.getText().isEmpty()) {
+	        	JOptionPane.showMessageDialog(null, "Please Insert Patient ID");
+	        }
+        });
     }
 }

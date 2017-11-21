@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -11,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -153,7 +155,6 @@ public class AppointmentEditorPartner extends JDialog {
         table.setModel(new DefaultTableModel(
             new Object[][]{
                 {null},
-                {null},
             },
             new String[]{
                 "Treatment"
@@ -178,7 +179,19 @@ public class AppointmentEditorPartner extends JDialog {
         // The Finish button
         JButton okButton = new JButton("Finish");
         buttonPanel.add(okButton);
-        okButton.addActionListener(e -> dispose());
+        okButton.addActionListener(e ->  {
+        	int count= table.getModel().getRowCount(); 
+        	boolean hasTreatment = false;
+        	for (int i=0; i<count;i++) {
+        		if (table.getModel().getValueAt(i, 0) != null) {
+        			hasTreatment = true;
+        			dispose();
+        		}
+        	}
+        	if (!hasTreatment) {
+        		JOptionPane.showMessageDialog(null, "No Treatment Inserted");
+        	}
+        });
         okButton.setActionCommand("OK");
         getRootPane().setDefaultButton(okButton);
 
