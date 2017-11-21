@@ -140,8 +140,8 @@ public class AppointmentEditorPartner extends JDialog {
         gbc_btnAddTreatmentRow.gridx = 0;
         gbc_btnAddTreatmentRow.gridy = 4;
         infoPanel.add(btnAddTreatmentRow, gbc_btnAddTreatmentRow);
-        btnAddTreatmentRow.addActionListener(
-            e -> ((DefaultTableModel) table.getModel()).addRow(new Object[]{}));
+        btnAddTreatmentRow.addActionListener(e ->
+            ((DefaultTableModel) table.getModel()).addRow(new Object[]{}));
 
         // Scroll pane for the treatment table
         JScrollPane scrollPane = new JScrollPane();

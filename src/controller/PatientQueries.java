@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import model.Address;
 import model.DateHandler;
 import model.Patient;
@@ -46,6 +48,44 @@ public class PatientQueries {
 
         return patient;
 
+    }
+
+    /**
+     * Get the list of patients from Database
+     * @param patientTable The patients table
+     */
+    public void getPatientList(JTable patientTable) {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        ArrayList<Patient> patients = new ArrayList<Patient>();
+        try {
+            pstmt = con.prepareStatement("SELECT * FROM Patient");
+            ResultSet res = pstmt.executeQuery();
+            while (res.next()) {
+                ((DefaultTableModel) patientTable.getModel()).addRow(
+                    new Object[]{
+                        res.getInt(1),
+                        res.getString(2),
+                        res.getString(3) + " " + res.getString(4),
+                        res.getDate(5),
+                        res.getString(6),
+                        AddressQueries.getAddress(res.getString(7), res.getString(8))
+                    }
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
     }
 
     public static ArrayList<Patient> getAllPatients() {

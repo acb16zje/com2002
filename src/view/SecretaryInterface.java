@@ -1,6 +1,7 @@
 package view;
 
 import controller.AppointmentTableListener;
+import controller.PatientQueries;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -346,15 +347,10 @@ public class SecretaryInterface extends JFrame {
         patientTable.getTableHeader().setReorderingAllowed(false);
         patient.add(new JScrollPane(patientTable), BorderLayout.CENTER);
         patientTable.setModel(new DefaultTableModel(
-            new Object[][]{
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-            },
+            new Object[][]{},
             new String[]{
-                "Patient ID", "Name", "Date Of Birth", "Phone No", "Address", "Healthcare Plan"
+                "Patient ID", "Title", "Name", "Date Of Birth", "Phone No", "Address",
+                "Healthcare Plan"
             }
         ) {
             @Override
@@ -363,7 +359,13 @@ public class SecretaryInterface extends JFrame {
             }
         });
         patientTable.setFillsViewportHeight(true);
+        patientTable.getColumnModel().getColumn(0).setPreferredWidth(10);
+        patientTable.getColumnModel().getColumn(1).setPreferredWidth(10);
         patientPanel.setLayout(new BoxLayout(patientPanel, BoxLayout.X_AXIS));
+
+        // Get the list of patients from Database
+        PatientQueries patientQueries = new PatientQueries();
+        patientQueries.getPatientList(patientTable);
 
         // Bottom panel
         JPanel editorPanel = new JPanel();
@@ -437,7 +439,8 @@ public class SecretaryInterface extends JFrame {
         setTitle("Sheffield Dental Care - Secretary");
         setBackground(Color.WHITE);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 914, 878);
+        setBounds(100, 100, 1000, 878);
         setLocationRelativeTo(null);
     }
+
 }
