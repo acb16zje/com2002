@@ -14,9 +14,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.SwingConstants;
 
 public class ViewAppointment extends JDialog {
 
@@ -222,7 +222,7 @@ public class ViewAppointment extends JDialog {
         totalCostTextField.setEditable(false);
         totalCostPanel.add(totalCostTextField);
         totalCostTextField.setColumns(8);
-        
+
         receiptLabel = new JLabel("Receipt", SwingConstants.CENTER);
         receiptLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         treatmentPanel.add(receiptLabel, BorderLayout.NORTH);

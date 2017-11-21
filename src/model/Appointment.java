@@ -1,7 +1,7 @@
 package model;
 
-import java.sql.Time;
 import java.sql.Date;
+import java.sql.Time;
 
 public class Appointment {
 
@@ -96,7 +96,7 @@ public class Appointment {
     public void setPatientID(int patientID) {
         this.patientID = patientID;
     }
-    
+
     @Override
     public String toString() {
         return "Appointment{" +

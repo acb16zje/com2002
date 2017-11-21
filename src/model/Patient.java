@@ -159,12 +159,14 @@ public class Patient {
     public String getFullName() {
         return title + " " + forename + " " + surname;
     }
-    
+
     @Override
     public String toString() {
-        return "Patient [ID=" + patientID + ", title=" + title + ", forename=" + forename + ", surname="
+        return "Patient [ID=" + patientID + ", title=" + title + ", forename=" + forename
+            + ", surname="
             + surname + ", DOB="
-            + dateOfBirth + ", phone=" + phone + ", houseNumber=" + getAddress().getHouseNo() + ", postCode=" + getAddress().getPostcode()
+            + dateOfBirth + ", phone=" + phone + ", houseNumber=" + getAddress().getHouseNo()
+            + ", postCode=" + getAddress().getPostcode()
             + "]";
     }
 }

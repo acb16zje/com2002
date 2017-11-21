@@ -151,7 +151,7 @@ public class BookAppointment extends JDialog {
             comboEndYear.addItem(i);
         }
         comboYear.setSelectedItem(tempCal.get(Calendar.YEAR));
-        
+
         // Label for end time
         JLabel endTimeLabel = new JLabel("End Time:");
         endTimeLabel.setBounds(46, 283, 68, 15);
@@ -270,41 +270,41 @@ public class BookAppointment extends JDialog {
             // Check if appointment date is valid
             Calendar inputDate = new GregorianCalendar((int) comboYear.getSelectedItem(),
                 ((int) comboMonth.getSelectedItem()) - 1, (int) comboDay.getSelectedItem());
-            
+
             if (holidayRadioButton.isSelected()) {
-            	SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm"); 
-            	
-            	
-            	try {
-            		String startDateStr = comboDay.getSelectedItem()+"/"+comboMonth.getSelectedItem()+"/"+comboYear.getSelectedItem()+" "+comboStartTime.getSelectedItem();
-                	String endDateStr = comboEndDay.getSelectedItem()+"/"+comboEndMonth.getSelectedItem()+"/"+comboEndYear.getSelectedItem()+" "+comboEndTime.getSelectedItem();
-            		Date startDate = timeFormatCompare.parse(startDateStr);
-                	Calendar startCal = Calendar.getInstance();
-                	startCal.setTime(startDate);
-                	Date endDate = timeFormatCompare.parse(endDateStr);
-                	Calendar endCal = Calendar.getInstance();
-                	endCal.setTime(endDate);
-					int diff = endDate.compareTo(startDate);
-					if (diff <= 0 || isValidDate(startCal) || isValidDate(endCal)) {
-	            		JOptionPane.showMessageDialog(null, "Invalid Time");
-	            	}
-					else {
-						dispose();
-					}
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-            	
-            }
-            else {
-	            if (isValidDate(inputDate)) {
-	                // insert SQL query here
-	                dispose();
-	            } 
-	            else {
-	                JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
-	            }
+                SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+                try {
+                    String startDateStr =
+                        comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/"
+                            + comboYear.getSelectedItem() + " " + comboStartTime.getSelectedItem();
+                    String endDateStr =
+                        comboEndDay.getSelectedItem() + "/" + comboEndMonth.getSelectedItem() + "/"
+                            + comboEndYear.getSelectedItem() + " " + comboEndTime.getSelectedItem();
+                    Date startDate = timeFormatCompare.parse(startDateStr);
+                    Calendar startCal = Calendar.getInstance();
+                    startCal.setTime(startDate);
+                    Date endDate = timeFormatCompare.parse(endDateStr);
+                    Calendar endCal = Calendar.getInstance();
+                    endCal.setTime(endDate);
+                    int diff = endDate.compareTo(startDate);
+                    if (diff <= 0 || isValidDate(startCal) || isValidDate(endCal)) {
+                        JOptionPane.showMessageDialog(null, "Invalid Time");
+                    } else {
+                        dispose();
+                    }
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+
+            } else {
+                if (isValidDate(inputDate)) {
+                    // insert SQL query here
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
+                }
             }
 
 

@@ -162,7 +162,7 @@ public class SecretaryInterface extends JFrame {
         // Disable the view appointment button when it is clicked on empty slot
         dentistTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                JTable target = (JTable)e.getSource();
+                JTable target = (JTable) e.getSource();
                 int column = target.getSelectedColumn();
                 if (column == 0) {
                     dentistCancelButton.setEnabled(false);
@@ -290,7 +290,7 @@ public class SecretaryInterface extends JFrame {
         // Disable the view appointment button when it is clicked on empty slot
         hygienistTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                JTable target = (JTable)e.getSource();
+                JTable target = (JTable) e.getSource();
                 int column = target.getSelectedColumn();
                 if (column == 0) {
                     hygienistCancelButton.setEnabled(false);
