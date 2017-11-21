@@ -279,7 +279,7 @@ public class BookAppointment extends JDialog {
             		}
             	}
             }
-            System.out.println(completed);
+            
             components = contentPanel.getComponents();
             for (Component comp1 : components) {
                 // Cast comp to JComboBox / JTextField to get the values
@@ -288,15 +288,16 @@ public class BookAppointment extends JDialog {
                         completed = false;
                         break;
                     }
-                }
-                
+                }     
             }
-            System.out.println(completed);
+            
             if (completed) {
 
 	            // Check if appointment date is valid
-	            Calendar inputDate = new GregorianCalendar( ((int) comboYear.getSelectedItem()),
-	                ((int) comboMonth.getSelectedItem()) - 1,  Integer.valueOf( (String) comboDay.getSelectedItem()));
+            	int inputYear = (int)comboYear.getSelectedItem();
+            	int inputMonth = (int)comboMonth.getSelectedItem() - 1;
+            	int inputDay = (int)comboDay.getSelectedItem();
+	            Calendar inputDate = new GregorianCalendar( inputYear,inputMonth, inputDay);
 	            
 	            if (holidayRadioButton.isSelected()) {
 	            	SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm"); 

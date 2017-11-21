@@ -228,7 +228,6 @@ public class PatientEditor extends JDialog {
                     }
                 }
             }
-
             if (completed) {
                 dispose();
             }
@@ -249,5 +248,4 @@ public class PatientEditor extends JDialog {
     }
 
     private enum title {MR, MRS, MS, MISS}
-
 }
