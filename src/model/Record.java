@@ -49,5 +49,10 @@ public class Record {
         this.partnerID = partnerID;
     }
 
-
+    @Override
+    public String toString() {
+        return "Record [date=" + date + ", partnerID=" + partnerID + ", startTime=" + startTime
+            + ", treatmentGiven="
+            + treatmentGiven + "]";
+    }
 }

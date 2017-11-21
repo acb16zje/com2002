@@ -22,7 +22,8 @@ CREATE TABLE Patient (
 
 CREATE TABLE Partner (
   partnerID INT         NOT NULL,
-  role      VARCHAR(10) NOT NULL,
+  forename  VARCHAR(20) NULL,
+  surname   VARCHAR(30) NOT NULL,
   PRIMARY KEY (partnerID)
 );
 
