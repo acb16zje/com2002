@@ -4,7 +4,10 @@ import controller.DateListener;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -63,29 +66,29 @@ public class BookAppointment extends JDialog {
         JComboBox comboDay = new JComboBox();
         comboDay.setBounds(147, 153, 50, 24);
         contentPanel.add(comboDay);
-        comboDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
         for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             comboDay.addItem(i);
         }
+        comboDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
 
         // ComboBox for month
         JComboBox comboMonth = new JComboBox();
         comboMonth.setBounds(209, 153, 50, 24);
         contentPanel.add(comboMonth);
-        comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
         for (int i = 1; i <= 12; i++) {
             comboMonth.addItem(i);
         }
+        comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
 
         // ComboBox for year
         JComboBox comboYear = new JComboBox();
         comboYear.setBounds(271, 153, 76, 24);
         contentPanel.add(comboYear);
-        comboYear.setSelectedItem(tempCal.get(Calendar.YEAR));
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for (int i = currentYear; i <= currentYear + 2; i++) {
             comboYear.addItem(i);
         }
+        comboYear.setSelectedItem(tempCal.get(Calendar.YEAR));
 
         // Label for Start Time
         JLabel startTimeLabel = new JLabel("Start Time:");
@@ -120,22 +123,22 @@ public class BookAppointment extends JDialog {
         comboEndDay.setBounds(147, 234, 50, 24);
         comboEndDay.setVisible(false);
         comboEndDay.setEnabled(false);
-        comboEndDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
         contentPanel.add(comboEndDay);
         for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             comboEndDay.addItem(i);
         }
+        comboEndDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
 
         // ComboBox for end month
         JComboBox comboEndMonth = new JComboBox();
         comboEndMonth.setBounds(209, 234, 50, 24);
         comboEndMonth.setVisible(false);
         comboEndMonth.setEnabled(false);
-        comboEndMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
         contentPanel.add(comboEndMonth);
         for (int i = 1; i <= 12; i++) {
             comboEndMonth.addItem(i);
         }
+        comboEndMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
 
         // ComboBox for end year
         JComboBox comboEndYear = new JComboBox();
@@ -147,7 +150,8 @@ public class BookAppointment extends JDialog {
         for (int i = currentEndYear; i <= currentYear + 2; i++) {
             comboEndYear.addItem(i);
         }
-
+        comboYear.setSelectedItem(tempCal.get(Calendar.YEAR));
+        
         // Label for end time
         JLabel endTimeLabel = new JLabel("End Time:");
         endTimeLabel.setBounds(46, 283, 68, 15);
@@ -266,12 +270,41 @@ public class BookAppointment extends JDialog {
             // Check if appointment date is valid
             Calendar inputDate = new GregorianCalendar((int) comboYear.getSelectedItem(),
                 ((int) comboMonth.getSelectedItem()) - 1, (int) comboDay.getSelectedItem());
-
-            if (isValidDate(inputDate)) {
-                // insert SQL query here
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
+            
+            if (holidayRadioButton.isSelected()) {
+            	SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm"); 
+            	
+            	
+            	try {
+            		String startDateStr = comboDay.getSelectedItem()+"/"+comboMonth.getSelectedItem()+"/"+comboYear.getSelectedItem()+" "+comboStartTime.getSelectedItem();
+                	String endDateStr = comboEndDay.getSelectedItem()+"/"+comboEndMonth.getSelectedItem()+"/"+comboEndYear.getSelectedItem()+" "+comboEndTime.getSelectedItem();
+            		Date startDate = timeFormatCompare.parse(startDateStr);
+                	Calendar startCal = Calendar.getInstance();
+                	startCal.setTime(startDate);
+                	Date endDate = timeFormatCompare.parse(endDateStr);
+                	Calendar endCal = Calendar.getInstance();
+                	endCal.setTime(endDate);
+					int diff = endDate.compareTo(startDate);
+					if (diff <= 0 || isValidDate(startCal) || isValidDate(endCal)) {
+	            		JOptionPane.showMessageDialog(null, "Invalid Time");
+	            	}
+					else {
+						dispose();
+					}
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            	
+            }
+            else {
+	            if (isValidDate(inputDate)) {
+	                // insert SQL query here
+	                dispose();
+	            } 
+	            else {
+	                JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
+	            }
             }
 
 

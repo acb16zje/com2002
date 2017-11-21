@@ -48,9 +48,10 @@ public class TreatmentQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("INSERT INTO Treatment VALUES (?, ?)");
+            pstmt = con.prepareStatement("INSERT INTO Treatment VALUES (?, ?, ?)");
             pstmt.setString(1, treatment.getName());
-            pstmt.setInt(2, treatment.getCost());
+            pstmt.setString(2, treatment.getType());
+            pstmt.setInt(3, treatment.getCost());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,9 +73,10 @@ public class TreatmentQueries {
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
-                "UPDATE Treatment SET cost = ? WHERE name = ?");
+                "UPDATE Treatment SET cost = ?, type = ? WHERE name = ?");
             pstmt.setInt(1, treatment.getCost());
-            pstmt.setString(2, treatment.getName());
+            pstmt.setString(2, treatment.getType());
+            pstmt.setString(3, treatment.getName());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
