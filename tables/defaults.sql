@@ -2,8 +2,8 @@ INSERT INTO Address VALUES ("-", "-", "-", "-", "-");
 INSERT INTO Patient
 VALUES (0, "Mx", "Blank", "Patient", DATE "2000-01-01", "00000000000", "-", "-");
 
-INSERT INTO Partner VALUES (0, "dentist");
-INSERT INTO Partner VALUES (1, "hygienist");
+INSERT INTO Partner VALUES (0, "Jim", "Toothsworth");
+INSERT INTO Partner VALUES (1, "Sophie", "Gummington");
 
 INSERT INTO HealthCarePlan VALUES ("NHS Free Plan", 0, 2, 2, 6);
 INSERT INTO HealthCarePlan VALUES ("Maintenance Plan", 15, 2, 2, 0);

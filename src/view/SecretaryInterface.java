@@ -189,15 +189,18 @@ public class SecretaryInterface extends JFrame {
 
         // Listeners for dates
         hygienistMonth.addActionListener(
-            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear, hygienistCalendar,
+            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
+                hygienistCalendar,
                 hygienistTable, "month"));
 
         hygienistYear.addActionListener(
-            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear, hygienistCalendar,
+            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
+                hygienistCalendar,
                 hygienistTable, "year"));
 
         hygienistWeek.addActionListener(
-            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear, hygienistCalendar,
+            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
+                hygienistCalendar,
                 hygienistTable, "week"));
 
         JPanel hygienistAppointmentPanel = new JPanel();

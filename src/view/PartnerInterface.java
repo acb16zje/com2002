@@ -91,20 +91,22 @@ public class PartnerInterface extends JFrame {
         timetable.setCellSelectionEnabled(true);
         timetable.setFillsViewportHeight(true);
         timetable.setRowHeight(20);
-        timetable.setModel(new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
-                           timeFormat.format(currentCalendar.getTime())}) {
-                           @Override
-                           public boolean isCellEditable(int row, int column) {
-                               return false;
-                           }
-                       }
-        );
+        timetable
+            .setModel(new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
+                          timeFormat.format(currentCalendar.getTime())}) {
+                          @Override
+                          public boolean isCellEditable(int row, int column) {
+                              return false;
+                          }
+                      }
+            );
         scrollPane.setViewportView(timetable);
 
         // Yesterday button
         JButton yesterdayButton = new JButton("Yesterday");
         yesterdayButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        yesterdayButton.addActionListener(new PartnerListener(-1, currentCalendar, timetable, dayLabel));
+        yesterdayButton
+            .addActionListener(new PartnerListener(-1, currentCalendar, timetable, dayLabel));
         GridBagConstraints gbc_yesterdayButton = new GridBagConstraints();
         gbc_yesterdayButton.fill = GridBagConstraints.BOTH;
         gbc_yesterdayButton.insets = new Insets(0, 0, 0, 5);
@@ -115,7 +117,8 @@ public class PartnerInterface extends JFrame {
         // Tomorrow button
         JButton tomorrowButton = new JButton("Tomorrow");
         tomorrowButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        tomorrowButton.addActionListener(new PartnerListener(1, currentCalendar, timetable, dayLabel));
+        tomorrowButton
+            .addActionListener(new PartnerListener(1, currentCalendar, timetable, dayLabel));
         GridBagConstraints gbc_tomorrowButton = new GridBagConstraints();
         gbc_tomorrowButton.fill = GridBagConstraints.BOTH;
         gbc_tomorrowButton.gridx = 4;
