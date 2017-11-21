@@ -160,7 +160,7 @@ public class Subscription {
     public void setRepairWorkLeft(int repairWorkLeft) {
         this.repairWorkLeft = repairWorkLeft;
     }
-    
+
     @Override
     public String toString() {
         return "Subscription [patientID=" + patientID + ", name=" + planName + ", startDate="

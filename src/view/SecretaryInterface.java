@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +24,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import util.IntegerFilter;
 import util.WeekGenerator;
 
 public class SecretaryInterface extends JFrame {
@@ -48,6 +52,7 @@ public class SecretaryInterface extends JFrame {
         tabbedPane.addTab("Dentist Appointment", null, dentistAppointment, null);
         dentistAppointment.setLayout(new BorderLayout(0, 0));
 
+        // Contain Week Selector for Dentist
         JPanel dentistControlPanel = new JPanel();
         dentistAppointment.add(dentistControlPanel, BorderLayout.NORTH);
         dentistControlPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -60,12 +65,14 @@ public class SecretaryInterface extends JFrame {
 
         String todayAsString = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
+        // ComboBox for year select
         JComboBox dentistYear = new JComboBox();
         for (int i = 2000; i <= currentYear + 2; i++) {
             dentistYear.addItem(i);
         }
         dentistYear.setSelectedItem(currentYear);
 
+        // ComboBox for month select
         JComboBox dentistMonth = new JComboBox();
         for (int i = 1; i <= 12; i++) {
             dentistMonth.addItem(i);
@@ -73,12 +80,15 @@ public class SecretaryInterface extends JFrame {
         dentistMonth.setSelectedItem(currentMonth + 1);
         dentistControlPanel.add(dentistMonth);
 
+        // List of weeks to select in a month
         JComboBox dentistWeek = WeekGenerator.weekSpinner(dentistCalendar);
 
+        // Add all combobox into the top panel
         dentistControlPanel.add(dentistWeek);
         dentistControlPanel.add(dentistMonth);
         dentistControlPanel.add(dentistYear);
 
+        // Dentist appointment table
         dentistTable = new JTable();
         dentistTable.setCellSelectionEnabled(true);
         dentistTable.setGridColor(Color.GRAY);
@@ -102,9 +112,11 @@ public class SecretaryInterface extends JFrame {
             new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
                 dentistTable, "week"));
 
+        // Bottom panel, contain all the buttons
         JPanel dentistAppointmentPanel = new JPanel();
         dentistAppointment.add(dentistAppointmentPanel, BorderLayout.SOUTH);
 
+        // Book appointment button for dentist
         JButton dentistBookButton = new JButton("Book Appointment");
         dentistBookButton.addActionListener(e -> {
             BookAppointment dialog = new BookAppointment("Check-up");
@@ -115,7 +127,9 @@ public class SecretaryInterface extends JFrame {
         dentistAppointmentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         dentistAppointmentPanel.add(dentistBookButton);
 
+        // Cancel appointment button for dentist
         JButton dentistCancelButton = new JButton("Cancel Appointment");
+        dentistCancelButton.setEnabled(false);
         dentistCancelButton.addActionListener(e -> {
             int rowSelected = dentistTable.getSelectedRow();
             if (rowSelected == -1) {
@@ -129,7 +143,9 @@ public class SecretaryInterface extends JFrame {
         });
         dentistAppointmentPanel.add(dentistCancelButton);
 
+        // View appointment button for dentist
         JButton dentistViewButton = new JButton("View Appointment");
+        dentistViewButton.setEnabled(false);
         dentistViewButton.addActionListener(e -> {
             int rowSelected = dentistTable.getSelectedRow();
             if (rowSelected == -1) {
@@ -143,6 +159,23 @@ public class SecretaryInterface extends JFrame {
         });
         dentistAppointmentPanel.add(dentistViewButton);
 
+        // Disable the view appointment button when it is clicked on empty slot
+        dentistTable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                JTable target = (JTable) e.getSource();
+                int column = target.getSelectedColumn();
+                if (column == 0) {
+                    dentistCancelButton.setEnabled(false);
+                    dentistViewButton.setEnabled(false);
+                } else {
+                    dentistCancelButton.setEnabled(true);
+                    dentistViewButton.setEnabled(true);
+                }
+
+            }
+        });
+
+        // Search appointment button for dentist
         JButton dentistSearchButton = new JButton("Search Appointment");
         dentistAppointmentPanel.add(dentistSearchButton);
         dentistSearchButton.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -153,16 +186,20 @@ public class SecretaryInterface extends JFrame {
             dialog.setVisible(true);
         });
 
+        // Main panel for hygienist appointment
         JPanel hygienistAppointment = new JPanel();
         tabbedPane.addTab("Hygienist Appointment", null, hygienistAppointment, null);
         hygienistAppointment.setLayout(new BorderLayout(0, 0));
 
+        // Contain date selector for hygienist
         JPanel hygienistControlPanel = new JPanel();
         hygienistAppointment.add(hygienistControlPanel, BorderLayout.NORTH);
 
+        // ComboBox to show list of weeks in this month
         JComboBox hygienistWeek = WeekGenerator.weekSpinner(hygienistCalendar);
         hygienistControlPanel.add(hygienistWeek);
 
+        // ComboBox for 12 months
         JComboBox hygienistMonth = new JComboBox();
         for (int i = 1; i <= 12; i++) {
             hygienistMonth.addItem(i);
@@ -170,6 +207,7 @@ public class SecretaryInterface extends JFrame {
         hygienistMonth.setSelectedItem(hygienistCalendar.get(Calendar.MONTH) + 1);
         hygienistControlPanel.add(hygienistMonth);
 
+        // ComboBox for year
         JComboBox hygienistYear = new JComboBox();
         for (int i = 2000; i <= currentYear + 2; i++) {
             hygienistYear.addItem(i);
@@ -177,6 +215,7 @@ public class SecretaryInterface extends JFrame {
         hygienistYear.setSelectedItem(currentYear);
         hygienistControlPanel.add(hygienistYear);
 
+        // Hygienist timetable
         hygienistTable = new JTable();
         hygienistTable.setRowHeight(30);
         hygienistTable.setCellSelectionEnabled(true);
@@ -203,6 +242,7 @@ public class SecretaryInterface extends JFrame {
                 hygienistCalendar,
                 hygienistTable, "week"));
 
+        // Contain book, cancel, view and search appointment button
         JPanel hygienistAppointmentPanel = new JPanel();
         hygienistAppointment.add(hygienistAppointmentPanel, BorderLayout.SOUTH);
 
@@ -215,7 +255,9 @@ public class SecretaryInterface extends JFrame {
         });
         hygienistAppointmentPanel.add(hygienistBookButton);
 
+        // Hygienist cancel button
         JButton hygienistCancelButton = new JButton("Cancel Appointment");
+        hygienistCancelButton.setEnabled(false);
         hygienistCancelButton.addActionListener(e -> {
             int rowSelected = hygienistTable.getSelectedRow();
             if (rowSelected == -1) {
@@ -229,7 +271,9 @@ public class SecretaryInterface extends JFrame {
         });
         hygienistAppointmentPanel.add(hygienistCancelButton);
 
+        // Hygienist view appointment button
         JButton hygienistViewButton = new JButton("View Appointment");
+        hygienistViewButton.setEnabled(false);
         hygienistViewButton.addActionListener(e -> {
             int rowSelected = hygienistTable.getSelectedRow();
             if (rowSelected == -1) {
@@ -243,6 +287,23 @@ public class SecretaryInterface extends JFrame {
         });
         hygienistAppointmentPanel.add(hygienistViewButton);
 
+        // Disable the view appointment button when it is clicked on empty slot
+        hygienistTable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                JTable target = (JTable) e.getSource();
+                int column = target.getSelectedColumn();
+                if (column == 0) {
+                    hygienistCancelButton.setEnabled(false);
+                    hygienistViewButton.setEnabled(false);
+                } else {
+                    hygienistCancelButton.setEnabled(true);
+                    hygienistViewButton.setEnabled(true);
+                }
+
+            }
+        });
+
+        // Hygienist search button
         JButton hygienistSearchButton = new JButton("Search Appointment");
         hygienistSearchButton.addActionListener(e -> {
             AppointmentSearch dialog = new AppointmentSearch();
@@ -252,27 +313,34 @@ public class SecretaryInterface extends JFrame {
         });
         hygienistAppointmentPanel.add(hygienistSearchButton);
 
-        // UI for patient
+        // UI for patient, separate tab
         JPanel patient = new JPanel();
         tabbedPane.addTab("Patient", null, patient, null);
         patient.setLayout(new BorderLayout(0, 0));
 
+        // Top panel
         JPanel searchPatientPanel = new JPanel();
         patient.add(searchPatientPanel, BorderLayout.NORTH);
 
+        // Label for patient ID
         JLabel lblPatientId = new JLabel("Patient ID:");
         searchPatientPanel.add(lblPatientId);
 
+        // Text field for patient ID
         JTextField patientID = new JTextField();
+        ((AbstractDocument) patientID.getDocument()).setDocumentFilter(new IntegerFilter());
         searchPatientPanel.add(patientID);
         patientID.setColumns(20);
 
+        // Search button
         JButton searchPatientButton = new JButton("Search");
         searchPatientPanel.add(searchPatientButton);
 
+        // Panel for table
         JPanel patientPanel = new JPanel();
         patient.add(patientPanel, BorderLayout.SOUTH);
 
+        // List of registered patients
         JTable patientTable = new JTable();
         patientTable.setRowHeight(25);
         patientTable.getTableHeader().setReorderingAllowed(false);
@@ -297,9 +365,11 @@ public class SecretaryInterface extends JFrame {
         patientTable.setFillsViewportHeight(true);
         patientPanel.setLayout(new BoxLayout(patientPanel, BoxLayout.X_AXIS));
 
+        // Bottom panel
         JPanel editorPanel = new JPanel();
         patientPanel.add(editorPanel);
 
+        // Add a new patient button
         JButton addPatientButton = new JButton("Add Patient");
         editorPanel.add(addPatientButton);
         addPatientButton.addActionListener(e -> {
@@ -308,34 +378,10 @@ public class SecretaryInterface extends JFrame {
             frame.setVisible(true);
         });
 
+        // Edit patient button
         JButton editPatientButton = new JButton("Edit Patient");
+        editPatientButton.setEnabled(false);
         editorPanel.add(editPatientButton);
-
-        JButton deletePatientButton = new JButton("Delete Patient");
-        editorPanel.add(deletePatientButton);
-
-        JPanel planPanel = new JPanel();
-        patientPanel.add(planPanel);
-
-        JButton viewPatientPlanButton = new JButton("View Patient Plan");
-        planPanel.add(viewPatientPlanButton);
-        viewPatientPlanButton.addActionListener(e -> {
-            HealthcarePlan dialog = new HealthcarePlan();
-            dialog.setModal(true);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        });
-        deletePatientButton.addActionListener(e -> {
-            int rowSelected = patientTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select a patient!");
-            } else {
-                int a = JOptionPane.showConfirmDialog(deletePatientButton, "Are you sure?");
-                if (a == JOptionPane.YES_OPTION) {
-                    // insert delete patient sql stuff here
-                }
-            }
-        });
         editPatientButton.addActionListener(e -> {
             int rowSelected = patientTable.getSelectedRow();
             if (rowSelected == -1) {
@@ -347,26 +393,45 @@ public class SecretaryInterface extends JFrame {
             }
         });
 
-        // UI for healthcare plan tab (work in progress)
-        JPanel healthcarePlan = new JPanel();
-        tabbedPane.addTab("Healthcare Plan", null, healthcarePlan, null);
-        healthcarePlan.setLayout(new BorderLayout(0, 0));
-        JPanel searchPlanPanel = new JPanel();
-        healthcarePlan.add(searchPlanPanel, BorderLayout.NORTH);
+        // Delete patient button
+        JButton deletePatientButton = new JButton("Delete Patient");
+        deletePatientButton.setEnabled(false);
+        editorPanel.add(deletePatientButton);
+        deletePatientButton.addActionListener(e -> {
+            int rowSelected = patientTable.getSelectedRow();
+            if (rowSelected == -1) {
+                JOptionPane.showMessageDialog(null, "Select a patient!");
+            } else {
+                int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+                if (a == JOptionPane.YES_OPTION) {
+                    // insert delete patient sql stuff here
+                }
+            }
+        });
 
-        JLabel healthCarePlan = new JLabel("Plan ID:");
-        searchPlanPanel.add(healthCarePlan);
+        // View the patient registered plan
+        JPanel planPanel = new JPanel();
+        patientPanel.add(planPanel);
 
-        JTextField searchBox = new JTextField();
-        searchBox.setColumns(20);
-        searchPlanPanel.add(searchBox);
+        // View the patient registered plan button
+        JButton viewPatientPlanButton = new JButton("View Patient Plan");
+        viewPatientPlanButton.setEnabled(false);
+        planPanel.add(viewPatientPlanButton);
+        viewPatientPlanButton.addActionListener(e -> {
+            HealthcarePlan dialog = new HealthcarePlan();
+            dialog.setModal(true);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        });
 
-        JButton searchPlan = new JButton("Search");
-        searchPlanPanel.add(searchPlan);
-
-        JTable planTable = new JTable();
-        planTable.setFillsViewportHeight(true);
-        healthcarePlan.add(planTable, BorderLayout.CENTER);
+        // Disable the edit patient, delete button and view patient plan button when
+        patientTable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                editPatientButton.setEnabled(true);
+                deletePatientButton.setEnabled(true);
+                viewPatientPlanButton.setEnabled(true);
+            }
+        });
 
         // Basic settings
         setTitle("Sheffield Dental Care - Secretary");

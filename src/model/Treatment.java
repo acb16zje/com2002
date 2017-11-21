@@ -35,7 +35,7 @@ public class Treatment {
     public void setCost(int cost) {
         this.cost = cost;
     }
-    
+
     @Override
     public String toString() {
         return "Treatment{" +

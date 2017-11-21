@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AbstractDocument;
+import util.IntegerFilter;
 
 public class BookAppointment extends JDialog {
 
@@ -47,7 +49,10 @@ public class BookAppointment extends JDialog {
         JLabel patientIDLabel = new JLabel("Patient ID:");
         patientIDLabel.setBounds(46, 116, 75, 15);
         contentPanel.add(patientIDLabel);
+
+        // Text field for patient ID
         JTextField patientID = new JTextField();
+        ((AbstractDocument) patientID.getDocument()).setDocumentFilter(new IntegerFilter());
         patientID.setBounds(147, 112, 154, 23);
         patientID.setFont(new Font("Dialog", Font.PLAIN, 16));
         patientID.setColumns(10);
@@ -147,7 +152,7 @@ public class BookAppointment extends JDialog {
             comboEndYear.addItem(i);
         }
         comboYear.setSelectedItem(tempCal.get(Calendar.YEAR));
-        
+
         // Label for end time
         JLabel endTimeLabel = new JLabel("End Time:");
         endTimeLabel.setBounds(46, 283, 68, 15);
@@ -262,6 +267,7 @@ public class BookAppointment extends JDialog {
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
             // insert SQL query here
+
         	boolean completed = false;
             // Check if all field are filled in
             Component[] components = contentPanel.getComponents();
@@ -325,7 +331,6 @@ public class BookAppointment extends JDialog {
 		                JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
 		            }
 	            }
-
             }
             else {
             	JOptionPane.showMessageDialog(null, "Please Complete");

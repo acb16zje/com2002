@@ -14,6 +14,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -35,6 +36,7 @@ public class ViewAppointment extends JDialog {
     private JLabel typeLabel;
     private JRadioButton checkUpRadioButton;
     private JRadioButton treatmentRadioButton;
+    private JLabel receiptLabel;
 
     /**
      * Create the dialog.
@@ -50,7 +52,7 @@ public class ViewAppointment extends JDialog {
         contentPanel.add(infoPanel, BorderLayout.CENTER);
         GridBagLayout gbl_infoPanel = new GridBagLayout();
         gbl_infoPanel.columnWidths = new int[]{50, 92, 132, 0, 15, 0};
-        gbl_infoPanel.rowHeights = new int[]{38, 40, 40, 40, 40, 40, 40, 36, 0};
+        gbl_infoPanel.rowHeights = new int[]{72, 40, 40, 40, 40, 40, 40, 36, 0};
         gbl_infoPanel.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
         gbl_infoPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
             Double.MIN_VALUE};
@@ -204,7 +206,7 @@ public class ViewAppointment extends JDialog {
                 {null, null},
             },
             new String[]{
-                "Treatment", "Cost", "Amount Paid"
+                "Treatment", "Cost"
             }
         ));
 
@@ -220,6 +222,10 @@ public class ViewAppointment extends JDialog {
         totalCostTextField.setEditable(false);
         totalCostPanel.add(totalCostTextField);
         totalCostTextField.setColumns(8);
+
+        receiptLabel = new JLabel("Receipt", SwingConstants.CENTER);
+        receiptLabel.setFont(new Font("Dialog", Font.BOLD, 16));
+        treatmentPanel.add(receiptLabel, BorderLayout.NORTH);
 
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -237,7 +243,7 @@ public class ViewAppointment extends JDialog {
         buttonPane.add(cancelButton);
 
         setTitle("View Appointment");
-        setBounds(100, 100, 915, 389);
+        setBounds(100, 100, 915, 466);
         setResizable(false);
         setLocationRelativeTo(null);
     }
