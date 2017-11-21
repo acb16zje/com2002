@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
+import util.CharacterFilter;
 import util.IntegerFilter;
 
 public class PatientEditor extends JDialog {
@@ -58,6 +59,7 @@ public class PatientEditor extends JDialog {
 
         // Text field for forename
         JTextField foreName = new JTextField();
+        ((AbstractDocument) foreName.getDocument()).setDocumentFilter(new CharacterFilter());
         foreName.setBounds(154, 86, 200, 23);
         foreName.setFont(new Font("Dialog", Font.PLAIN, 16));
         foreName.setColumns(10);
@@ -70,6 +72,7 @@ public class PatientEditor extends JDialog {
 
         // Text field for surname
         JTextField surName = new JTextField();
+        ((AbstractDocument) surName.getDocument()).setDocumentFilter(new CharacterFilter());
         surName.setBounds(154, 126, 200, 23);
         surName.setFont(new Font("Dialog", Font.PLAIN, 16));
         surName.setColumns(10);
@@ -137,7 +140,6 @@ public class PatientEditor extends JDialog {
         JTextField houseNo = new JTextField();
         houseNo.setBounds(154, 246, 200, 23);
         houseNo.setFont(new Font("Dialog", Font.PLAIN, 16));
-        ((AbstractDocument) houseNo.getDocument()).setDocumentFilter(new IntegerFilter());
         houseNo.setColumns(5);
         panel.add(houseNo);
 

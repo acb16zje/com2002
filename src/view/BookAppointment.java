@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AbstractDocument;
+import util.IntegerFilter;
 
 public class BookAppointment extends JDialog {
 
@@ -43,7 +45,10 @@ public class BookAppointment extends JDialog {
         JLabel patientIDLabel = new JLabel("Patient ID:");
         patientIDLabel.setBounds(46, 116, 75, 15);
         contentPanel.add(patientIDLabel);
+
+        // Text field for patient ID
         JTextField patientID = new JTextField();
+        ((AbstractDocument) patientID.getDocument()).setDocumentFilter(new IntegerFilter());
         patientID.setBounds(147, 112, 154, 23);
         patientID.setFont(new Font("Dialog", Font.PLAIN, 16));
         patientID.setColumns(10);
