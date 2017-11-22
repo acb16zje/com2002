@@ -112,7 +112,7 @@ public class SecretaryInterface extends JFrame {
         // Book appointment button for dentist
         JButton dentistBookButton = new JButton("Book Appointment");
         dentistBookButton.addActionListener(e -> {
-            BookAppointment dialog = new BookAppointment("Check-up");
+            BookAppointment dialog = new BookAppointment("Check-up",0);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
@@ -254,7 +254,7 @@ public class SecretaryInterface extends JFrame {
 
         JButton hygienistBookButton = new JButton("Book Appointment");
         hygienistBookButton.addActionListener(e -> {
-            BookAppointment dialog = new BookAppointment("Hygiene");
+            BookAppointment dialog = new BookAppointment("Hygiene",1);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
