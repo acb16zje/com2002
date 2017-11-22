@@ -447,14 +447,9 @@ public class SecretaryInterface extends JFrame {
         editPatientButton.setEnabled(false);
         editorPanel.add(editPatientButton);
         editPatientButton.addActionListener(e -> {
-            int rowSelected = patientTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select a patient!");
-            } else {
-                PatientEditor frame = new PatientEditor("Edit", patientTable);
-                frame.setModal(true);
-                frame.setVisible(true);
-            }
+            PatientEditor frame = new PatientEditor("Edit", patientTable);
+            frame.setModal(true);
+            frame.setVisible(true);
         });
 
         // Delete patient button
@@ -462,14 +457,9 @@ public class SecretaryInterface extends JFrame {
         deletePatientButton.setEnabled(false);
         editorPanel.add(deletePatientButton);
         deletePatientButton.addActionListener(e -> {
-            int rowSelected = patientTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select a patient!");
-            } else {
-                int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
-                if (a == JOptionPane.YES_OPTION) {
-                    // insert delete patient sql stuff here
-                }
+            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+            if (a == JOptionPane.YES_OPTION) {
+                // insert delete patient sql stuff here
             }
         });
 

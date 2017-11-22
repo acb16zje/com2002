@@ -277,15 +277,15 @@ public class AppointmentQueries {
 //        AppointmentQueries.updateAppointment(app);
 //        System.out.println(AppointmentQueries.getAllAppointments());
 
-        AppointmentQueries.deleteAppointment(app.getDate(), app.getPartnerID(), app.getStartTime());
-        AppointmentQueries.deleteAppointment(app2.getDate(), app2.getPartnerID(), app2.getStartTime());
-        AppointmentQueries.deleteAppointment(app3.getDate(), app3.getPartnerID(), app3.getStartTime());
-        PatientQueries.deletePatient(1);
-    	Boolean[] test = AppointmentQueries.getAvailableTime(DateHandler.newDate(2017, 12, 25), 0);
-    	for (int i = 0; i<test.length; i++ ) {
-    		System.out.println(test[i]);
-    	}
-        System.out.println(AppointmentQueries.getAllAppointments());
+//        AppointmentQueries.deleteAppointment(app.getDate(), app.getPartnerID(), app.getStartTime());
+//        AppointmentQueries.deleteAppointment(app2.getDate(), app2.getPartnerID(), app2.getStartTime());
+//        AppointmentQueries.deleteAppointment(app3.getDate(), app3.getPartnerID(), app3.getStartTime());
+//        PatientQueries.deletePatient(1);
+//    	Boolean[] test = AppointmentQueries.getAvailableTime(DateHandler.newDate(2017, 12, 25), 0);
+//    	for (int i = 0; i<test.length; i++ ) {
+//    		System.out.println(test[i]);
+//    	}
+//        System.out.println(AppointmentQueries.getAllAppointments());
 
     }
 
