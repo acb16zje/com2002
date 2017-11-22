@@ -52,6 +52,7 @@ CREATE TABLE Subscription (
 CREATE TABLE Appointment (
   date      DATE NOT NULL,
   startTime TIME NOT NULL,
+  endTime   TIME NOT NULL,
   patientID INT  NOT NULL,
   partnerID INT  NOT NULL,
   PRIMARY KEY (date, startTime, partnerID),

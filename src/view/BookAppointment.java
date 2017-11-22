@@ -257,7 +257,7 @@ public class BookAppointment extends JDialog {
             comboEndTime.setEnabled(true);
         });
         treatmentGroup.add(holidayRadioButton);
-        
+
         // Button panel
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -268,18 +268,18 @@ public class BookAppointment extends JDialog {
         okButton.addActionListener(e -> {
             // insert SQL query here
 
-        	boolean completed = false;
+            boolean completed = false;
             // Check if all field are filled in
             Component[] components = contentPanel.getComponents();
             for (Component comp : components) {
-            	if (comp instanceof JRadioButton) {
-            		completed = ((JRadioButton) comp).isSelected();
-            		if (completed) {
-            			break;
-            		}
-            	}
+                if (comp instanceof JRadioButton) {
+                    completed = ((JRadioButton) comp).isSelected();
+                    if (completed) {
+                        break;
+                    }
+                }
             }
-            
+
             components = contentPanel.getComponents();
             for (Component comp1 : components) {
                 // Cast comp to JComboBox / JTextField to get the values
@@ -288,55 +288,57 @@ public class BookAppointment extends JDialog {
                         completed = false;
                         break;
                     }
-                }     
+                }
             }
-            
+
             if (completed) {
 
-	            // Check if appointment date is valid
-            	int inputYear = (int)comboYear.getSelectedItem();
-            	int inputMonth = (int)comboMonth.getSelectedItem() - 1;
-            	int inputDay = (int)comboDay.getSelectedItem();
-	            Calendar inputDate = new GregorianCalendar( inputYear,inputMonth, inputDay);
-	            
-	            if (holidayRadioButton.isSelected()) {
-	            	SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm"); 
-	            	try {
-	            		String startDateStr = comboDay.getSelectedItem()+"/"+comboMonth.getSelectedItem()+"/"+comboYear.getSelectedItem()+" "+comboStartTime.getSelectedItem();
-	                	String endDateStr = comboEndDay.getSelectedItem()+"/"+comboEndMonth.getSelectedItem()+"/"+comboEndYear.getSelectedItem()+" "+comboEndTime.getSelectedItem();
-	            		Date startDate = timeFormatCompare.parse(startDateStr);
-	                	Calendar startCal = Calendar.getInstance();
-	                	startCal.setTime(startDate);
-	                	Date endDate = timeFormatCompare.parse(endDateStr);
-	                	Calendar endCal = Calendar.getInstance();
-	                	endCal.setTime(endDate);
-						int diff = endDate.compareTo(startDate);
-						if (diff <= 0 || !isValidDate(startCal) || !isValidDate(endCal)) {
-		            		JOptionPane.showMessageDialog(null, "Invalid Time");
-		            	}
-						else {
-							dispose();
-						}
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-	            	
-	            }
-	            else {
-		            if (isValidDate(inputDate)) {
-		                // insert SQL query here
-		                dispose();
-		            } 
-		            else {
-		                JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
-		            }
-	            }
+                // Check if appointment date is valid
+                int inputYear = (int) comboYear.getSelectedItem();
+                int inputMonth = (int) comboMonth.getSelectedItem() - 1;
+                int inputDay = (int) comboDay.getSelectedItem();
+                Calendar inputDate = new GregorianCalendar(inputYear, inputMonth, inputDay);
+
+                if (holidayRadioButton.isSelected()) {
+                    SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    try {
+                        String startDateStr =
+                            comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/"
+                                + comboYear.getSelectedItem() + " " + comboStartTime
+                                .getSelectedItem();
+                        String endDateStr =
+                            comboEndDay.getSelectedItem() + "/" + comboEndMonth.getSelectedItem()
+                                + "/" + comboEndYear.getSelectedItem() + " " + comboEndTime
+                                .getSelectedItem();
+                        Date startDate = timeFormatCompare.parse(startDateStr);
+                        Calendar startCal = Calendar.getInstance();
+                        startCal.setTime(startDate);
+                        Date endDate = timeFormatCompare.parse(endDateStr);
+                        Calendar endCal = Calendar.getInstance();
+                        endCal.setTime(endDate);
+                        int diff = endDate.compareTo(startDate);
+                        if (diff <= 0 || !isValidDate(startCal) || !isValidDate(endCal)) {
+                            JOptionPane.showMessageDialog(null, "Invalid Time");
+                        } else {
+                            dispose();
+                        }
+                    } catch (ParseException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+
+                } else {
+                    if (isValidDate(inputDate)) {
+                        // insert SQL query here
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Please Complete");
             }
-            else {
-            	JOptionPane.showMessageDialog(null, "Please Complete");
-            }
-            
+
         });
         okButton.setActionCommand("OK");
         buttonPane.add(okButton);

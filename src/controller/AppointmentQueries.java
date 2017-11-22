@@ -10,7 +10,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import model.Address;
 import model.Appointment;
-import model.DateHandler;
+import util.DateHandler;
 import model.Patient;
 
 /**

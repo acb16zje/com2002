@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
-import model.DateHandler;
+import util.DateHandler;
 import model.Record;
 
 /**

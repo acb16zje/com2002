@@ -44,6 +44,40 @@ public class HealthCarePlanQueries {
 
     }
 
+    /**
+     * Return all the plan names in database, used in JComboBox in PatientEditor
+     *
+     * @return Array of plan names
+     */
+    public static ArrayList getAllPlanName() {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        ArrayList<String> planName = new ArrayList<>();
+        planName.add("");
+
+        try {
+            pstmt = con.prepareStatement("SELECT planName FROM HealthCarePlan");
+            ResultSet res = pstmt.executeQuery();
+            while (res.next()) {
+                planName.add(res.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+
+        return planName;
+    }
+
     public static ArrayList<HealthCarePlan> getAllPlans() {
         Database db = new Database();
         Connection con = db.getCon();
@@ -169,7 +203,6 @@ public class HealthCarePlanQueries {
         HealthCarePlanQueries.deletePlan("Test Plan");
 
         System.out.println(HealthCarePlanQueries.getAllPlans());
-
     }
 
 }

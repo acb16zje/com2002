@@ -84,9 +84,9 @@ public class AppointmentSearch extends JDialog {
         setResizable(false);
         setLocationRelativeTo(null);
         okButton.addActionListener(e -> {
-	        if (textField.getText().isEmpty()) {
-	        	JOptionPane.showMessageDialog(null, "Please Insert Patient ID");
-	        }
+            if (textField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please Insert Patient ID");
+            }
         });
     }
 }

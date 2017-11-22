@@ -2,11 +2,14 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -21,15 +24,32 @@ public class AppointmentTableListener implements ActionListener {
     private JComboBox partnerMonth;
     private JComboBox partnerWeek;
     private Calendar calendar;
+    private JButton cancelButton;
+    private JButton viewButton;
     private String changingSpinner;
 
+    /**
+     * Initial constructor for generator the startup table
+     *
+     * @param table The partner appointment table
+     * @param cancelButton The cancel button
+     * @param viewButton The view button
+     */
+    public AppointmentTableListener(JTable table, JButton cancelButton, JButton viewButton) {
+        this.table = table;
+        this.cancelButton = cancelButton;
+        this.viewButton = viewButton;
+    }
+
     public AppointmentTableListener(JComboBox w, JComboBox m, JComboBox y, Calendar c, JTable table,
-        String s) {
+        JButton cancelButton, JButton viewButton, String s) {
         this.partnerWeek = w;
         this.partnerMonth = m;
         this.partnerYear = y;
         this.table = table;
         this.calendar = c;
+        this.cancelButton = cancelButton;
+        this.viewButton = viewButton;
         this.changingSpinner = s;
     }
 
@@ -38,7 +58,8 @@ public class AppointmentTableListener implements ActionListener {
      *
      * @param selectedWeek The selected week
      */
-    public static void generateAppointmentTable(String selectedWeek, JTable table) {
+    public void generateAppointmentTable(String selectedWeek, JTable table, JButton cancelButton,
+        JButton viewButton) {
         try {
             monDate = timeFormat.parse(selectedWeek);
         } catch (ParseException e1) {
@@ -60,7 +81,34 @@ public class AppointmentTableListener implements ActionListener {
             }
         );
 
+        cancelButton.setEnabled(false);
+        viewButton.setEnabled(false);
         table.getColumnModel().getColumn(0).setPreferredWidth(15);
+    }
+
+    /**
+     * Disable the cancel and view button when it is clicked on empty slot
+     *
+     * @param partnerTable The partner table
+     * @param cancelButton The cancel table
+     * @param viewButton The view button
+     */
+    public static void buttonDisabler(JTable partnerTable, JButton cancelButton,
+        JButton viewButton) {
+        partnerTable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                JTable target = (JTable) e.getSource();
+                int column = target.getSelectedColumn();
+                if (column == 0) {
+                    cancelButton.setEnabled(false);
+                    viewButton.setEnabled(false);
+                } else {
+                    cancelButton.setEnabled(true);
+                    viewButton.setEnabled(true);
+                }
+
+            }
+        });
     }
 
     @Override
@@ -73,6 +121,6 @@ public class AppointmentTableListener implements ActionListener {
             partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
         }
         String selectedWeek = ((String) partnerWeek.getSelectedItem()).substring(0, 10);
-        generateAppointmentTable(selectedWeek, table);
+        generateAppointmentTable(selectedWeek, table, cancelButton, viewButton);
     }
 }

@@ -1,6 +1,8 @@
 package view;
 
 import controller.DateListener;
+import controller.HealthCarePlanQueries;
+import controller.PatientQueries;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -17,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
+import model.Patient;
 import util.CharacterFilter;
 import util.IntegerFilter;
 
@@ -48,7 +51,7 @@ public class PatientEditor extends JDialog {
         panel.add(titleLabel);
 
         // ComboBox for title, eg MR, MS, MISS
-        JComboBox comboTitle = new JComboBox(title.values());
+        JComboBox comboTitle = new JComboBox(new String[]{"Mr", "Mrs", "Ms", "Miss"});
         comboTitle.setBounds(154, 45, 62, 24);
         panel.add(comboTitle);
 
@@ -114,8 +117,8 @@ public class PatientEditor extends JDialog {
         }
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
+        // Add listener for ComboBox month and year
         comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
-
         comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
 
         // Label for phone number
@@ -197,14 +200,17 @@ public class PatientEditor extends JDialog {
         panel.add(planLabel);
 
         // ComboBox for healthcare plan
-        JComboBox healthcarePlan = new JComboBox();
+        JComboBox healthcarePlan = new JComboBox(HealthCarePlanQueries.getAllPlanName().toArray());
         healthcarePlan.setBounds(154, 445, 200, 24);
         panel.add(healthcarePlan);
 
         // Check for update healthcare plan
         JCheckBox updatePlanCheckBox = new JCheckBox("Update Healthcare Plan");
         updatePlanCheckBox.setBounds(154, 488, 194, 23);
-        updatePlanCheckBox.setForeground(new Color(128, 128, 128));
+        if (label == "Add") {
+            updatePlanCheckBox.setEnabled(false);
+            updatePlanCheckBox.setVisible(false);
+        }
         panel.add(updatePlanCheckBox);
 
         // Bottom panel for Save and Cancel button
@@ -229,6 +235,19 @@ public class PatientEditor extends JDialog {
                 }
             }
             if (completed) {
+
+                System.out.println(comboTitle.getSelectedItem());
+                System.out.println(foreName.getText());
+                System.out.println(surName.getText());
+                System.out.println(String.valueOf(comboDay.getSelectedItem()) + "-" + String.valueOf(comboMonth.getSelectedItem()) + "-" + String.valueOf(comboYear.getSelectedItem()));
+                System.out.println(phoneNo.getText());
+                System.out.println(houseNo.getText());
+                System.out.println(street.getText());
+                System.out.println(district.getText());
+                System.out.println(city.getText());
+                System.out.println(postcode.getText());
+                System.out.println(String.valueOf(healthcarePlan.getSelectedItem()));
+                System.out.println(String.valueOf(healthcarePlan.getSelectedIndex()));
                 dispose();
             }
         });
@@ -246,6 +265,4 @@ public class PatientEditor extends JDialog {
         setResizable(false);
         setLocationRelativeTo(null);
     }
-
-    private enum title {MR, MRS, MS, MISS}
 }

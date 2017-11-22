@@ -44,7 +44,7 @@ public class Login extends JFrame {
 
         // Button for hygienist login
         JButton HygienistLogin = new JButton("Hygienist");
-        HygienistLogin.setBounds(253, 168, 115, 71);
+        HygienistLogin.setBounds(438, 168, 115, 71);
         HygienistLogin.addActionListener(e -> {
             dispose();
             PartnerInterface partnerFrame = new PartnerInterface("Hygienist");
@@ -55,7 +55,7 @@ public class Login extends JFrame {
 
         // Button for dentist login
         JButton DentistLogin = new JButton("Dentist");
-        DentistLogin.setBounds(438, 168, 115, 71);
+        DentistLogin.setBounds(253, 168, 115, 71);
         DentistLogin.addActionListener(e -> {
             dispose();
             PartnerInterface partnerFrame = new PartnerInterface("Dentist");
