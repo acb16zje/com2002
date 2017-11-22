@@ -21,40 +21,20 @@ public class HealthCarePlan {
         return planName;
     }
 
-    public void setPlanName(String planName) {
-        this.planName = planName;
-    }
-
     public int getMonthlyFee() {
         return monthlyFee;
-    }
-
-    public void setMonthlyFee(int monthlyFee) {
-        this.monthlyFee = monthlyFee;
     }
 
     public int getCheckUp() {
         return checkUp;
     }
 
-    public void setCheckUp(int checkUp) {
-        this.checkUp = checkUp;
-    }
-
     public int getHygieneVisit() {
         return hygieneVisit;
     }
 
-    public void setHygieneVisit(int hygieneVisit) {
-        this.hygieneVisit = hygieneVisit;
-    }
-
     public int getRepairWork() {
         return repairWork;
-    }
-
-    public void setRepairWork(int repairWork) {
-        this.repairWork = repairWork;
     }
 
     @Override

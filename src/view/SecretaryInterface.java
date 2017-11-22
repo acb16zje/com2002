@@ -392,7 +392,7 @@ public class SecretaryInterface extends JFrame {
         JButton addPatientButton = new JButton("Add Patient");
         editorPanel.add(addPatientButton);
         addPatientButton.addActionListener(e -> {
-            PatientEditor frame = new PatientEditor("Add");
+            PatientEditor frame = new PatientEditor("Add", patientTable);
             frame.setModal(true);
             frame.setVisible(true);
         });
@@ -406,7 +406,7 @@ public class SecretaryInterface extends JFrame {
             if (rowSelected == -1) {
                 JOptionPane.showMessageDialog(null, "Select a patient!");
             } else {
-                PatientEditor frame = new PatientEditor("Edit");
+                PatientEditor frame = new PatientEditor("Edit", patientTable);
                 frame.setModal(true);
                 frame.setVisible(true);
             }

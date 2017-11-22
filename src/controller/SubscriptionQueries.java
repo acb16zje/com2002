@@ -53,7 +53,7 @@ public class SubscriptionQueries {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
-        ArrayList<Subscription> subscriptions = new ArrayList<Subscription>();
+        ArrayList<Subscription> subscriptions = new ArrayList<>();
         try {
             pstmt = con.prepareStatement("SELECT * FROM Subscription");
             ResultSet res = pstmt.executeQuery();

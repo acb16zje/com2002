@@ -19,7 +19,7 @@ public class Appointment {
      * @param partnerID The partner, dentist or hygienist
      * @param patientID The ID of the patient
      */
-    public Appointment(Date date, Time startTime,Time endTime, int patientID, int partnerID) {
+    public Appointment(Date date, Time startTime, Time endTime, int patientID, int partnerID) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -36,7 +36,7 @@ public class Appointment {
         return date;
     }
 
-	/**
+    /**
      * Set the date of the appointment
      *
      * @param date The new date appointment
@@ -62,24 +62,24 @@ public class Appointment {
     public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
-    
+
     /**
      * Get the end time of the appointment
      *
      * @return The end time of the appointment
      */
     public Time getEndTime() {
-		return endTime;
-	}
-    
+        return endTime;
+    }
+
     /**
      * Set the end time of the appointment
      *
      * @param endTime The end time of a appointment
      */
-	public void setEndTime(Time endTime) {
-		this.endTime = endTime;
-	}
+    public void setEndTime(Time endTime) {
+        this.endTime = endTime;
+    }
 
     /**
      * Get the partner of a appointment

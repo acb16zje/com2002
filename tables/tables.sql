@@ -55,7 +55,7 @@ CREATE TABLE Appointment (
   endTime   TIME NOT NULL,
   patientID INT  NOT NULL,
   partnerID INT  NOT NULL,
-  PRIMARY KEY (date, startTime, endTime, partnerID),
+  PRIMARY KEY (date, startTime, partnerID),
   FOREIGN KEY (partnerID) REFERENCES Partner (partnerID),
   FOREIGN KEY (patientID) REFERENCES Patient (patientID)
 );

@@ -326,7 +326,6 @@ public class BookAppointment extends JDialog {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
-
                 } else {
                     if (isValidDate(inputDate)) {
                         // insert SQL query here

@@ -24,8 +24,7 @@ public class Subscription {
      * @param repairWorkLeft The repair work left in the subscription
      */
     public Subscription(int patientID, String planName, Date startDate, Date endDate,
-        int checkUpLeft,
-        int hygieneVisitLeft, int repairWorkLeft) {
+        int checkUpLeft, int hygieneVisitLeft, int repairWorkLeft) {
         this.patientID = patientID;
         this.planName = planName;
         this.startDate = startDate;

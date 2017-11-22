@@ -26,6 +26,7 @@ public class PatientQueries {
             pstmt = con.prepareStatement(
                 "SELECT Patient.*, Subscription.planName FROM Patient LEFT JOIN Subscription ON Subscription.patientID = Patient.patientID");
             ResultSet res = pstmt.executeQuery();
+            ((DefaultTableModel) patientTable.getModel()).setRowCount(0);
             while (res.next()) {
                 ((DefaultTableModel) patientTable.getModel()).addRow(
                     new Object[]{
@@ -177,5 +178,31 @@ public class PatientQueries {
             }
             db.closeConnection();
         }
+    }
+
+    public static int getNewPatientID() {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        int maxID = 0;
+        try {
+            pstmt = con.prepareStatement("SELECT MAX(patientID) + 1 FROM Patient");
+            ResultSet res = pstmt.executeQuery();
+            res.next();
+            return res.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+
+        return maxID;
     }
 }
