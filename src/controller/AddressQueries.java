@@ -135,6 +135,8 @@ public class AddressQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
+            pstmt = con.prepareStatement("SET foreign_key_checks = 0");
+            pstmt.executeQuery();
             pstmt = con.prepareStatement(
                 "UPDATE Address SET houseNumber = ?, street = ?, district = ?, city = ?, postCode = ? WHERE houseNumber = ? AND postCode = ?");
             pstmt.setString(1, address.getHouseNo());
@@ -145,6 +147,8 @@ public class AddressQueries {
             pstmt.setString(6, houseNumber);
             pstmt.setString(7, postCode);
             pstmt.executeUpdate();
+            pstmt = con.prepareStatement("SET foreign_key_checks = 1");
+            pstmt.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

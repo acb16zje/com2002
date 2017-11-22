@@ -157,7 +157,7 @@ public class SecretaryInterface extends JFrame {
     				e1.printStackTrace();
     		}
         });
-           
+
         dentistAppointmentPanel.add(dentistViewButton);
 
         // Generate the appointment table for dentist
@@ -367,7 +367,7 @@ public class SecretaryInterface extends JFrame {
 
         // Text field for patient ID
         JTextField patientID = new JTextField();
-        ((AbstractDocument) patientID.getDocument()).setDocumentFilter(new IntegerFilter());
+        ((AbstractDocument) patientID.getDocument()).setDocumentFilter(new IntegerFilter(10));
         searchPatientPanel.add(patientID);
         patientID.setColumns(20);
 
@@ -463,12 +463,26 @@ public class SecretaryInterface extends JFrame {
             dialog.setVisible(true);
         });
 
-        // Disable the edit patient, delete button and view patient plan button when
+        // Disable the edit patient, delete button and view patient plan button when invalid click
         patientTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                editPatientButton.setEnabled(true);
-                deletePatientButton.setEnabled(true);
-                viewPatientPlanButton.setEnabled(true);
+                JTable target = (JTable) e.getSource();
+                int row = target.getSelectedRow();
+
+                if (row == -1) {
+                    editPatientButton.setEnabled(false);
+                    deletePatientButton.setEnabled(false);
+                } else {
+                    Object cell = patientTable.getValueAt(row, 6);
+                    if (cell == null) {
+                        viewPatientPlanButton.setEnabled(false);
+                    } else {
+                        viewPatientPlanButton.setEnabled(true);
+                    }
+
+                    editPatientButton.setEnabled(true);
+                    deletePatientButton.setEnabled(true);
+                }
             }
         });
 

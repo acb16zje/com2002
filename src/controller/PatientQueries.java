@@ -94,13 +94,7 @@ public class PatientQueries {
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Patient VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            PreparedStatement getID = con
-                .prepareStatement("SELECT MAX(patientID) + 1 FROM Patient");
-            ResultSet res = getID.executeQuery();
-            res.next();
-            int ID = res.getInt(1);
-            getID.close();
-            pstmt.setInt(1, ID);
+            pstmt.setInt(1, patient.getPatientID());
             pstmt.setString(2, patient.getTitle());
             pstmt.setString(3, patient.getForename());
             pstmt.setString(4, patient.getSurname());

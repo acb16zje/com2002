@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -115,8 +116,8 @@ public class AppointmentTableListener implements ActionListener {
 
             }
         });
-        
-        partnerTable.addKeyListener(new KeyListener() {		
+
+        partnerTable.addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
@@ -142,18 +143,18 @@ public class AppointmentTableListener implements ActionListener {
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
 			}
-		
+
 		});
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (changingSpinner == "year") {
+        if (Objects.equals(changingSpinner, "year")) {
             calendar.set(Calendar.YEAR, (int) partnerYear.getSelectedItem());
-            partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
-        } else if (changingSpinner == "month") {
+            partnerWeek.setModel(new DefaultComboBoxModel<>(WeekGenerator.weekList(calendar)));
+        } else if (Objects.equals(changingSpinner, "month")) {
             calendar.set(Calendar.MONTH, (int) partnerMonth.getSelectedItem() - 1);
-            partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
+            partnerWeek.setModel(new DefaultComboBoxModel<>(WeekGenerator.weekList(calendar)));
         }
         String selectedWeek = ((String) partnerWeek.getSelectedItem()).substring(0, 10);
 
