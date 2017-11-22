@@ -3,7 +3,10 @@ package view;
 import controller.AppointmentQueries;
 import controller.AppointmentTableListener;
 import controller.PatientQueries;
+import controller.RecordQueries;
+import controller.RefreshTableListener;
 import model.Appointment;
+import model.Record;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -146,6 +149,10 @@ public class SecretaryInterface extends JFrame {
         		String time = ((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(2,7);
         		String date = ((String)dentistTable.getColumnName(colSelected)).substring(4, 14);
                 try {
+                	if (patientID != 0) {
+                	// Insert wipe all appointment related Record here
+                	//	RecordQueries.deleteRecord( RecordQueries.getByRecord(Time.valueOf(time+":00"),new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),0));
+                	}
                 	AppointmentQueries.deleteAppointment(new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 0, Time.valueOf(time+":00"));
                 	AppointmentTableListener.refreshTable(dentistTable,((String) dentistWeek.getSelectedItem()).substring(0, 10),0,dentistCancelButton,dentistViewButton);
 				} catch (ParseException e1) {
@@ -155,7 +162,6 @@ public class SecretaryInterface extends JFrame {
             }
         });
        
-        
         // Book appointment button for dentist
         JButton dentistBookButton = new JButton("Book Appointment");
         dentistBookButton.addActionListener(e -> {
@@ -163,46 +169,7 @@ public class SecretaryInterface extends JFrame {
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
-            dialog.addWindowListener(new WindowListener(){
-            	@Override
-            	public void windowClosing(WindowEvent e) {
-            		
-                    
-                }
-
-				@Override
-				public void windowOpened(WindowEvent e) {
-					// TODO Auto-generated method stub	
-				}
-
-				@Override
-				public void windowClosed(WindowEvent e) {
-					AppointmentTableListener.refreshTable(dentistTable,((String) dentistWeek.getSelectedItem()).substring(0, 10),0,dentistCancelButton,dentistViewButton);
-					// TODO Auto-generated method stub
-				}
-
-				@Override
-				public void windowIconified(WindowEvent e) {
-					// TODO Auto-generated method stub
-				}
-
-				@Override
-				public void windowDeiconified(WindowEvent e) {
-					// TODO Auto-generated method stub
-				}
-
-				@Override
-				public void windowActivated(WindowEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void windowDeactivated(WindowEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-            });
+            dialog.addWindowListener(new RefreshTableListener(dentistTable,dentistWeek,dentistCancelButton,dentistViewButton,0));
         });
         dentistAppointmentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         dentistAppointmentPanel.add(dentistBookButton);
