@@ -2,6 +2,8 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
@@ -101,7 +103,9 @@ public class AppointmentTableListener implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 JTable target = (JTable) e.getSource();
                 int column = target.getSelectedColumn();
-                if (column == 0) {
+                int row = target.getSelectedRow();
+                Object cell = partnerTable.getValueAt(row, column);
+                if (column == 0 || cell == null) {
                     cancelButton.setEnabled(false);
                     viewButton.setEnabled(false);
                 } else {
@@ -111,6 +115,35 @@ public class AppointmentTableListener implements ActionListener {
 
             }
         });
+        
+        partnerTable.addKeyListener(new KeyListener() {		
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+                JTable target = (JTable) e.getSource();
+                int column = target.getSelectedColumn();
+                int row = target.getSelectedRow();
+                Object cell = partnerTable.getValueAt(row, column);
+                if (column == 0 || cell == null) {
+                    cancelButton.setEnabled(false);
+                    viewButton.setEnabled(false);
+                } else {
+                    cancelButton.setEnabled(true);
+                    viewButton.setEnabled(true);
+                }
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+			}
+		
+		});
     }
 
     @Override
