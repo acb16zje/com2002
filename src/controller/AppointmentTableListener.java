@@ -108,10 +108,16 @@ public class AppointmentTableListener implements ActionListener {
                 Object cell = partnerTable.getValueAt(row, column);
                 if (column == 0 || cell == null) {
                     cancelButton.setEnabled(false);
-                    viewButton.setEnabled(false);
-                } else {
+                    viewButton.setEnabled(false);  
+                } 
+                else {
+                	if (((String)cell).substring(0,1).equals("0")) {
+                    	cancelButton.setEnabled(true);
+                        viewButton.setEnabled(false);
+                	} else {
                     cancelButton.setEnabled(true);
                     viewButton.setEnabled(true);
+                	}
                 }
 
             }
@@ -129,8 +135,13 @@ public class AppointmentTableListener implements ActionListener {
                     cancelButton.setEnabled(false);
                     viewButton.setEnabled(false);
                 } else {
-                    cancelButton.setEnabled(true);
-                    viewButton.setEnabled(true);
+                	if (((String)cell).substring(0,1).equals("0")) {
+                    	cancelButton.setEnabled(true);
+                        viewButton.setEnabled(false);
+                	} else {	
+                		cancelButton.setEnabled(true);
+                		viewButton.setEnabled(true);
+                	}
                 }
 			}
 
@@ -146,7 +157,38 @@ public class AppointmentTableListener implements ActionListener {
 
 		});
     }
+     public static void refreshTable(JTable partnerTable, String selectedWeek, int partnerID,JButton cancelButton,
+    	        JButton viewButton) {
+    	 Date monDate;
+ 		try {
+ 			System.out.println("refereshing");
+ 			monDate = timeFormat.parse(selectedWeek);
+ 			Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+ 			partnerTable.setModel(
+ 		            new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
+ 		                "Mon " + timeFormat.format(daysInWeekList[0]),
+ 		                "Tue " + timeFormat.format(daysInWeekList[1]),
+ 		                "Wed " + timeFormat.format(daysInWeekList[2]),
+ 		                "Thu " + timeFormat.format(daysInWeekList[3]),
+ 		                "Fri " + timeFormat.format(daysInWeekList[4])}) {
+ 		                @Override
+ 		                public boolean isCellEditable(int row, int column) {
+ 		                    return false;
+ 		                }
+ 		            }
+ 		        );
 
+ 		        cancelButton.setEnabled(false);
+ 		        viewButton.setEnabled(false);
+ 	        for (int i=0; i<5; i++) {
+ 	        	AppointmentQueries.getDayAppointmentList(partnerTable,daysInWeekList[i],partnerID,i+1);
+ 	        }
+ 		} catch (ParseException e1) {
+ 			// TODO Auto-generated catch block
+ 			e1.printStackTrace();
+ 		}
+     }
+     
     @Override
     public void actionPerformed(ActionEvent e) {
         if (Objects.equals(changingSpinner, "year")) {
@@ -159,16 +201,6 @@ public class AppointmentTableListener implements ActionListener {
         String selectedWeek = ((String) partnerWeek.getSelectedItem()).substring(0, 10);
 
         generateAppointmentTable(selectedWeek, table, cancelButton, viewButton);
-        Date monDate;
-		try {
-			monDate = timeFormat.parse(selectedWeek);
-			Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
-	        for (int i=0; i<5; i++) {
-	        	AppointmentQueries.getDayAppointmentList(table,daysInWeekList[i],partnerID,i+1);
-	        }
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        refreshTable(table,selectedWeek,partnerID, cancelButton, viewButton);
     }
 }

@@ -154,7 +154,8 @@ public class ViewAppointment extends JDialog {
         ButtonGroup type = new ButtonGroup();
         type.add(checkUpRadioButton);
         type.add(treatmentRadioButton);
-        if (MINUTES.between(app.getEndTime().toLocalTime(),app.getStartTime().toLocalTime()) == 60) {
+        System.out.println(MINUTES.between(app.getEndTime().toLocalTime(),app.getStartTime().toLocalTime()));
+        if (MINUTES.between(app.getStartTime().toLocalTime(),app.getEndTime().toLocalTime()) == 60) {
         	type.setSelected(treatmentRadioButton.getModel(), true);
         } else {
         	type.setSelected(checkUpRadioButton.getModel(), true);
