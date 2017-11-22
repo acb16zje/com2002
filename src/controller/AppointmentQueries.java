@@ -82,7 +82,7 @@ public class AppointmentQueries {
             	Patient tempPatient = PatientQueries.getByID(res.getInt(3));
             	for (int i = startCell; i < cellsTaken+startCell;i++) {
             		if (res.getInt(3) == 0) {
-            			model.setValueAt(res.getInt(3)+" "+startTime+" "+sqlDate+" HOLIDAY",i, cols);
+            			model.setValueAt(res.getInt(3)+" "+startTime+" HOLIDAY",i, cols);
             		}
             		else {
             			model.setValueAt(res.getInt(3)+" "+startTime+" "+tempPatient.getFullName(),i, cols);
@@ -207,6 +207,7 @@ public class AppointmentQueries {
             pstmt.setDate(1, d);
             pstmt.setInt(2, partnerID);
             pstmt.setTime(3, time);
+            System.out.println(d+" "+partnerID+" "+time);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -250,36 +251,36 @@ public class AppointmentQueries {
 
     public static void main(String[] args) {
 
-//        System.out.println(AppointmentQueries
-//            .getAppointment(DateHandler.newDate(2017, 12, 25), 0,0, Time.valueOf("12:00:00")));
-//
-//        Appointment app = new Appointment(DateHandler.newDate(2017, 12, 25),
-//            Time.valueOf("13:00:00"),Time.valueOf("14:00:00"), 0, 0);
-//        Appointment app2 = new Appointment(DateHandler.newDate(2017, 11, 22),
-//                Time.valueOf("09:00:00"),Time.valueOf("11:00:00"), 0, 0);
-//        
-//        System.out.println(app);
-//       AppointmentQueries.insertAppointment(app);
-//        AppointmentQueries.insertAppointment(app2);
-//
-//        System.out.println(AppointmentQueries.getAllAppointments());
-//
-//        Address testAddress = new Address("-", "-", "-", "-", "-");
-//
-//        PatientQueries
-//            .insertPatient(new Patient(1, "Miss", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
-//                "0783649208", testAddress));
-//        app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"),Time.valueOf("04:45:00"), 1, 0);
-//        Appointment app3 = new Appointment(DateHandler.newDate(2017, 11, 22),
-//                Time.valueOf("11:00:00"),Time.valueOf("12:40:00"), 1, 1);
-//        AppointmentQueries.insertAppointment(app3);
-//        AppointmentQueries.updateAppointment(app);
-//        System.out.println(AppointmentQueries.getAllAppointments());
+        System.out.println(AppointmentQueries
+            .getAppointment(DateHandler.newDate(2017, 12, 25), 0,0, Time.valueOf("12:00:00")));
 
-//        AppointmentQueries.deleteAppointment(app.getDate(), app.getPartnerID(), app.getStartTime());
-//        AppointmentQueries.deleteAppointment(app2.getDate(), app2.getPartnerID(), app2.getStartTime());
-//        AppointmentQueries.deleteAppointment(app3.getDate(), app3.getPartnerID(), app3.getStartTime());
-//        PatientQueries.deletePatient(1);
+        Appointment app = new Appointment(DateHandler.newDate(2017, 12, 25),
+            Time.valueOf("13:00:00"),Time.valueOf("14:00:00"), 0, 0);
+        Appointment app2 = new Appointment(DateHandler.newDate(2017, 11, 22),
+                Time.valueOf("09:00:00"),Time.valueOf("11:00:00"), 0, 0);
+        
+        System.out.println(app);
+       AppointmentQueries.insertAppointment(app);
+        AppointmentQueries.insertAppointment(app2);
+
+        System.out.println(AppointmentQueries.getAllAppointments());
+
+        Address testAddress = new Address("-", "-", "-", "-", "-");
+
+        PatientQueries
+            .insertPatient(new Patient(1, "Miss", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
+                "0783649208", testAddress));
+        app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"),Time.valueOf("04:45:00"), 1, 0);
+        Appointment app3 = new Appointment(DateHandler.newDate(2017, 11, 22),
+                Time.valueOf("11:00:00"),Time.valueOf("12:40:00"), 1, 1);
+        AppointmentQueries.insertAppointment(app3);
+        AppointmentQueries.updateAppointment(app);
+        System.out.println(AppointmentQueries.getAllAppointments());
+
+        AppointmentQueries.deleteAppointment(app.getDate(), app.getPartnerID(), app.getStartTime());
+        AppointmentQueries.deleteAppointment(app2.getDate(), app2.getPartnerID(), app2.getStartTime());
+        AppointmentQueries.deleteAppointment(app3.getDate(), app3.getPartnerID(), app3.getStartTime());
+        PatientQueries.deletePatient(1);
     	Boolean[] test = AppointmentQueries.getAvailableTime(DateHandler.newDate(2017, 12, 25), 0);
     	for (int i = 0; i<test.length; i++ ) {
     		System.out.println(test[i]);

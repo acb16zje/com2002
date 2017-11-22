@@ -122,7 +122,7 @@ public class PatientQueries {
             db.closeConnection();
         }
     }
-
+    
     public static void deletePatient(int ID) {
         Database db = new Database();
         Connection con = db.getCon();

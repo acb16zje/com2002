@@ -3,7 +3,10 @@ package view;
 import controller.AppointmentQueries;
 import controller.BookingListener;
 import controller.DateListener;
+import controller.PatientQueries;
+import controller.RecordQueries;
 import model.Appointment;
+import model.Record;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -182,22 +185,23 @@ public class BookAppointment extends JDialog {
         comboEndTime.setEnabled(false);
         contentPanel.add(comboEndTime);
         int cellEndValue = 0;
+        Boolean[] endAvaibilityBoolean = AppointmentQueries.getAvailableTime( DateHandler.newDate((int) comboEndYear.getSelectedItem(),(int)comboEndMonth.getSelectedItem(),(int)comboEndDay.getSelectedItem()), partnerID);
         for (int hour = 9; hour <= 17; hour++) {
             if (hour == 9) {
                 for (int min = 2; min < 6; min += 2) {
-                	if (avaibilityBoolean[cellEndValue]) {
+                	if (endAvaibilityBoolean[cellEndValue]) {
 	                    comboEndTime
 	                        .addItem("0" + String.valueOf(hour) + ":" + String.valueOf(min) + "0");
                 	}
                 	cellEndValue++;
                 }
             } else if (hour == 17) {
-            	if (avaibilityBoolean[cellEndValue]) {
+            	if (endAvaibilityBoolean[cellEndValue]) {
             		comboEndTime.addItem("17:00");
             	}
             } else {
                 for (int min = 0; min < 6; min += 2) {
-                	if (avaibilityBoolean[cellEndValue]) {
+                	if (endAvaibilityBoolean[cellEndValue]) {
                 		comboEndTime.addItem(String.valueOf(hour) + ":" + String.valueOf(min) + "0");
                 	}
                 	cellEndValue++;
@@ -211,9 +215,9 @@ public class BookAppointment extends JDialog {
         comboYear.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboStartTime,"Start",partnerID));
 
         // Listener for end month and year
-        comboEndDay.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboEndTime,"End",partnerID));
-        comboEndMonth.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboEndTime,"End",partnerID));
-        comboEndYear.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboEndTime,"End",partnerID));
+        comboEndDay.addActionListener(new BookingListener(comboEndDay, comboEndMonth, comboEndYear, comboEndTime,"End",partnerID));
+        comboEndMonth.addActionListener(new BookingListener(comboEndDay, comboEndMonth, comboEndYear, comboEndTime,"End",partnerID));
+        comboEndYear.addActionListener(new BookingListener(comboEndDay, comboEndMonth, comboEndYear, comboEndTime,"End",partnerID));
 
         // Button group for check up, treatment. holiday
         ButtonGroup treatmentGroup = new ButtonGroup();
@@ -318,7 +322,10 @@ public class BookAppointment extends JDialog {
                     if (((JTextField) comp1).getText().isEmpty() && comp1.isShowing()) {
                         completed = false;
                         break;
-                    }
+                    } else if (Integer.parseInt(((JTextField) comp1).getText()) > PatientQueries.getNewPatientID()-1) {
+                    	completed = false;
+                    	break;
+                    }	
                 }
             }
 
@@ -401,7 +408,7 @@ public class BookAppointment extends JDialog {
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Please Complete");
+                JOptionPane.showMessageDialog(null, "Please Complete/Invalid Patient ID");
             }
 
         });

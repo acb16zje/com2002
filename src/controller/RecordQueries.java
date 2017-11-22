@@ -100,7 +100,7 @@ public class RecordQueries {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            }
+             }
             db.closeConnection();
         }
     }
