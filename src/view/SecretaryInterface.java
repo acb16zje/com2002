@@ -1,5 +1,6 @@
 package view;
 
+import controller.AppointmentQueries;
 import controller.AppointmentTableListener;
 import controller.PatientQueries;
 import java.awt.BorderLayout;
@@ -8,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -103,15 +105,15 @@ public class SecretaryInterface extends JFrame {
         // Listeners for dates
         dentistMonth.addActionListener(
             new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-                dentistTable, "month"));
+                dentistTable, "month",0));
 
         dentistYear.addActionListener(
             new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-                dentistTable, "year"));
+                dentistTable, "year",0));
 
         dentistWeek.addActionListener(
             new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-                dentistTable, "week"));
+                dentistTable, "week" ,0));
 
         // Bottom panel, contain all the buttons
         JPanel dentistAppointmentPanel = new JPanel();
@@ -186,7 +188,22 @@ public class SecretaryInterface extends JFrame {
             dialog.setModal(true);
             dialog.setVisible(true);
         });
-
+        
+        //printing appointment on dentist table
+        SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String selectedMon = ((String) dentistWeek.getSelectedItem()).substring(0, 10);
+        Date monDate;
+		try {
+			monDate = timeFormat.parse(selectedMon);
+			Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+	        for (int i=0; i<5; i++) {
+	        	AppointmentQueries.getDayAppointmentList(dentistTable,daysInWeekList[i],0,i+1);        	
+	        }
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
         // Main panel for hygienist appointment
         JPanel hygienistAppointment = new JPanel();
         tabbedPane.addTab("Hygienist Appointment", null, hygienistAppointment, null);
@@ -231,17 +248,17 @@ public class SecretaryInterface extends JFrame {
         hygienistMonth.addActionListener(
             new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
                 hygienistCalendar,
-                hygienistTable, "month"));
+                hygienistTable, "month", 1));
 
         hygienistYear.addActionListener(
             new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
                 hygienistCalendar,
-                hygienistTable, "year"));
+                hygienistTable, "year", 1));
 
         hygienistWeek.addActionListener(
             new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
                 hygienistCalendar,
-                hygienistTable, "week"));
+                hygienistTable, "week", 1));
 
         // Contain book, cancel, view and search appointment button
         JPanel hygienistAppointmentPanel = new JPanel();
@@ -313,7 +330,21 @@ public class SecretaryInterface extends JFrame {
             dialog.setVisible(true);
         });
         hygienistAppointmentPanel.add(hygienistSearchButton);
-
+        
+      //printing appointment on dentist table
+        String hygienedMon = ((String) hygienistWeek.getSelectedItem()).substring(0, 10);
+        Date hygieneMonDate;
+		try {
+			hygieneMonDate = timeFormat.parse(hygienedMon);
+			Date[] daysInWeekListHygiene = WeekGenerator.daysInWeekList(hygieneMonDate);
+	        for (int i=0; i<5; i++) {
+	        	AppointmentQueries.getDayAppointmentList(hygienistTable,daysInWeekListHygiene[i],1,i+1);        	
+	        }
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
         // UI for patient, separate tab
         JPanel patient = new JPanel();
         tabbedPane.addTab("Patient", null, patient, null);

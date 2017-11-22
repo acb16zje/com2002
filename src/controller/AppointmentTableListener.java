@@ -22,15 +22,17 @@ public class AppointmentTableListener implements ActionListener {
     private JComboBox partnerWeek;
     private Calendar calendar;
     private String changingSpinner;
+    private int partnerID;
 
     public AppointmentTableListener(JComboBox w, JComboBox m, JComboBox y, Calendar c, JTable table,
-        String s) {
+        String s,int partnerID) {
         this.partnerWeek = w;
         this.partnerMonth = m;
         this.partnerYear = y;
         this.table = table;
         this.calendar = c;
         this.changingSpinner = s;
+        this.partnerID = partnerID;
     }
 
     /**
@@ -68,11 +70,35 @@ public class AppointmentTableListener implements ActionListener {
         if (changingSpinner == "year") {
             calendar.set(Calendar.YEAR, (int) partnerYear.getSelectedItem());
             partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
+            String selectedMon = ((String) partnerWeek.getSelectedItem()).substring(0, 10);
+            Date monDate;
+    		try {
+    			monDate = timeFormat.parse(selectedMon);
+    			Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+    	        for (int i=0; i<5; i++) {
+    	        	AppointmentQueries.getDayAppointmentList(table,daysInWeekList[i],partnerID,i+1);        	
+    	        }
+    		} catch (ParseException e1) {
+    			// TODO Auto-generated catch block
+    			e1.printStackTrace();
+    		}
+            
         } else if (changingSpinner == "month") {
             calendar.set(Calendar.MONTH, (int) partnerMonth.getSelectedItem() - 1);
             partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
         }
         String selectedWeek = ((String) partnerWeek.getSelectedItem()).substring(0, 10);
         generateAppointmentTable(selectedWeek, table);
+        Date monDate;
+		try {
+			monDate = timeFormat.parse(selectedWeek);
+			Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+	        for (int i=0; i<5; i++) {
+	        	AppointmentQueries.getDayAppointmentList(table,daysInWeekList[i],partnerID,i+1);        	
+	        }
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     }
 }
