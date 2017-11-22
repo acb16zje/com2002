@@ -7,11 +7,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 import model.Address;
 import model.Appointment;
 import util.DateHandler;
 import model.Patient;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
  * @author Jake Sturgeon
@@ -33,7 +40,7 @@ public class AppointmentQueries {
             pstmt.setTime(3, time);
             ResultSet res = pstmt.executeQuery();
             while (res.next()) {
-                appointment = new Appointment(d, time, res.getInt(4), partnerID);
+                appointment = new Appointment(d, time, res.getTime(3), res.getInt(4), partnerID);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,7 +58,43 @@ public class AppointmentQueries {
         return appointment;
 
     }
-
+    
+    public static void getDayAppointmentList(JTable appointmentTable, java.util.Date date, int partnerID, int cols) {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        DefaultTableModel model = (DefaultTableModel)appointmentTable.getModel();
+        ArrayList<Appointment> appointments = new ArrayList<Appointment>();
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        try {
+            pstmt = con.prepareStatement("SELECT startTime,endTime,patientID FROM Appointment WHERE date = ? AND partnerID = ?");
+            pstmt.setDate(1, sqlDate);
+            pstmt.setInt(2, partnerID);
+            ResultSet res = pstmt.executeQuery();
+            while (res.next()) {
+            	LocalTime startTime = res.getTime(1).toLocalTime();
+            	LocalTime endTime = res.getTime(2).toLocalTime();
+            	int cellsTaken = ((int) MINUTES.between(startTime,endTime))/20;
+            	int startCell = ((int) MINUTES.between(LocalTime.parse("09:00:00"),startTime))/20;
+            	Patient tempPatient = PatientQueries.getByID(res.getInt(3));
+            	for (int i = startCell; i < cellsTaken+startCell;i++) {
+            		model.setValueAt(res.getInt(3)+" "+tempPatient.getFullName(),i, cols);
+            	}
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+    }
+    
     public static ArrayList<Appointment> getAllAppointments() {
         Database db = new Database();
         Connection con = db.getCon();
@@ -63,8 +106,9 @@ public class AppointmentQueries {
             while (res.next()) {
                 appointments.add(new Appointment(res.getDate(1),
                     res.getTime(2),
-                    res.getInt(3),
-                    res.getInt(4)));
+                    res.getTime(3),
+                    res.getInt(4),
+                    res.getInt(5)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,11 +131,12 @@ public class AppointmentQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("INSERT INTO Appointment VALUES (?, ?, ?, ?)");
+            pstmt = con.prepareStatement("INSERT INTO Appointment VALUES (?, ?, ?, ?, ?)");
             pstmt.setDate(1, appointment.getDate());
             pstmt.setTime(2, appointment.getStartTime());
-            pstmt.setInt(3, appointment.getPatientID());
-            pstmt.setInt(4, appointment.getPartnerID());
+            pstmt.setTime(3, appointment.getEndTime());
+            pstmt.setInt(4, appointment.getPatientID());
+            pstmt.setInt(5, appointment.getPartnerID());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -164,9 +209,13 @@ public class AppointmentQueries {
             .getAppointment(DateHandler.newDate(2017, 12, 25), 0, Time.valueOf("12:00:00")));
 
         Appointment app = new Appointment(DateHandler.newDate(2000, 8, 27),
-            Time.valueOf("03:45:00"), 0, 0);
+            Time.valueOf("03:45:00"),Time.valueOf("04:45:00"), 0, 0);
+        Appointment app2 = new Appointment(DateHandler.newDate(2017, 11, 22),
+                Time.valueOf("09:00:00"),Time.valueOf("11:00:00"), 0, 0);
+        
         System.out.println(app);
         AppointmentQueries.insertAppointment(app);
+        AppointmentQueries.insertAppointment(app2);
 
         System.out.println(AppointmentQueries.getAllAppointments());
 
@@ -175,12 +224,18 @@ public class AppointmentQueries {
         PatientQueries
             .insertPatient(new Patient(1, "Miss", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
                 "0783649208", testAddress));
-        app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"), 1, 0);
+        app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"),Time.valueOf("04:45:00"), 1, 0);
+        Appointment app3 = new Appointment(DateHandler.newDate(2017, 11, 22),
+                Time.valueOf("12:00:00"),Time.valueOf("12:40:00"), 1, 1);
+        AppointmentQueries.insertAppointment(app3);
         AppointmentQueries.updateAppointment(app);
         System.out.println(AppointmentQueries.getAllAppointments());
 
-        AppointmentQueries.deleteAppointment(app.getDate(), app.getPartnerID(), app.getStartTime());
-        PatientQueries.deletePatient(1);
+//        AppointmentQueries.deleteAppointment(app.getDate(), app.getPartnerID(), app.getStartTime());
+//        AppointmentQueries.deleteAppointment(app2.getDate(), app2.getPartnerID(), app2.getStartTime());
+//        AppointmentQueries.deleteAppointment(app3.getDate(), app3.getPartnerID(), app3.getStartTime());
+//        PatientQueries.deletePatient(1);
+        
         System.out.println(AppointmentQueries.getAllAppointments());
 
     }

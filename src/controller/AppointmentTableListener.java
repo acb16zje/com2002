@@ -27,6 +27,7 @@ public class AppointmentTableListener implements ActionListener {
     private JButton cancelButton;
     private JButton viewButton;
     private String changingSpinner;
+    private int partnerID;
 
     /**
      * Initial constructor for generator the startup table
@@ -42,7 +43,7 @@ public class AppointmentTableListener implements ActionListener {
     }
 
     public AppointmentTableListener(JComboBox w, JComboBox m, JComboBox y, Calendar c, JTable table,
-        JButton cancelButton, JButton viewButton, String s) {
+        JButton cancelButton, JButton viewButton, String s, int partnerID) {
         this.partnerWeek = w;
         this.partnerMonth = m;
         this.partnerYear = y;
@@ -51,6 +52,7 @@ public class AppointmentTableListener implements ActionListener {
         this.cancelButton = cancelButton;
         this.viewButton = viewButton;
         this.changingSpinner = s;
+        this.partnerID = partnerID;
     }
 
     /**
@@ -121,6 +123,18 @@ public class AppointmentTableListener implements ActionListener {
             partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
         }
         String selectedWeek = ((String) partnerWeek.getSelectedItem()).substring(0, 10);
+
         generateAppointmentTable(selectedWeek, table, cancelButton, viewButton);
+        Date monDate;
+		try {
+			monDate = timeFormat.parse(selectedWeek);
+			Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+	        for (int i=0; i<5; i++) {
+	        	AppointmentQueries.getDayAppointmentList(table,daysInWeekList[i],partnerID,i+1);
+	        }
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     }
 }

@@ -2,9 +2,7 @@ package view;
 
 import controller.DateListener;
 import controller.HealthCarePlanQueries;
-import controller.PatientQueries;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.Calendar;
@@ -19,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
-import model.Patient;
 import util.CharacterFilter;
 import util.IntegerFilter;
 
@@ -239,7 +236,9 @@ public class PatientEditor extends JDialog {
                 System.out.println(comboTitle.getSelectedItem());
                 System.out.println(foreName.getText());
                 System.out.println(surName.getText());
-                System.out.println(String.valueOf(comboDay.getSelectedItem()) + "-" + String.valueOf(comboMonth.getSelectedItem()) + "-" + String.valueOf(comboYear.getSelectedItem()));
+                System.out.println(String.valueOf(comboDay.getSelectedItem()) + "-" + String
+                    .valueOf(comboMonth.getSelectedItem()) + "-" + String
+                    .valueOf(comboYear.getSelectedItem()));
                 System.out.println(phoneNo.getText());
                 System.out.println(houseNo.getText());
                 System.out.println(street.getText());

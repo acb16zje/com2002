@@ -1,5 +1,6 @@
 package view;
 
+import controller.AppointmentQueries;
 import controller.AppointmentTableListener;
 import controller.PatientQueries;
 import java.awt.BorderLayout;
@@ -7,6 +8,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -155,15 +157,15 @@ public class SecretaryInterface extends JFrame {
         // Listeners for dates
         dentistMonth.addActionListener(
             new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-                dentistTable, dentistCancelButton, dentistViewButton, "month"));
+                dentistTable, dentistCancelButton, dentistViewButton, "month", 0));
 
         dentistYear.addActionListener(
             new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-                dentistTable, dentistCancelButton, dentistViewButton, "year"));
+                dentistTable, dentistCancelButton, dentistViewButton, "year", 0));
 
         dentistWeek.addActionListener(
             new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-                dentistTable, dentistCancelButton, dentistViewButton, "week"));
+                dentistTable, dentistCancelButton, dentistViewButton, "week", 0));
 
         // Disable the cancel and view appointment button when it is clicked on empty slot
         AppointmentTableListener
@@ -178,6 +180,21 @@ public class SecretaryInterface extends JFrame {
             dialog.setModal(true);
             dialog.setVisible(true);
         });
+
+        //printing appointment on dentist table
+        SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String selectedMon = ((String) dentistWeek.getSelectedItem()).substring(0, 10);
+        Date monDate;
+        try {
+            monDate = timeFormat.parse(selectedMon);
+            Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+            for (int i = 0; i < 5; i++) {
+                AppointmentQueries.getDayAppointmentList(dentistTable, daysInWeekList[i], 0, i + 1);
+            }
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
 
         // Main panel for hygienist appointment
         JPanel hygienistAppointment = new JPanel();
@@ -274,17 +291,17 @@ public class SecretaryInterface extends JFrame {
         hygienistWeek.addActionListener(
             new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
                 hygienistCalendar, hygienistTable, hygienistCancelButton, hygienistViewButton,
-                "week"));
+                "week", 1));
 
         hygienistMonth.addActionListener(
             new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
                 hygienistCalendar, hygienistTable, hygienistCancelButton, hygienistViewButton,
-                "month"));
+                "month", 1));
 
         hygienistYear.addActionListener(
             new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
                 hygienistCalendar, hygienistTable, hygienistCancelButton, hygienistViewButton,
-                "year"));
+                "year", 1));
 
         // Disable the cancel and view appointment button when it is clicked on empty slot
         AppointmentTableListener
@@ -299,6 +316,21 @@ public class SecretaryInterface extends JFrame {
             dialog.setVisible(true);
         });
         hygienistAppointmentPanel.add(hygienistSearchButton);
+
+        //printing appointment on dentist table
+        String hygienedMon = ((String) hygienistWeek.getSelectedItem()).substring(0, 10);
+        Date hygieneMonDate;
+        try {
+            hygieneMonDate = timeFormat.parse(hygienedMon);
+            Date[] daysInWeekListHygiene = WeekGenerator.daysInWeekList(hygieneMonDate);
+            for (int i = 0; i < 5; i++) {
+                AppointmentQueries
+                    .getDayAppointmentList(hygienistTable, daysInWeekListHygiene[i], 1, i + 1);
+            }
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
 
         // UI for patient, separate tab
         JPanel patient = new JPanel();

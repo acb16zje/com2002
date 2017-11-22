@@ -37,6 +37,9 @@ public class Database {
         return con;
     }
 
+    /**
+     * Close connection
+     */
     public void closeConnection() {
         if (con != null) {
             try {
@@ -44,10 +47,13 @@ public class Database {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            System.out.println("Connection closed");
         }
     }
 
+    /**
+     * Close statement
+     * @param st The statement
+     */
     public void closeStmt(Statement st) {
         if (st != null) {
             try {
