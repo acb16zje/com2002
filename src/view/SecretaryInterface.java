@@ -3,11 +3,14 @@ package view;
 import controller.AppointmentQueries;
 import controller.AppointmentTableListener;
 import controller.PatientQueries;
+import model.Appointment;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,6 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
+
+import util.DateHandler;
 import util.IntegerFilter;
 import util.WeekGenerator;
 
@@ -135,16 +140,24 @@ public class SecretaryInterface extends JFrame {
         JButton dentistViewButton = new JButton("View Appointment");
         dentistViewButton.setEnabled(false);
         dentistViewButton.addActionListener(e -> {
-            int rowSelected = dentistTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select an appointment!");
-            } else {
-                ViewAppointment dialog = new ViewAppointment();
-                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                dialog.setModal(true);
-                dialog.setVisible(true);
-            }
+                int rowSelected = dentistTable.getSelectedRow();
+                int colSelected = dentistTable.getSelectedColumn();
+                int patientID = Integer.parseInt(((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(0,1));
+                String time = ((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(2,7);
+                String date = ((String)dentistTable.getColumnName(colSelected)).substring(4, 14);
+                Appointment viewApp;
+    			try {
+    				viewApp = AppointmentQueries.getAppointment( new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 0, patientID, Time.valueOf(time+":00"));
+    				ViewAppointment dialog = new ViewAppointment(viewApp);
+    		        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    		        dialog.setModal(true);
+    		        dialog.setVisible(true);
+    			} catch (ParseException e1) {
+    				// TODO Auto-generated catch block
+    				e1.printStackTrace();
+    		}
         });
+           
         dentistAppointmentPanel.add(dentistViewButton);
 
         // Generate the appointment table for dentist
@@ -269,14 +282,21 @@ public class SecretaryInterface extends JFrame {
         hygienistViewButton.setEnabled(false);
         hygienistViewButton.addActionListener(e -> {
             int rowSelected = hygienistTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select an appointment!");
-            } else {
-                ViewAppointment dialog = new ViewAppointment();
-                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                dialog.setModal(true);
-                dialog.setVisible(true);
-            }
+            int colSelected = hygienistTable.getSelectedColumn();
+            int patientID = Integer.parseInt(((String)hygienistTable.getValueAt(rowSelected, colSelected)).substring(0,1));
+            String time = ((String)hygienistTable.getValueAt(rowSelected, colSelected)).substring(2,7);
+            String date = ((String)hygienistTable.getColumnName(colSelected)).substring(4, 14);
+            Appointment viewApp;
+			try {
+				viewApp = AppointmentQueries.getAppointment( new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 1, patientID, Time.valueOf(time+":00"));
+				ViewAppointment dialog = new ViewAppointment(viewApp);
+		        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		        dialog.setModal(true);
+		        dialog.setVisible(true);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         });
         hygienistAppointmentPanel.add(hygienistViewButton);
 
@@ -317,7 +337,7 @@ public class SecretaryInterface extends JFrame {
         });
         hygienistAppointmentPanel.add(hygienistSearchButton);
 
-        //printing appointment on dentist table
+        //printing appointment on hygienist table
         String hygienedMon = ((String) hygienistWeek.getSelectedItem()).substring(0, 10);
         Date hygieneMonDate;
         try {
