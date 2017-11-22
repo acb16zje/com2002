@@ -107,10 +107,16 @@ public class AppointmentTableListener implements ActionListener {
                 Object cell = partnerTable.getValueAt(row, column);
                 if (column == 0 || cell == null) {
                     cancelButton.setEnabled(false);
-                    viewButton.setEnabled(false);
-                } else {
+                    viewButton.setEnabled(false);  
+                } 
+                else {
+                	if (((String)cell).substring(0,1).equals("0")) {
+                    	cancelButton.setEnabled(true);
+                        viewButton.setEnabled(false);
+                	} else {
                     cancelButton.setEnabled(true);
                     viewButton.setEnabled(true);
+                	}
                 }
 
             }
@@ -126,6 +132,9 @@ public class AppointmentTableListener implements ActionListener {
                 Object cell = partnerTable.getValueAt(row, column);
                 if (column == 0 || cell == null) {
                     cancelButton.setEnabled(false);
+                    viewButton.setEnabled(false);
+                } else if (cell == "Holiday") {
+                	cancelButton.setEnabled(true);
                     viewButton.setEnabled(false);
                 } else {
                     cancelButton.setEnabled(true);

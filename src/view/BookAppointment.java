@@ -1,6 +1,7 @@
 package view;
 
 import controller.AppointmentQueries;
+import controller.BookingListener;
 import controller.DateListener;
 import model.Appointment;
 
@@ -25,6 +26,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
+
+import util.DateHandler;
 import util.IntegerFilter;
 
 public class BookAppointment extends JDialog {
@@ -105,14 +108,21 @@ public class BookAppointment extends JDialog {
         comboStartTime.setBounds(147, 193, 68, 24);
         comboStartTime.setEditable(false);
         contentPanel.add(comboStartTime);
+        
+        //get all available time
+        Boolean[] avaibilityBoolean = AppointmentQueries.getAvailableTime( DateHandler.newDate((int) comboYear.getSelectedItem(),(int)comboMonth.getSelectedItem(),(int)comboDay.getSelectedItem()), partnerID);
+        int cellValue = 0;
         for (int hour = 9; hour < 17; hour++) {
             for (int min = 0; min < 6; min += 2) {
-                if (hour == 9) {
-                    comboStartTime
-                        .addItem("0" + String.valueOf(hour) + ":" + String.valueOf(min) + "0");
-                } else {
-                    comboStartTime.addItem(String.valueOf(hour) + ":" + String.valueOf(min) + "0");
-                }
+            	if (avaibilityBoolean[cellValue]) {
+	                if (hour == 9) {
+	                    comboStartTime
+	                        .addItem("0" + String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+	                } else {
+	                    comboStartTime.addItem(String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+	                }
+            	}
+            	cellValue++;
             }
         }
 
@@ -171,28 +181,39 @@ public class BookAppointment extends JDialog {
         comboEndTime.setVisible(false);
         comboEndTime.setEnabled(false);
         contentPanel.add(comboEndTime);
+        int cellEndValue = 0;
         for (int hour = 9; hour <= 17; hour++) {
             if (hour == 9) {
                 for (int min = 2; min < 6; min += 2) {
-                    comboEndTime
-                        .addItem("0" + String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+                	if (avaibilityBoolean[cellEndValue]) {
+	                    comboEndTime
+	                        .addItem("0" + String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+                	}
+                	cellEndValue++;
                 }
             } else if (hour == 17) {
-                comboEndTime.addItem("17:00");
+            	if (avaibilityBoolean[cellEndValue]) {
+            		comboEndTime.addItem("17:00");
+            	}
             } else {
                 for (int min = 0; min < 6; min += 2) {
-                    comboEndTime.addItem(String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+                	if (avaibilityBoolean[cellEndValue]) {
+                		comboEndTime.addItem(String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+                	}
+                	cellEndValue++;
                 }
             }
         }
 
         // Listener for start month and year
-        comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
-        comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
+        comboDay.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboStartTime,"Start",partnerID));
+        comboMonth.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboStartTime,"Start",partnerID));
+        comboYear.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboStartTime,"Start",partnerID));
 
         // Listener for end month and year
-        comboEndMonth.addActionListener(new DateListener(comboEndDay, comboEndMonth, comboEndYear));
-        comboEndYear.addActionListener(new DateListener(comboEndDay, comboEndMonth, comboEndYear));
+        comboEndDay.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboEndTime,"End",partnerID));
+        comboEndMonth.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboEndTime,"End",partnerID));
+        comboEndYear.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboEndTime,"End",partnerID));
 
         // Button group for check up, treatment. holiday
         ButtonGroup treatmentGroup = new ButtonGroup();
