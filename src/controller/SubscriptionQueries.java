@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import model.DateHandler;
+import util.DateHandler;
 import model.Subscription;
 
 public class SubscriptionQueries {
@@ -53,7 +53,7 @@ public class SubscriptionQueries {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
-        ArrayList<Subscription> subscriptions = new ArrayList<Subscription>();
+        ArrayList<Subscription> subscriptions = new ArrayList<>();
         try {
             pstmt = con.prepareStatement("SELECT * FROM Subscription");
             ResultSet res = pstmt.executeQuery();

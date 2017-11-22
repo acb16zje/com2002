@@ -1,13 +1,17 @@
 package view;
 
+import controller.AppointmentQueries;
 import controller.AppointmentTableListener;
 import controller.PatientQueries;
+import model.Appointment;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,6 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
+
+import util.DateHandler;
 import util.IntegerFilter;
 import util.WeekGenerator;
 
@@ -98,20 +104,6 @@ public class SecretaryInterface extends JFrame {
         dentistTable.setFillsViewportHeight(true);
         JScrollPane dentistScrollPane = new JScrollPane(dentistTable);
         dentistAppointment.add(dentistScrollPane, BorderLayout.CENTER);
-        AppointmentTableListener.generateAppointmentTable(todayAsString, dentistTable);
-
-        // Listeners for dates
-        dentistMonth.addActionListener(
-            new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-                dentistTable, "month"));
-
-        dentistYear.addActionListener(
-            new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-                dentistTable, "year"));
-
-        dentistWeek.addActionListener(
-            new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
-                dentistTable, "week"));
 
         // Bottom panel, contain all the buttons
         JPanel dentistAppointmentPanel = new JPanel();
@@ -120,7 +112,7 @@ public class SecretaryInterface extends JFrame {
         // Book appointment button for dentist
         JButton dentistBookButton = new JButton("Book Appointment");
         dentistBookButton.addActionListener(e -> {
-            BookAppointment dialog = new BookAppointment("Check-up");
+            BookAppointment dialog = new BookAppointment("Check-up",0);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
@@ -148,44 +140,74 @@ public class SecretaryInterface extends JFrame {
         JButton dentistViewButton = new JButton("View Appointment");
         dentistViewButton.setEnabled(false);
         dentistViewButton.addActionListener(e -> {
-            int rowSelected = dentistTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select an appointment!");
-            } else {
-                ViewAppointment dialog = new ViewAppointment();
-                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                dialog.setModal(true);
-                dialog.setVisible(true);
-            }
+                int rowSelected = dentistTable.getSelectedRow();
+                int colSelected = dentistTable.getSelectedColumn();
+                int patientID = Integer.parseInt(((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(0,1));
+                String time = ((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(2,7);
+                String date = ((String)dentistTable.getColumnName(colSelected)).substring(4, 14);
+                Appointment viewApp;
+    			try {
+    				viewApp = AppointmentQueries.getAppointment( new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 0, patientID, Time.valueOf(time+":00"));
+    				ViewAppointment dialog = new ViewAppointment(viewApp);
+    		        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    		        dialog.setModal(true);
+    		        dialog.setVisible(true);
+    			} catch (ParseException e1) {
+    				// TODO Auto-generated catch block
+    				e1.printStackTrace();
+    		}
         });
+           
         dentistAppointmentPanel.add(dentistViewButton);
 
-        // Disable the view appointment button when it is clicked on empty slot
-        dentistTable.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                JTable target = (JTable) e.getSource();
-                int column = target.getSelectedColumn();
-                if (column == 0) {
-                    dentistCancelButton.setEnabled(false);
-                    dentistViewButton.setEnabled(false);
-                } else {
-                    dentistCancelButton.setEnabled(true);
-                    dentistViewButton.setEnabled(true);
-                }
+        // Generate the appointment table for dentist
+        AppointmentTableListener dentistAppointmentTable = new AppointmentTableListener(
+            dentistTable, dentistCancelButton, dentistViewButton);
+        dentistAppointmentTable
+            .generateAppointmentTable(todayAsString, dentistTable, dentistCancelButton,
+                dentistViewButton);
 
-            }
-        });
+        // Listeners for dates
+        dentistMonth.addActionListener(
+            new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
+                dentistTable, dentistCancelButton, dentistViewButton, "month", 0));
+
+        dentistYear.addActionListener(
+            new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
+                dentistTable, dentistCancelButton, dentistViewButton, "year", 0));
+
+        dentistWeek.addActionListener(
+            new AppointmentTableListener(dentistWeek, dentistMonth, dentistYear, dentistCalendar,
+                dentistTable, dentistCancelButton, dentistViewButton, "week", 0));
+
+        // Disable the cancel and view appointment button when it is clicked on empty slot
+        AppointmentTableListener
+            .buttonDisabler(dentistTable, dentistCancelButton, dentistViewButton);
 
         // Search appointment button for dentist
         JButton dentistSearchButton = new JButton("Search Appointment");
         dentistAppointmentPanel.add(dentistSearchButton);
-        dentistSearchButton.setFont(new Font("Dialog", Font.BOLD, 12));
         dentistSearchButton.addActionListener(e -> {
             AppointmentSearch dialog = new AppointmentSearch();
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
         });
+
+        //printing appointment on dentist table
+        SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String selectedMon = ((String) dentistWeek.getSelectedItem()).substring(0, 10);
+        Date monDate;
+        try {
+            monDate = timeFormat.parse(selectedMon);
+            Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
+            for (int i = 0; i < 5; i++) {
+                AppointmentQueries.getDayAppointmentList(dentistTable, daysInWeekList[i], 0, i + 1);
+            }
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
 
         // Main panel for hygienist appointment
         JPanel hygienistAppointment = new JPanel();
@@ -225,23 +247,6 @@ public class SecretaryInterface extends JFrame {
         hygienistTable.setFillsViewportHeight(true);
         JScrollPane hygienistScrollPane = new JScrollPane(hygienistTable);
         hygienistAppointment.add(hygienistScrollPane, BorderLayout.CENTER);
-        AppointmentTableListener.generateAppointmentTable(todayAsString, hygienistTable);
-
-        // Listeners for dates
-        hygienistMonth.addActionListener(
-            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
-                hygienistCalendar,
-                hygienistTable, "month"));
-
-        hygienistYear.addActionListener(
-            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
-                hygienistCalendar,
-                hygienistTable, "year"));
-
-        hygienistWeek.addActionListener(
-            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
-                hygienistCalendar,
-                hygienistTable, "week"));
 
         // Contain book, cancel, view and search appointment button
         JPanel hygienistAppointmentPanel = new JPanel();
@@ -249,7 +254,7 @@ public class SecretaryInterface extends JFrame {
 
         JButton hygienistBookButton = new JButton("Book Appointment");
         hygienistBookButton.addActionListener(e -> {
-            BookAppointment dialog = new BookAppointment("Hygiene");
+            BookAppointment dialog = new BookAppointment("Hygiene",1);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
@@ -277,32 +282,50 @@ public class SecretaryInterface extends JFrame {
         hygienistViewButton.setEnabled(false);
         hygienistViewButton.addActionListener(e -> {
             int rowSelected = hygienistTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select an appointment!");
-            } else {
-                ViewAppointment dialog = new ViewAppointment();
-                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                dialog.setModal(true);
-                dialog.setVisible(true);
-            }
+            int colSelected = hygienistTable.getSelectedColumn();
+            int patientID = Integer.parseInt(((String)hygienistTable.getValueAt(rowSelected, colSelected)).substring(0,1));
+            String time = ((String)hygienistTable.getValueAt(rowSelected, colSelected)).substring(2,7);
+            String date = ((String)hygienistTable.getColumnName(colSelected)).substring(4, 14);
+            Appointment viewApp;
+			try {
+				viewApp = AppointmentQueries.getAppointment( new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 1, patientID, Time.valueOf(time+":00"));
+				ViewAppointment dialog = new ViewAppointment(viewApp);
+		        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		        dialog.setModal(true);
+		        dialog.setVisible(true);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         });
         hygienistAppointmentPanel.add(hygienistViewButton);
 
-        // Disable the view appointment button when it is clicked on empty slot
-        hygienistTable.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                JTable target = (JTable) e.getSource();
-                int column = target.getSelectedColumn();
-                if (column == 0) {
-                    hygienistCancelButton.setEnabled(false);
-                    hygienistViewButton.setEnabled(false);
-                } else {
-                    hygienistCancelButton.setEnabled(true);
-                    hygienistViewButton.setEnabled(true);
-                }
+        // Generate the appointment table for hygienist
+        AppointmentTableListener hygienistAppointmentTable = new AppointmentTableListener(
+            hygienistTable, hygienistCancelButton, hygienistViewButton);
+        hygienistAppointmentTable
+            .generateAppointmentTable(todayAsString, hygienistTable, hygienistCancelButton,
+                hygienistViewButton);
 
-            }
-        });
+        // Listeners for dates
+        hygienistWeek.addActionListener(
+            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
+                hygienistCalendar, hygienistTable, hygienistCancelButton, hygienistViewButton,
+                "week", 1));
+
+        hygienistMonth.addActionListener(
+            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
+                hygienistCalendar, hygienistTable, hygienistCancelButton, hygienistViewButton,
+                "month", 1));
+
+        hygienistYear.addActionListener(
+            new AppointmentTableListener(hygienistWeek, hygienistMonth, hygienistYear,
+                hygienistCalendar, hygienistTable, hygienistCancelButton, hygienistViewButton,
+                "year", 1));
+
+        // Disable the cancel and view appointment button when it is clicked on empty slot
+        AppointmentTableListener
+            .buttonDisabler(hygienistTable, hygienistCancelButton, hygienistViewButton);
 
         // Hygienist search button
         JButton hygienistSearchButton = new JButton("Search Appointment");
@@ -313,6 +336,21 @@ public class SecretaryInterface extends JFrame {
             dialog.setVisible(true);
         });
         hygienistAppointmentPanel.add(hygienistSearchButton);
+
+        //printing appointment on hygienist table
+        String hygienedMon = ((String) hygienistWeek.getSelectedItem()).substring(0, 10);
+        Date hygieneMonDate;
+        try {
+            hygieneMonDate = timeFormat.parse(hygienedMon);
+            Date[] daysInWeekListHygiene = WeekGenerator.daysInWeekList(hygieneMonDate);
+            for (int i = 0; i < 5; i++) {
+                AppointmentQueries
+                    .getDayAppointmentList(hygienistTable, daysInWeekListHygiene[i], 1, i + 1);
+            }
+        } catch (ParseException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
 
         // UI for patient, separate tab
         JPanel patient = new JPanel();
@@ -364,8 +402,7 @@ public class SecretaryInterface extends JFrame {
         patientPanel.setLayout(new BoxLayout(patientPanel, BoxLayout.X_AXIS));
 
         // Get the list of patients from Database
-        PatientQueries patientQueries = new PatientQueries();
-        patientQueries.getPatientList(patientTable);
+        PatientQueries.getPatientList(patientTable);
 
         // Bottom panel
         JPanel editorPanel = new JPanel();
@@ -375,7 +412,7 @@ public class SecretaryInterface extends JFrame {
         JButton addPatientButton = new JButton("Add Patient");
         editorPanel.add(addPatientButton);
         addPatientButton.addActionListener(e -> {
-            PatientEditor frame = new PatientEditor("Add");
+            PatientEditor frame = new PatientEditor("Add", patientTable);
             frame.setModal(true);
             frame.setVisible(true);
         });
@@ -389,7 +426,7 @@ public class SecretaryInterface extends JFrame {
             if (rowSelected == -1) {
                 JOptionPane.showMessageDialog(null, "Select a patient!");
             } else {
-                PatientEditor frame = new PatientEditor("Edit");
+                PatientEditor frame = new PatientEditor("Edit", patientTable);
                 frame.setModal(true);
                 frame.setVisible(true);
             }

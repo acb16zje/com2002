@@ -1,10 +1,14 @@
 package view;
 
+import controller.AppointmentQueries;
 import controller.DateListener;
+import model.Appointment;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,7 +32,7 @@ public class BookAppointment extends JDialog {
     /**
      * Create the dialog.
      */
-    public BookAppointment(String radioButton) {
+    public BookAppointment(String radioButton, int partnerID) {
         // Calendar object to create date combobox
         Calendar tempCal = new GregorianCalendar();
 
@@ -215,6 +219,8 @@ public class BookAppointment extends JDialog {
             endTimeLabel.setEnabled(false);
             comboEndTime.setVisible(false);
             comboEndTime.setEnabled(false);
+            patientID.setVisible(true);
+            patientID.setEnabled(true);
         });
         treatmentGroup.add(checkUpRadioButton);
 
@@ -235,6 +241,8 @@ public class BookAppointment extends JDialog {
             endTimeLabel.setEnabled(false);
             comboEndTime.setVisible(false);
             comboEndTime.setEnabled(false);
+            patientID.setVisible(true);
+            patientID.setEnabled(true);
         });
         treatmentGroup.add(treatmentRadioButton);
 
@@ -255,9 +263,11 @@ public class BookAppointment extends JDialog {
             endTimeLabel.setEnabled(true);
             comboEndTime.setVisible(true);
             comboEndTime.setEnabled(true);
+            patientID.setVisible(false);
+            patientID.setEnabled(false);
         });
         treatmentGroup.add(holidayRadioButton);
-        
+
         // Button panel
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -268,75 +278,111 @@ public class BookAppointment extends JDialog {
         okButton.addActionListener(e -> {
             // insert SQL query here
 
-        	boolean completed = false;
+            boolean completed = false;
             // Check if all field are filled in
             Component[] components = contentPanel.getComponents();
             for (Component comp : components) {
-            	if (comp instanceof JRadioButton) {
-            		completed = ((JRadioButton) comp).isSelected();
-            		if (completed) {
-            			break;
-            		}
-            	}
+                if (comp instanceof JRadioButton) {
+                    completed = ((JRadioButton) comp).isSelected();
+                    if (completed) {
+                        break;
+                    }
+                }
             }
-            
+
             components = contentPanel.getComponents();
             for (Component comp1 : components) {
                 // Cast comp to JComboBox / JTextField to get the values
                 if (comp1 instanceof JTextField) {
-                    if (((JTextField) comp1).getText().isEmpty()) {
+                    if (((JTextField) comp1).getText().isEmpty() && comp1.isShowing()) {
                         completed = false;
                         break;
                     }
-                }     
+                }
             }
-            
-            if (completed) {
 
-	            // Check if appointment date is valid
-            	int inputYear = (int)comboYear.getSelectedItem();
-            	int inputMonth = (int)comboMonth.getSelectedItem() - 1;
-            	int inputDay = (int)comboDay.getSelectedItem();
-	            Calendar inputDate = new GregorianCalendar( inputYear,inputMonth, inputDay);
-	            
-	            if (holidayRadioButton.isSelected()) {
-	            	SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm"); 
-	            	try {
-	            		String startDateStr = comboDay.getSelectedItem()+"/"+comboMonth.getSelectedItem()+"/"+comboYear.getSelectedItem()+" "+comboStartTime.getSelectedItem();
-	                	String endDateStr = comboEndDay.getSelectedItem()+"/"+comboEndMonth.getSelectedItem()+"/"+comboEndYear.getSelectedItem()+" "+comboEndTime.getSelectedItem();
-	            		Date startDate = timeFormatCompare.parse(startDateStr);
-	                	Calendar startCal = Calendar.getInstance();
-	                	startCal.setTime(startDate);
-	                	Date endDate = timeFormatCompare.parse(endDateStr);
-	                	Calendar endCal = Calendar.getInstance();
-	                	endCal.setTime(endDate);
-						int diff = endDate.compareTo(startDate);
-						if (diff <= 0 || !isValidDate(startCal) || !isValidDate(endCal)) {
-		            		JOptionPane.showMessageDialog(null, "Invalid Time");
-		            	}
-						else {
-							dispose();
+            if (completed) {
+                // Check if appointment date is valid
+                int inputYear = (int) comboYear.getSelectedItem();
+                int inputMonth = (int) comboMonth.getSelectedItem() - 1;
+                int inputDay = (int) comboDay.getSelectedItem();
+                Calendar inputDate = new GregorianCalendar(inputYear, inputMonth, inputDay);
+
+                if (holidayRadioButton.isSelected()) {
+                    SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    try {
+                        String startDateStr =
+                            comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/"
+                                + comboYear.getSelectedItem() + " " + comboStartTime
+                                .getSelectedItem();
+                        String endDateStr =
+                            comboEndDay.getSelectedItem() + "/" + comboEndMonth.getSelectedItem()
+                                + "/" + comboEndYear.getSelectedItem() + " " + comboEndTime
+                                .getSelectedItem();
+                        Date startDate = timeFormatCompare.parse(startDateStr);
+                        Calendar startCal = Calendar.getInstance();
+                        startCal.setTime(startDate);
+                        Date endDate = timeFormatCompare.parse(endDateStr);
+                        Calendar endCal = Calendar.getInstance();
+                        endCal.setTime(endDate);
+                        int diff = endDate.compareTo(startDate);
+                        System.out.println(diff);
+                        if (diff <= 0 || !isValidDate(startCal) || !isValidDate(endCal)) {
+                            JOptionPane.showMessageDialog(null, "Invalid Time");
+                        } else {
+                        	Calendar holCal = GregorianCalendar.getInstance();
+                        	holCal.setTime(startDate);
+                        	long totalDays = endDate.getTime() - startDate.getTime();
+                        	float daysBetween = (totalDays / (1000*60*60*24))+1;
+                        	if (daysBetween > 1) {
+                        		AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(holCal.getTime().getTime()),new java.sql.Time(startDate.getTime()),Time.valueOf("17:00:00"),0,partnerID));
+	                        	holCal.add(Calendar.DAY_OF_YEAR, 1);
+                        		for (int i = 1;i<daysBetween-1;i++) {
+	                        		AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(holCal.getTime().getTime()),Time.valueOf("09:00:00"),Time.valueOf("17:00:00"),0,partnerID));
+	                        		holCal.add(Calendar.DAY_OF_YEAR, 1);
+                        		}
+	                        	AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(holCal.getTime().getTime()),Time.valueOf("09:00:00"),new java.sql.Time(endDate.getTime()),0,partnerID));
+                        	} else {
+                        		AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(holCal.getTime().getTime()),new java.sql.Time(startDate.getTime()),new java.sql.Time(endDate.getTime()),0,partnerID));
+                        	}
+	                            dispose();
+                        }
+                    } catch (ParseException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                } else {
+                    if (isValidDate(inputDate)) {
+                    	
+                    	SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    	String startDateStr =
+                                comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/"
+                                    + comboYear.getSelectedItem() + " " + comboStartTime
+                                    .getSelectedItem();
+                    	Date startDate;
+						try {
+							startDate = timeFormatCompare.parse(startDateStr);
+							Calendar startCal = Calendar.getInstance();
+	                        startCal.setTime(startDate);
+	                    	if (treatmentRadioButton.isSelected()) {
+	                    		startCal.add(Calendar.HOUR, 1);
+	                    	} else if (checkUpRadioButton.isSelected()) {
+	                    		startCal.add(Calendar.MINUTE, 20);
+	                    	}
+	                		AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(startDate.getTime()),new java.sql.Time(startDate.getTime()),new java.sql.Time(startCal.getTime().getTime()),Integer.parseInt(patientID.getText()),partnerID));
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-	            	
-	            }
-	            else {
-		            if (isValidDate(inputDate)) {
-		                // insert SQL query here
-		                dispose();
-		            } 
-		            else {
-		                JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
-		            }
-	            }
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Please Complete");
             }
-            else {
-            	JOptionPane.showMessageDialog(null, "Please Complete");
-            }
-            
+
         });
         okButton.setActionCommand("OK");
         buttonPane.add(okButton);

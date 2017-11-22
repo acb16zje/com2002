@@ -46,11 +46,38 @@ public class AddressQueries {
 
     }
 
+    public static boolean isUniqueAddress(String houseNo, String postcode) {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement("SELECT COUNT(*) FROM Address WHERE houseNumber = ? AND postCode = ?");
+            pstmt.setString(1, houseNo);
+            pstmt.setString(2, postcode);
+            ResultSet res = pstmt.executeQuery();
+            res.next();
+            return res.getInt(1) == 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+
+        return false;
+    }
+
     public static ArrayList<Address> getAllAddresses() {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
-        ArrayList<Address> addresses = new ArrayList<Address>();
+        ArrayList<Address> addresses = new ArrayList<>();
         try {
             pstmt = con.prepareStatement("SELECT * FROM Address");
             ResultSet res = pstmt.executeQuery();
@@ -158,26 +185,4 @@ public class AddressQueries {
         }
 
     }
-
-    public static void main(String[] args) {
-
-        Address blankAddress = AddressQueries.getAddress("-", "-");
-        System.out.println(blankAddress);
-
-        Address newAddress = new Address("1", "Main Street", "Central", "Citytown", "P0ST CDE");
-        AddressQueries.insertAddress(newAddress);
-
-        System.out.println(AddressQueries.getAllAddresses());
-
-        Address updatedAddress = new Address("2", "Other Street", "West", "Towncity", "HELL0");
-        AddressQueries.updateAddress("1", "P0ST CDE", updatedAddress);
-
-        System.out.println(AddressQueries.getAllAddresses());
-
-        AddressQueries.deleteAddress("2", "HELL0");
-
-        System.out.println(AddressQueries.getAllAddresses());
-
-    }
-
 }

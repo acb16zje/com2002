@@ -5,17 +5,56 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import model.Address;
-import model.DateHandler;
 import model.Patient;
 
 public class PatientQueries {
 
-    public static Patient getByID(int ID) {
+    /**
+     * Get the list of patients from Database
+     *
+     * @param patientTable The patients table
+     */
+    public static void getPatientList(JTable patientTable) {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
 
+        try {
+            pstmt = con.prepareStatement(
+                "SELECT Patient.*, Subscription.planName FROM Patient LEFT JOIN Subscription ON Subscription.patientID = Patient.patientID");
+            ResultSet res = pstmt.executeQuery();
+            ((DefaultTableModel) patientTable.getModel()).setRowCount(0);
+            while (res.next()) {
+                ((DefaultTableModel) patientTable.getModel()).addRow(
+                    new Object[]{
+                        res.getInt(1),
+                        res.getString(2),
+                        res.getString(3) + " " + res.getString(4),
+                        new SimpleDateFormat("dd-MM-yyyy").format(res.getDate(5)),
+                        res.getString(6),
+                        AddressQueries.getAddress(res.getString(7), res.getString(8)),
+                        res.getString(9)
+                    }
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+    }
+
+    public static Patient getByID(int ID) {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
@@ -47,78 +86,6 @@ public class PatientQueries {
         }
 
         return patient;
-
-    }
-
-    /**
-     * Get the list of patients from Database
-     * @param patientTable The patients table
-     */
-    public void getPatientList(JTable patientTable) {
-        Database db = new Database();
-        Connection con = db.getCon();
-        PreparedStatement pstmt = null;
-        ArrayList<Patient> patients = new ArrayList<Patient>();
-        try {
-            pstmt = con.prepareStatement("SELECT * FROM Patient");
-            ResultSet res = pstmt.executeQuery();
-            while (res.next()) {
-                ((DefaultTableModel) patientTable.getModel()).addRow(
-                    new Object[]{
-                        res.getInt(1),
-                        res.getString(2),
-                        res.getString(3) + " " + res.getString(4),
-                        res.getDate(5),
-                        res.getString(6),
-                        AddressQueries.getAddress(res.getString(7), res.getString(8))
-                    }
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            db.closeConnection();
-        }
-    }
-
-    public static ArrayList<Patient> getAllPatients() {
-        Database db = new Database();
-        Connection con = db.getCon();
-        PreparedStatement pstmt = null;
-        ArrayList<Patient> patients = new ArrayList<Patient>();
-        try {
-            pstmt = con.prepareStatement("SELECT * FROM Patient");
-            ResultSet res = pstmt.executeQuery();
-            while (res.next()) {
-                patients.add(new Patient(res.getInt(1),
-                    res.getString(2),
-                    res.getString(3),
-                    res.getString(4),
-                    res.getDate(5),
-                    res.getString(6),
-                    AddressQueries.getAddress(res.getString(7), res.getString(8))));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            db.closeConnection();
-        }
-
-        return patients;
     }
 
     public static void insertPatient(Patient patient) {
@@ -213,35 +180,29 @@ public class PatientQueries {
         }
     }
 
-    public static void main(String[] args) {
-        Patient patient = PatientQueries.getByID(0);
-        System.out.println(patient);
+    public static int getNewPatientID() {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        int maxID = 0;
+        try {
+            pstmt = con.prepareStatement("SELECT MAX(patientID) + 1 FROM Patient");
+            ResultSet res = pstmt.executeQuery();
+            res.next();
+            return res.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
 
-        ArrayList<Patient> patients = PatientQueries.getAllPatients();
-        System.out.println(patients);
-
-        AddressQueries
-            .insertAddress(new Address("1", "West Street", "Test", "Sheffield", "S1 4WW"));
-        Patient newPatient = new Patient(0, "Mr", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
-            "0783649208", new Address("1", "West Street", "Test", "Sheffield", "S1 4WW"));
-        PatientQueries.insertPatient(newPatient);
-
-        patients = PatientQueries.getAllPatients();
-        System.out.println(patients);
-
-        Patient updatedPatient = new Patient(1, "Mrs", "Curly", "Lass",
-            DateHandler.newDate(1969, 07, 06), "0783649208",
-            new Address("1", "West Street", "Test", "Sheffield", "S1 4WW"));
-        PatientQueries.updatePatient(updatedPatient);
-
-        patients = PatientQueries.getAllPatients();
-        System.out.println(patients);
-
-        PatientQueries.deletePatient(1);
-        AddressQueries.deleteAddress("1", "S1 4WW");
-
-        patients = PatientQueries.getAllPatients();
-        System.out.println(patients);
+        return maxID;
     }
-
 }

@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -16,12 +18,14 @@ public class PartnerListener implements ActionListener {
     private Calendar calendar;
     private JTable table;
     private JLabel label;
+    private int id;
 
-    public PartnerListener(int i, Calendar c, JTable t, JLabel l) {
+    public PartnerListener(int i, Calendar c, JTable t, JLabel l, int id) {
         this.dayChange = i;
         this.calendar = c;
         this.table = t;
         this.label = l;
+        this.id = id;
     }
 
     @Override
@@ -37,6 +41,8 @@ public class PartnerListener implements ActionListener {
             });
         label.setText(new SimpleDateFormat("EEEE").format(calendar.getTime()) + " " + timeFormat
             .format(calendar.getTime()));
+        Date monDate = calendar.getTime();
+		AppointmentQueries.getDayAppointmentList(table,monDate,id,1);
     }
 
 }

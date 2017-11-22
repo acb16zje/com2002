@@ -143,15 +143,6 @@ public class Patient {
     }
 
     /**
-     * Set the ID for the patient
-     *
-     * @param patientID The ID for the patient
-     */
-    public void setPatientID(int patientID) {
-        this.patientID = patientID;
-    }
-
-    /**
      * Get the fullname with title of the patient
      *
      * @return The fullname with title of the patient

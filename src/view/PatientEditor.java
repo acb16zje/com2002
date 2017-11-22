@@ -1,12 +1,18 @@
 package view;
 
+import controller.AddressQueries;
 import controller.DateListener;
+import controller.HealthCarePlanQueries;
+import controller.PatientQueries;
+import controller.SubscriptionQueries;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -14,9 +20,15 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
+import model.Address;
+import model.HealthCarePlan;
+import model.Patient;
+import model.Subscription;
+import util.CharLengthFilter;
 import util.CharacterFilter;
 import util.IntegerFilter;
 
@@ -25,7 +37,7 @@ public class PatientEditor extends JDialog {
     /**
      * Create the frame.
      */
-    public PatientEditor(String label) {
+    public PatientEditor(String label, JTable patientTable) {
         // Main content panel
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -48,7 +60,7 @@ public class PatientEditor extends JDialog {
         panel.add(titleLabel);
 
         // ComboBox for title, eg MR, MS, MISS
-        JComboBox comboTitle = new JComboBox(title.values());
+        JComboBox<String> comboTitle = new JComboBox<>(new String[]{"Mr", "Mrs", "Ms", "Miss"});
         comboTitle.setBounds(154, 45, 62, 24);
         panel.add(comboTitle);
 
@@ -60,6 +72,7 @@ public class PatientEditor extends JDialog {
         // Text field for forename
         JTextField foreName = new JTextField();
         ((AbstractDocument) foreName.getDocument()).setDocumentFilter(new CharacterFilter());
+        ((AbstractDocument) foreName.getDocument()).setDocumentFilter(new CharLengthFilter(20));
         foreName.setBounds(154, 86, 200, 23);
         foreName.setFont(new Font("Dialog", Font.PLAIN, 16));
         foreName.setColumns(10);
@@ -73,6 +86,7 @@ public class PatientEditor extends JDialog {
         // Text field for surname
         JTextField surName = new JTextField();
         ((AbstractDocument) surName.getDocument()).setDocumentFilter(new CharacterFilter());
+        ((AbstractDocument) surName.getDocument()).setDocumentFilter(new CharLengthFilter(30));
         surName.setBounds(154, 126, 200, 23);
         surName.setFont(new Font("Dialog", Font.PLAIN, 16));
         surName.setColumns(10);
@@ -87,7 +101,7 @@ public class PatientEditor extends JDialog {
         Calendar tempCal = new GregorianCalendar();
 
         // ComboBox for day
-        JComboBox comboDay = new JComboBox();
+        JComboBox<Integer> comboDay = new JComboBox<>();
         comboDay.setBounds(154, 165, 50, 24);
         panel.add(comboDay);
         for (int i = 1; i <= tempCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
@@ -96,7 +110,7 @@ public class PatientEditor extends JDialog {
         comboDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
 
         // ComboBox for month
-        JComboBox comboMonth = new JComboBox();
+        JComboBox<Integer> comboMonth = new JComboBox<>();
         comboMonth.setBounds(216, 165, 50, 24);
         panel.add(comboMonth);
         for (int i = 1; i <= 12; i++) {
@@ -105,7 +119,7 @@ public class PatientEditor extends JDialog {
         comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
 
         // ComboBox for year
-        JComboBox comboYear = new JComboBox();
+        JComboBox<Integer> comboYear = new JComboBox<>();
         comboYear.setBounds(278, 165, 76, 24);
         panel.add(comboYear);
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
@@ -114,8 +128,8 @@ public class PatientEditor extends JDialog {
         }
         comboYear.setSelectedIndex(comboYear.getItemCount() - 1);
 
+        // Add listener for ComboBox month and year
         comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
-
         comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
 
         // Label for phone number
@@ -128,6 +142,7 @@ public class PatientEditor extends JDialog {
         phoneNo.setBounds(154, 206, 200, 23);
         phoneNo.setFont(new Font("Dialog", Font.PLAIN, 16));
         ((AbstractDocument) phoneNo.getDocument()).setDocumentFilter(new IntegerFilter());
+        ((AbstractDocument) phoneNo.getDocument()).setDocumentFilter(new CharLengthFilter(11));
         phoneNo.setColumns(13);
         panel.add(phoneNo);
 
@@ -138,6 +153,7 @@ public class PatientEditor extends JDialog {
 
         // Text field for house number
         JTextField houseNo = new JTextField();
+        ((AbstractDocument) houseNo.getDocument()).setDocumentFilter(new CharLengthFilter(10));
         houseNo.setBounds(154, 246, 200, 23);
         houseNo.setFont(new Font("Dialog", Font.PLAIN, 16));
         houseNo.setColumns(5);
@@ -150,6 +166,7 @@ public class PatientEditor extends JDialog {
 
         // Text field for street
         JTextField street = new JTextField();
+        ((AbstractDocument) street.getDocument()).setDocumentFilter(new CharLengthFilter(20));
         street.setBounds(154, 286, 200, 23);
         street.setFont(new Font("Dialog", Font.PLAIN, 16));
         street.setColumns(20);
@@ -162,6 +179,7 @@ public class PatientEditor extends JDialog {
 
         // Text field for district
         JTextField district = new JTextField();
+        ((AbstractDocument) district.getDocument()).setDocumentFilter(new CharLengthFilter(20));
         district.setBounds(154, 326, 200, 23);
         district.setFont(new Font("Dialog", Font.PLAIN, 16));
         district.setColumns(20);
@@ -174,6 +192,7 @@ public class PatientEditor extends JDialog {
 
         // Text field for city
         JTextField city = new JTextField();
+        ((AbstractDocument) city.getDocument()).setDocumentFilter(new CharLengthFilter(20));
         city.setBounds(154, 366, 200, 23);
         city.setFont(new Font("Dialog", Font.PLAIN, 16));
         city.setColumns(20);
@@ -186,6 +205,7 @@ public class PatientEditor extends JDialog {
 
         // Text field for postcode
         JTextField postcode = new JTextField();
+        ((AbstractDocument) postcode.getDocument()).setDocumentFilter(new CharLengthFilter(8));
         postcode.setBounds(154, 406, 200, 23);
         postcode.setFont(new Font("Dialog", Font.PLAIN, 16));
         postcode.setColumns(20);
@@ -197,14 +217,18 @@ public class PatientEditor extends JDialog {
         panel.add(planLabel);
 
         // ComboBox for healthcare plan
-        JComboBox healthcarePlan = new JComboBox();
+        JComboBox<Object> healthcarePlan = new JComboBox<>(
+            HealthCarePlanQueries.getAllPlanName().toArray());
         healthcarePlan.setBounds(154, 445, 200, 24);
         panel.add(healthcarePlan);
 
         // Check for update healthcare plan
         JCheckBox updatePlanCheckBox = new JCheckBox("Update Healthcare Plan");
         updatePlanCheckBox.setBounds(154, 488, 194, 23);
-        updatePlanCheckBox.setForeground(new Color(128, 128, 128));
+        if (Objects.equals(label, "Add")) {
+            updatePlanCheckBox.setEnabled(false);
+            updatePlanCheckBox.setVisible(false);
+        }
         panel.add(updatePlanCheckBox);
 
         // Bottom panel for Save and Cancel button
@@ -228,7 +252,70 @@ public class PatientEditor extends JDialog {
                     }
                 }
             }
+
+            // If all fields are filled in then register the new patient
             if (completed) {
+                // Create address instance for the new patient
+                Address address = new Address(
+                    houseNo.getText(),
+                    street.getText(),
+                    district.getText(),
+                    city.getText(),
+                    postcode.getText()
+                );
+
+                // Check if the same address
+                if (AddressQueries.isUniqueAddress(houseNo.getText(), postcode.getText())) {
+                    AddressQueries.insertAddress(address);
+                }
+
+                // Ready to parse the input date as Date object
+                String dobString = String.valueOf(comboYear.getSelectedItem()) + "-" + String
+                    .valueOf(comboMonth.getSelectedItem()) + "-" + String
+                    .valueOf(comboDay.getSelectedItem());
+
+                // Register the new patient
+                Date dateOfBirth = Date.valueOf(dobString);
+
+                Patient patient = new Patient(
+                    PatientQueries.getNewPatientID(),
+                    String.valueOf(comboTitle.getSelectedItem()),
+                    foreName.getText(),
+                    surName.getText(),
+                    dateOfBirth,
+                    phoneNo.getText(),
+                    address
+                );
+
+                PatientQueries.insertPatient(patient);
+
+                // Check if the patient wants to subscribe to plan
+                if (healthcarePlan.getSelectedIndex() != 0) {
+                    HealthCarePlan subscribedPlan = HealthCarePlanQueries
+                        .getPlan(String.valueOf(healthcarePlan.getSelectedItem()));
+                    Calendar cal = Calendar.getInstance();
+                    Date startDate = Date
+                        .valueOf(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+                    cal.add(Calendar.YEAR, 1);
+                    Date endDate = Date
+                        .valueOf(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+
+                    Subscription subscription = new Subscription(
+                        patient.getPatientID(),
+                        subscribedPlan.getPlanName(),
+                        startDate,
+                        endDate,
+                        subscribedPlan.getCheckUp(),
+                        subscribedPlan.getHygieneVisit(),
+                        subscribedPlan.getRepairWork()
+                    );
+
+                    SubscriptionQueries.insertSubscription(subscription);
+                }
+
+                // Refresh the list of patients from Database
+                PatientQueries.getPatientList(patientTable);
+
                 dispose();
             }
         });
@@ -246,6 +333,4 @@ public class PatientEditor extends JDialog {
         setResizable(false);
         setLocationRelativeTo(null);
     }
-
-    private enum title {MR, MRS, MS, MISS}
 }
