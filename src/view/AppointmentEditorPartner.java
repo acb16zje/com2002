@@ -1,13 +1,13 @@
 package view;
 
+import controller.AppointmentQueries;
+import controller.PatientQueries;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,13 +18,14 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import model.Appointment;
 
 public class AppointmentEditorPartner extends JDialog {
 
     /**
      * Create the dialog.
      */
-    public AppointmentEditorPartner(String label) {
+    public AppointmentEditorPartner(String label, Appointment app) {
         // Main content panel
         getContentPane().setLayout(null);
         JPanel contentPanel = new JPanel();
@@ -187,6 +188,7 @@ public class AppointmentEditorPartner extends JDialog {
 
         // The Finish button
         JButton okButton = new JButton("Finish");
+        okButton.setEnabled(false);
         okButton.addActionListener(e -> {
         });
         buttonPanel.add(okButton);
@@ -198,6 +200,21 @@ public class AppointmentEditorPartner extends JDialog {
         buttonPanel.add(cancelButton);
         cancelButton.setActionCommand("Cancel");
         cancelButton.addActionListener(e -> dispose());
+
+        // Set all the details
+        idTextField.setText(String.valueOf(app.getPatientID()));
+        nameTextField.setText(PatientQueries.getNameByID(app.getPatientID()));
+        startTimeTextField.setText(String.valueOf(app.getStartTime()));
+        endTimeTextField.setText(String.valueOf(app.getEndTime()));
+
+        // Checkbox listener
+        chckbxAppointmentCompleted.addActionListener(e -> {
+            if (chckbxAppointmentCompleted.isSelected()) {
+                okButton.setEnabled(true);
+            } else {
+                okButton.setEnabled(false);
+            }
+        });
 
         // Dentist and Hygienist variation
         if (Objects.equals(label, "Dentist")) {
