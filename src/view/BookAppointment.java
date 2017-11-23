@@ -368,7 +368,6 @@ public class BookAppointment extends JDialog {
                         Calendar endCal = Calendar.getInstance();
                         endCal.setTime(endDate);
                         int diff = endDate.compareTo(startDate);
-                        System.out.println(diff);
                         if (diff <= 0 || !isValidDate(startCal) || !isValidDate(endCal)) {
                             JOptionPane.showMessageDialog(null, "Invalid Time");
                         } else {
@@ -461,7 +460,12 @@ public class BookAppointment extends JDialog {
                             }
                             if (AppointmentQueries.validTime(new java.sql.Time(startDate.getTime()),
                                 new java.sql.Time(startCal.getTime().getTime()),
-                                new java.sql.Date(startCal.getTime().getTime()), partnerID)) {
+                                new java.sql.Date(startCal.getTime().getTime()), partnerID)
+                                && AppointmentQueries
+                                .validPatientTime(new java.sql.Time(startDate.getTime()),
+                                    new java.sql.Time(startCal.getTime().getTime()),
+                                    new java.sql.Date(startCal.getTime().getTime()),
+                                    Integer.parseInt(patientID.getText()), partnerID)) {
                                 AppointmentQueries.insertAppointment(
                                     new Appointment(new java.sql.Date(startDate.getTime()),
                                         new java.sql.Time(startDate.getTime()),

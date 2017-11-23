@@ -253,31 +253,6 @@ public class SecretaryInterface extends JFrame {
         JPanel hygienistAppointmentPanel = new JPanel();
         hygienistAppointment.add(hygienistAppointmentPanel, BorderLayout.SOUTH);
 
-        JButton hygienistBookButton = new JButton("Book Appointment");
-        hygienistBookButton.addActionListener(e -> {
-            BookAppointment dialog = new BookAppointment("Hygiene", 1);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setModal(true);
-            dialog.setVisible(true);
-        });
-        hygienistAppointmentPanel.add(hygienistBookButton);
-
-        // Hygienist cancel button
-        JButton hygienistCancelButton = new JButton("Cancel Appointment");
-        hygienistCancelButton.setEnabled(false);
-        hygienistCancelButton.addActionListener(e -> {
-            int rowSelected = hygienistTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select an appointment!");
-            } else {
-                int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
-                if (a == JOptionPane.YES_OPTION) {
-                    // insert delete plan SQL stuff here
-                }
-            }
-        });
-        hygienistAppointmentPanel.add(hygienistCancelButton);
-
         // Hygienist view appointment button
         JButton hygienistViewButton = new JButton("View Appointment");
         hygienistViewButton.setEnabled(false);
@@ -302,6 +277,50 @@ public class SecretaryInterface extends JFrame {
                 e1.printStackTrace();
             }
         });
+
+        // Hygienist cancel button
+        JButton hygienistCancelButton = new JButton("Cancel Appointment");
+        hygienistCancelButton.setEnabled(false);
+        hygienistCancelButton.addActionListener(e -> {
+            int rowSelected = hygienistTable.getSelectedRow();
+            int colSelected = hygienistTable.getSelectedColumn();
+            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+            if (a == JOptionPane.YES_OPTION) {
+                int patientID = Integer.parseInt(
+                    ((String) hygienistTable.getValueAt(rowSelected, colSelected)).substring(0, 1));
+                String time = ((String) hygienistTable.getValueAt(rowSelected, colSelected))
+                    .substring(2, 7);
+                String date = ((String) hygienistTable.getColumnName(colSelected)).substring(4, 14);
+                try {
+                    if (patientID != 0) {
+                        // Insert wipe all appointment related Record here
+                        //	RecordQueries.deleteRecord( RecordQueries.getByRecord(Time.valueOf(time+":00"),new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),0));
+                    }
+                    AppointmentQueries.deleteAppointment(
+                        new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),
+                        1, Time.valueOf(time + ":00"));
+                    AppointmentTableListener.refreshTable(hygienistTable,
+                        ((String) hygienistWeek.getSelectedItem()).substring(0, 10), 1,
+                        hygienistCancelButton, hygienistViewButton);
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+        JButton hygienistBookButton = new JButton("Book Appointment");
+        hygienistBookButton.addActionListener(e -> {
+            BookAppointment dialog = new BookAppointment("Hygiene", 1);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setModal(true);
+            dialog.setVisible(true);
+            dialog.addWindowListener(
+                new RefreshTableListener(hygienistTable, hygienistWeek, hygienistCancelButton,
+                    hygienistViewButton, 1));
+        });
+        hygienistAppointmentPanel.add(hygienistBookButton);
+        hygienistAppointmentPanel.add(hygienistCancelButton);
         hygienistAppointmentPanel.add(hygienistViewButton);
 
         // Listeners for dates

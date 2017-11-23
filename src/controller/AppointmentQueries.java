@@ -12,11 +12,11 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import model.Address;
 import model.Appointment;
-import model.Patient;
 import util.DateHandler;
 
 /**
@@ -72,7 +72,8 @@ public class AppointmentQueries {
                 LocalTime startTime = res.getTime(1).toLocalTime();
                 LocalTime endTime = res.getTime(2).toLocalTime();
                 int cellsTaken = ((int) MINUTES.between(startTime, endTime)) / 20;
-                int startCell = ((int) MINUTES.between(LocalTime.parse("09:00:00"), startTime)) /20;
+                int startCell =
+                    ((int) MINUTES.between(LocalTime.parse("09:00:00"), startTime)) / 20;
                 //Patient tempPatient = PatientQueries.getByID(res.getInt(3)); // Performance loss
                 for (int i = startCell; i < cellsTaken + startCell; i++) {
                     if (res.getInt(3) == 0) {
@@ -148,6 +149,49 @@ public class AppointmentQueries {
         return true;
     }
 
+    public static Boolean validPatientTime(Time startTime, Time endTime, java.util.Date date,
+        int patientID, int partnerID) {
+        Boolean[] selectedList = new Boolean[24];
+        Arrays.fill(selectedList, false);
+        int tempID;
+        LocalTime start = startTime.toLocalTime();
+        LocalTime end = endTime.toLocalTime();
+        int cellsTaken = ((int) MINUTES.between(start, end)) / 20;
+        int startCell = ((int) MINUTES.between(LocalTime.parse("09:00:00"), start)) / 20;
+        for (int i = startCell; i < cellsTaken + startCell; i++) {
+            selectedList[i] = true;
+        }
+        if (partnerID == 0) {
+            tempID = 1;
+        } else {
+            tempID = 0;
+        }
+        Calendar tempCal = Calendar.getInstance();
+        tempCal.setTime(date);
+        tempCal.set(Calendar.HOUR_OF_DAY, 9);
+        tempCal.set(Calendar.MINUTE, 0);
+        tempCal.set(Calendar.SECOND, 0);
+        for (int i = 0; i < cellsTaken + startCell; i++) {
+            Appointment tempApp = getAppointment(new java.sql.Date(date.getTime()), tempID,
+                patientID, new java.sql.Time(tempCal.getTime().getTime()));
+            if (tempApp != null) {
+                LocalTime appointmentStart = tempApp.getStartTime().toLocalTime();
+                LocalTime appointmentEnd = tempApp.getEndTime().toLocalTime();
+                int appCellsTaken = ((int) MINUTES.between(appointmentStart, appointmentEnd)) / 20;
+                int appStartCell =
+                    ((int) MINUTES.between(LocalTime.parse("09:00:00"), appointmentStart)) / 20;
+                for (int j = appStartCell; j < appCellsTaken + appStartCell; j++) {
+                    if (selectedList[j]) {
+                        return false;
+                    }
+                }
+
+            }
+            tempCal.add(Calendar.MINUTE, 20);
+        }
+        return true;
+    }
+
     public static ArrayList<Appointment> getAllAppointments() {
         Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
@@ -212,7 +256,6 @@ public class AppointmentQueries {
             pstmt.setDate(1, d);
             pstmt.setInt(2, partnerID);
             pstmt.setTime(3, time);
-            System.out.println(d + " " + partnerID + " " + time);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
