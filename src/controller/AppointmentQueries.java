@@ -1,5 +1,7 @@
 package controller;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 import dbManager.Database;
 import java.sql.Connection;
 import java.sql.Date;
@@ -10,17 +12,12 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Iterator;
-
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import model.Address;
 import model.Appointment;
-import util.DateHandler;
 import model.Patient;
-import static java.time.temporal.ChronoUnit.MINUTES;
+import util.DateHandler;
 
 /**
  * @author Jake Sturgeon

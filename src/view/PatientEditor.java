@@ -14,7 +14,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Objects;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;

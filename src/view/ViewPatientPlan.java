@@ -1,25 +1,31 @@
 package view;
 
+import controller.HealthCarePlanQueries;
+import controller.PatientQueries;
+import controller.SubscriptionQueries;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.text.SimpleDateFormat;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import model.Patient;
+import model.Subscription;
 
-public class HealthcarePlan extends JDialog {
+public class ViewPatientPlan extends JDialog {
 
     /**
      * Create the dialog.
      */
-    public HealthcarePlan() {
-        // Main contel panel
+    public ViewPatientPlan(int patientID) {
+        // Main content panel
         getContentPane().setLayout(new BorderLayout());
         JPanel contentPanel = new JPanel();
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -54,7 +60,7 @@ public class HealthcarePlan extends JDialog {
         healthcarePlan.setColumns(10);
 
         // Label for the monthly amount
-        JLabel lblMonthlyPay = new JLabel("Monthly Pay:");
+        JLabel lblMonthlyPay = new JLabel("Monthly Fee:");
         GridBagConstraints gbc_lblMonthlyPay = new GridBagConstraints();
         gbc_lblMonthlyPay.anchor = GridBagConstraints.WEST;
         gbc_lblMonthlyPay.insets = new Insets(0, 0, 5, 5);
@@ -189,6 +195,18 @@ public class HealthcarePlan extends JDialog {
         okButton.setActionCommand("OK");
         buttonPane.add(okButton);
         getRootPane().setDefaultButton(okButton);
+
+        // Get the details of the subscription
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Subscription subscription = SubscriptionQueries.getSubscription(patientID);
+
+        healthcarePlan.setText(subscription.getPlanName());
+        monthlyPay.setText("\u00A3 " + String.valueOf(HealthCarePlanQueries.getMonthlyFee(subscription.getPlanName())));
+        startDate.setText(sdf.format(subscription.getStartDate()));
+        endDate.setText(sdf.format(subscription.getEndDate()));
+        checkUpLeft.setText(String.valueOf(subscription.getCheckUpLeft()));
+        hygieneVisitLeft.setText(String.valueOf(subscription.getHygieneVisitLeft()));
+        repairWork.setText(String.valueOf(subscription.getRepairWorkLeft()));
 
         // Basic settings
         setTitle("View Patient Plan");

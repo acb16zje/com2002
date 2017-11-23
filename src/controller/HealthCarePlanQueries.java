@@ -11,7 +11,6 @@ import model.HealthCarePlan;
 public class HealthCarePlanQueries {
 
     public static HealthCarePlan getPlan(String planName) {
-
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
@@ -78,41 +77,16 @@ public class HealthCarePlanQueries {
         return planName;
     }
 
-    public static void insertPlan(HealthCarePlan plan) {
+    public static int getMonthlyFee(String planName) {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("INSERT INTO HealthCarePlan VALUES (?, ?, ?, ?, ?)");
-            pstmt.setString(1, plan.getPlanName());
-            pstmt.setInt(2, plan.getMonthlyFee());
-            pstmt.setInt(3, plan.getCheckUp());
-            pstmt.setInt(4, plan.getHygieneVisit());
-            pstmt.setInt(5, plan.getRepairWork());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            db.closeConnection();
-        }
-    }
-
-    public static void deletePlan(String planName) {
-        Database db = new Database();
-        Connection con = db.getCon();
-        PreparedStatement pstmt = null;
-        HealthCarePlan plan = null;
-        try {
-            pstmt = con.prepareStatement("DELETE FROM HealthCarePlan WHERE planName = ?");
+            pstmt = con.prepareStatement("SELECT monthlyFee FROM HealthCarePlan WHERE planName = ?");
             pstmt.setString(1, planName);
-            pstmt.executeUpdate();
+            ResultSet res = pstmt.executeQuery();
+            res.next();
+            return res.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -125,32 +99,7 @@ public class HealthCarePlanQueries {
             }
             db.closeConnection();
         }
-    }
 
-    public static void updatePlan(HealthCarePlan plan) {
-        Database db = new Database();
-        Connection con = db.getCon();
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = con.prepareStatement(
-                "UPDATE HealthCarePlan SET monthlyFee = ?, checkUp = ?, hygieneVisit = ?, repairWork = ? WHERE planName = ?");
-            pstmt.setInt(1, plan.getMonthlyFee());
-            pstmt.setInt(2, plan.getCheckUp());
-            pstmt.setInt(3, plan.getHygieneVisit());
-            pstmt.setInt(4, plan.getRepairWork());
-            pstmt.setString(5, plan.getPlanName());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            db.closeConnection();
-        }
+        return 0;
     }
 }
