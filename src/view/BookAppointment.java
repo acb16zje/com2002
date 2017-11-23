@@ -418,7 +418,8 @@ public class BookAppointment extends JDialog {
 	                    	} else if (checkUpRadioButton.isSelected()) {
 	                    		startCal.add(Calendar.MINUTE, 20);
 	                    	}
-	                    	if (AppointmentQueries.validTime(new java.sql.Time(startDate.getTime()),new java.sql.Time(startCal.getTime().getTime()),new java.sql.Date(startCal.getTime().getTime()),partnerID)) {
+	                    	if (AppointmentQueries.validTime(new java.sql.Time(startDate.getTime()),new java.sql.Time(startCal.getTime().getTime()),new java.sql.Date(startCal.getTime().getTime()),partnerID) 
+	                    			&& AppointmentQueries.validPatientTime(new java.sql.Time(startDate.getTime()),new java.sql.Time(startCal.getTime().getTime()),new java.sql.Date(startCal.getTime().getTime()),Integer.parseInt(patientID.getText()),partnerID)) {
 	                    		AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(startDate.getTime()),new java.sql.Time(startDate.getTime()),new java.sql.Time(startCal.getTime().getTime()),Integer.parseInt(patientID.getText()),partnerID));
 	                    		dispose();
 	                    	} else {
