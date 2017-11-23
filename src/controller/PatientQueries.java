@@ -94,13 +94,7 @@ public class PatientQueries {
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Patient VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            PreparedStatement getID = con
-                .prepareStatement("SELECT MAX(patientID) + 1 FROM Patient");
-            ResultSet res = getID.executeQuery();
-            res.next();
-            int ID = res.getInt(1);
-            getID.close();
-            pstmt.setInt(1, ID);
+            pstmt.setInt(1, patient.getPatientID());
             pstmt.setString(2, patient.getTitle());
             pstmt.setString(3, patient.getForename());
             pstmt.setString(4, patient.getSurname());
@@ -108,33 +102,6 @@ public class PatientQueries {
             pstmt.setString(6, patient.getPhone());
             pstmt.setString(7, patient.getAddress().getHouseNo());
             pstmt.setString(8, patient.getAddress().getPostcode());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            db.closeConnection();
-        }
-    }
-
-    public static void deletePatient(int ID) {
-        Database db = new Database();
-        Connection con = db.getCon();
-        PreparedStatement pstmt = null;
-        Patient patient = null;
-        try {
-            pstmt = con.prepareStatement("DELETE FROM Patient WHERE patientID = ?");
-            pstmt.setInt(1, ID);
-            pstmt.executeUpdate();
-            pstmt = con.prepareStatement(
-                "UPDATE Patient SET patientID = patientID - 1 WHERE patientID > ?");
-            pstmt.setInt(1, ID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

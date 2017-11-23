@@ -8,10 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Treatment;
 
-/**
- * @author Jake Sturgeon
- * @version 1.0 on 19/11/2017
- */
 public class TreatmentQueries {
 
     public static Treatment getByName(String name) {
@@ -120,7 +116,7 @@ public class TreatmentQueries {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
-        ArrayList<Treatment> patients = new ArrayList<Treatment>();
+        ArrayList<Treatment> patients = new ArrayList<>();
         try {
             pstmt = con.prepareStatement("SELECT * FROM Treatment");
             ResultSet res = pstmt.executeQuery();

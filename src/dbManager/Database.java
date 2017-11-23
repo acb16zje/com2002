@@ -17,11 +17,6 @@ public class Database {
         this.con = connect();
     }
 
-    public static void main(String[] args) {
-        Database c = new Database();
-        c.closeConnection();
-    }
-
     public Connection getCon() {
         return con;
     }

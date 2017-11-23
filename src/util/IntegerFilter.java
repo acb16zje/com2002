@@ -1,11 +1,16 @@
 package util;
 
-import java.awt.Toolkit;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 public class IntegerFilter extends DocumentFilter {
+
+    private int limit;
+
+    public IntegerFilter(int limit) {
+        this.limit = limit;
+    }
 
     @Override
     public void insertString(DocumentFilter.FilterBypass fp, int offset, String string,
@@ -22,13 +27,11 @@ public class IntegerFilter extends DocumentFilter {
 
         if (isValidInteger) {
             super.insertString(fp, offset, string, aset);
-        } else {
-            Toolkit.getDefaultToolkit().beep();
         }
     }
 
     @Override
-    public void replace(DocumentFilter.FilterBypass fp, int offset, int length, String string,
+    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String string,
         AttributeSet aset) throws BadLocationException {
         int len = string.length();
         boolean isValidInteger = true;
@@ -40,10 +43,8 @@ public class IntegerFilter extends DocumentFilter {
             }
         }
 
-        if (isValidInteger) {
-            super.replace(fp, offset, length, string, aset);
-        } else {
-            Toolkit.getDefaultToolkit().beep();
+        if (isValidInteger && fb.getDocument().getLength() + string.length() <= limit) {
+            super.replace(fb, offset, length, string, aset);
         }
     }
 }

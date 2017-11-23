@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -42,7 +41,7 @@ public class PartnerListener implements ActionListener {
         label.setText(new SimpleDateFormat("EEEE").format(calendar.getTime()) + " " + timeFormat
             .format(calendar.getTime()));
         Date monDate = calendar.getTime();
-		AppointmentQueries.getDayAppointmentList(table,monDate,id,1);
+        AppointmentQueries.getDayAppointmentList(table, monDate, id, 1);
     }
 
 }

@@ -1,5 +1,7 @@
 package view;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -7,8 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.SimpleDateFormat;
-import static java.time.temporal.ChronoUnit.MINUTES;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
 import model.Appointment;
 
 public class ViewAppointment extends JDialog {
@@ -44,7 +43,7 @@ public class ViewAppointment extends JDialog {
     private JRadioButton treatmentRadioButton;
     private JLabel receiptLabel;
     private SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
-   
+
     /**
      * Create the dialog.
      */
@@ -150,16 +149,19 @@ public class ViewAppointment extends JDialog {
         gbc_treatmentRadioButton.gridx = 3;
         gbc_treatmentRadioButton.gridy = 4;
         infoPanel.add(treatmentRadioButton, gbc_treatmentRadioButton);
-        
+
         ButtonGroup type = new ButtonGroup();
         type.add(checkUpRadioButton);
         type.add(treatmentRadioButton);
-        if (MINUTES.between(app.getEndTime().toLocalTime(),app.getStartTime().toLocalTime()) == 60) {
-        	type.setSelected(treatmentRadioButton.getModel(), true);
+        System.out.println(
+            MINUTES.between(app.getEndTime().toLocalTime(), app.getStartTime().toLocalTime()));
+        if (MINUTES.between(app.getStartTime().toLocalTime(), app.getEndTime().toLocalTime())
+            == 60) {
+            type.setSelected(treatmentRadioButton.getModel(), true);
         } else {
-        	type.setSelected(checkUpRadioButton.getModel(), true);
+            type.setSelected(checkUpRadioButton.getModel(), true);
         }
-        
+
         JLabel partnerLabel = new JLabel("Partner:");
         GridBagConstraints gbc_partnerLabel = new GridBagConstraints();
         gbc_partnerLabel.anchor = GridBagConstraints.WEST;
@@ -185,16 +187,16 @@ public class ViewAppointment extends JDialog {
         gbc_hygienistRadioButton.gridx = 3;
         gbc_hygienistRadioButton.gridy = 5;
         infoPanel.add(hygienistRadioButton, gbc_hygienistRadioButton);
-        
+
         ButtonGroup partner = new ButtonGroup();
         partner.add(dentistRadioButton);
         partner.add(hygienistRadioButton);
         if (app.getPartnerID() == 0) {
-        	partner.setSelected(dentistRadioButton.getModel(), true);
+            partner.setSelected(dentistRadioButton.getModel(), true);
         } else {
-        	partner.setSelected(hygienistRadioButton.getModel(), true);
+            partner.setSelected(hygienistRadioButton.getModel(), true);
         }
-        
+
         patientIDLabel = new JLabel("Patient ID:");
         GridBagConstraints gbc_patientIDLabel = new GridBagConstraints();
         gbc_patientIDLabel.insets = new Insets(0, 0, 5, 5);

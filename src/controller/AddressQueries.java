@@ -11,7 +11,6 @@ import model.Address;
 public class AddressQueries {
 
     public static Address getAddress(String houseNumber, String postCode) {
-
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
@@ -51,7 +50,8 @@ public class AddressQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("SELECT COUNT(*) FROM Address WHERE houseNumber = ? AND postCode = ?");
+            pstmt = con.prepareStatement(
+                "SELECT COUNT(*) FROM Address WHERE houseNumber = ? AND postCode = ?");
             pstmt.setString(1, houseNo);
             pstmt.setString(2, postcode);
             ResultSet res = pstmt.executeQuery();
@@ -73,36 +73,6 @@ public class AddressQueries {
         return false;
     }
 
-    public static ArrayList<Address> getAllAddresses() {
-        Database db = new Database();
-        Connection con = db.getCon();
-        PreparedStatement pstmt = null;
-        ArrayList<Address> addresses = new ArrayList<>();
-        try {
-            pstmt = con.prepareStatement("SELECT * FROM Address");
-            ResultSet res = pstmt.executeQuery();
-            while (res.next()) {
-                addresses.add(new Address(res.getString(1),
-                    res.getString(2),
-                    res.getString(3),
-                    res.getString(4),
-                    res.getString(5)));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            db.closeConnection();
-        }
-
-        return addresses;
-    }
 
     public static void insertAddress(Address address) {
         Database db = new Database();
@@ -135,6 +105,8 @@ public class AddressQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
+            pstmt = con.prepareStatement("SET foreign_key_checks = 0");
+            pstmt.executeQuery();
             pstmt = con.prepareStatement(
                 "UPDATE Address SET houseNumber = ?, street = ?, district = ?, city = ?, postCode = ? WHERE houseNumber = ? AND postCode = ?");
             pstmt.setString(1, address.getHouseNo());
@@ -145,6 +117,8 @@ public class AddressQueries {
             pstmt.setString(6, houseNumber);
             pstmt.setString(7, postCode);
             pstmt.executeUpdate();
+            pstmt = con.prepareStatement("SET foreign_key_checks = 1");
+            pstmt.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -157,32 +131,5 @@ public class AddressQueries {
             }
             db.closeConnection();
         }
-    }
-
-    public static void deleteAddress(String houseNumber, String postCode) {
-
-        Database db = new Database();
-        Connection con = db.getCon();
-        PreparedStatement pstmt = null;
-        Address address = null;
-        try {
-            pstmt = con
-                .prepareStatement("DELETE FROM Address WHERE houseNumber = ? AND postCode = ?");
-            pstmt.setString(1, houseNumber);
-            pstmt.setString(2, postCode);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            db.closeConnection();
-        }
-
     }
 }

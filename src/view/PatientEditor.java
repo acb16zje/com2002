@@ -14,7 +14,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Objects;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -23,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
 import model.Address;
 import model.HealthCarePlan;
@@ -71,8 +71,7 @@ public class PatientEditor extends JDialog {
 
         // Text field for forename
         JTextField foreName = new JTextField();
-        ((AbstractDocument) foreName.getDocument()).setDocumentFilter(new CharacterFilter());
-        ((AbstractDocument) foreName.getDocument()).setDocumentFilter(new CharLengthFilter(20));
+        ((AbstractDocument) foreName.getDocument()).setDocumentFilter(new CharacterFilter(20));
         foreName.setBounds(154, 86, 200, 23);
         foreName.setFont(new Font("Dialog", Font.PLAIN, 16));
         foreName.setColumns(10);
@@ -85,8 +84,7 @@ public class PatientEditor extends JDialog {
 
         // Text field for surname
         JTextField surName = new JTextField();
-        ((AbstractDocument) surName.getDocument()).setDocumentFilter(new CharacterFilter());
-        ((AbstractDocument) surName.getDocument()).setDocumentFilter(new CharLengthFilter(30));
+        ((AbstractDocument) surName.getDocument()).setDocumentFilter(new CharacterFilter(30));
         surName.setBounds(154, 126, 200, 23);
         surName.setFont(new Font("Dialog", Font.PLAIN, 16));
         surName.setColumns(10);
@@ -141,8 +139,7 @@ public class PatientEditor extends JDialog {
         JTextField phoneNo = new JTextField();
         phoneNo.setBounds(154, 206, 200, 23);
         phoneNo.setFont(new Font("Dialog", Font.PLAIN, 16));
-        ((AbstractDocument) phoneNo.getDocument()).setDocumentFilter(new IntegerFilter());
-        ((AbstractDocument) phoneNo.getDocument()).setDocumentFilter(new CharLengthFilter(11));
+        ((AbstractDocument) phoneNo.getDocument()).setDocumentFilter(new IntegerFilter(11));
         phoneNo.setColumns(13);
         panel.add(phoneNo);
 
@@ -222,14 +219,30 @@ public class PatientEditor extends JDialog {
         healthcarePlan.setBounds(154, 445, 200, 24);
         panel.add(healthcarePlan);
 
-        // Check for update healthcare plan
-        JCheckBox updatePlanCheckBox = new JCheckBox("Update Healthcare Plan");
-        updatePlanCheckBox.setBounds(154, 488, 194, 23);
-        if (Objects.equals(label, "Add")) {
-            updatePlanCheckBox.setEnabled(false);
-            updatePlanCheckBox.setVisible(false);
+        // If it is Edit, then display the patient details
+        if (Objects.equals(label, "Edit")) {
+            int row = patientTable.getSelectedRow();
+            int patientID = Integer.valueOf(String.valueOf(patientTable.getValueAt(row, 0)));
+            Patient patient = PatientQueries.getByID(patientID);
+            Date dateOfBirth = patient.getDateOfBirth();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dateOfBirth);
+
+            // Setting all the field
+            comboTitle.setSelectedItem(patient.getTitle());
+            foreName.setText(patient.getForename());
+            surName.setText(patient.getSurname());
+            comboDay.setSelectedItem(cal.get(Calendar.DAY_OF_MONTH));
+            comboMonth.setSelectedItem(cal.get(Calendar.MONTH) + 1);
+            comboYear.setSelectedItem(cal.get(Calendar.YEAR));
+            phoneNo.setText(patient.getPhone());
+            houseNo.setText(patient.getAddress().getHouseNo());
+            street.setText(patient.getAddress().getStreet());
+            district.setText(patient.getAddress().getDistrict());
+            city.setText(patient.getAddress().getStreet());
+            postcode.setText(patient.getAddress().getPostcode());
+            healthcarePlan.setSelectedItem(patientTable.getValueAt(row, 6));
         }
-        panel.add(updatePlanCheckBox);
 
         // Bottom panel for Save and Cancel button
         JPanel confirmPanel = new JPanel();
@@ -253,7 +266,7 @@ public class PatientEditor extends JDialog {
                 }
             }
 
-            // If all fields are filled in then register the new patient
+            // If all fields are filled in then register or edit the new patient
             if (completed) {
                 // Create address instance for the new patient
                 Address address = new Address(
@@ -264,11 +277,6 @@ public class PatientEditor extends JDialog {
                     postcode.getText()
                 );
 
-                // Check if the same address
-                if (AddressQueries.isUniqueAddress(houseNo.getText(), postcode.getText())) {
-                    AddressQueries.insertAddress(address);
-                }
-
                 // Ready to parse the input date as Date object
                 String dobString = String.valueOf(comboYear.getSelectedItem()) + "-" + String
                     .valueOf(comboMonth.getSelectedItem()) + "-" + String
@@ -277,47 +285,160 @@ public class PatientEditor extends JDialog {
                 // Register the new patient
                 Date dateOfBirth = Date.valueOf(dobString);
 
-                Patient patient = new Patient(
-                    PatientQueries.getNewPatientID(),
-                    String.valueOf(comboTitle.getSelectedItem()),
-                    foreName.getText(),
-                    surName.getText(),
-                    dateOfBirth,
-                    phoneNo.getText(),
-                    address
-                );
+                if (Objects.equals(label, "Add")) {
+                    // Check if the same address has existed
+                    if (AddressQueries.isUniqueAddress(houseNo.getText(), postcode.getText())) {
+                        AddressQueries.insertAddress(address);
+                    }
 
-                PatientQueries.insertPatient(patient);
-
-                // Check if the patient wants to subscribe to plan
-                if (healthcarePlan.getSelectedIndex() != 0) {
-                    HealthCarePlan subscribedPlan = HealthCarePlanQueries
-                        .getPlan(String.valueOf(healthcarePlan.getSelectedItem()));
-                    Calendar cal = Calendar.getInstance();
-                    Date startDate = Date
-                        .valueOf(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-                    cal.add(Calendar.YEAR, 1);
-                    Date endDate = Date
-                        .valueOf(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-
-                    Subscription subscription = new Subscription(
-                        patient.getPatientID(),
-                        subscribedPlan.getPlanName(),
-                        startDate,
-                        endDate,
-                        subscribedPlan.getCheckUp(),
-                        subscribedPlan.getHygieneVisit(),
-                        subscribedPlan.getRepairWork()
+                    // Create an instance of the new registered patient
+                    Patient patient = new Patient(
+                        PatientQueries.getNewPatientID(),
+                        String.valueOf(comboTitle.getSelectedItem()),
+                        foreName.getText(),
+                        surName.getText(),
+                        dateOfBirth,
+                        phoneNo.getText(),
+                        address
                     );
 
-                    SubscriptionQueries.insertSubscription(subscription);
+                    // Insert the new patient into the database
+                    PatientQueries.insertPatient(patient);
+
+                    // Check if the patient wants to subscribe to plan
+                    if (healthcarePlan.getSelectedIndex() != 0) {
+                        HealthCarePlan subscribedPlan = HealthCarePlanQueries
+                            .getPlan(String.valueOf(healthcarePlan.getSelectedItem()));
+                        Calendar cal = Calendar.getInstance();
+                        Date startDate = Date
+                            .valueOf(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+                        cal.add(Calendar.YEAR, 1);
+                        cal.add(Calendar.DATE, -1);
+                        Date endDate = Date
+                            .valueOf(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+
+                        Subscription subscription = new Subscription(
+                            patient.getPatientID(),
+                            subscribedPlan.getPlanName(),
+                            startDate,
+                            endDate,
+                            subscribedPlan.getCheckUp(),
+                            subscribedPlan.getHygieneVisit(),
+                            subscribedPlan.getRepairWork()
+                        );
+
+                        // Insert subscription into the database
+                        SubscriptionQueries.insertSubscription(subscription);
+                    }
+
+                    // Add the new patient into the table
+                    ((DefaultTableModel) patientTable.getModel()).addRow(
+                        new Object[]{
+                            patient.getPatientID(),
+                            patient.getTitle(),
+                            patient.getForename() + patient.getSurname(),
+                            String.valueOf(comboDay.getSelectedItem()) + "-" + String
+                                .valueOf(comboMonth.getSelectedItem()) + "-" + String
+                                .valueOf(comboYear.getSelectedItem()),
+                            patient.getPhone(),
+                            address.getHouseNo() + ", " + address.getPostcode(),
+                            healthcarePlan.getSelectedItem()
+                        }
+                    );
+
+                } else {
+                    // Old data
+                    int row = patientTable.getSelectedRow();
+                    int patientID = Integer
+                        .valueOf(String.valueOf(patientTable.getValueAt(row, 0)));
+                    Patient oldPatient = PatientQueries.getByID(patientID);
+                    String oldHouseNo = oldPatient.getAddress().getHouseNo();
+                    String oldPostcode = oldPatient.getAddress().getPostcode();
+
+                    Patient newPatient = new Patient(
+                        oldPatient.getPatientID(),
+                        String.valueOf(comboTitle.getSelectedItem()),
+                        foreName.getText(),
+                        surName.getText(),
+                        dateOfBirth,
+                        phoneNo.getText(),
+                        address
+                    );
+
+                    // Update the address
+                    AddressQueries.updateAddress(oldHouseNo, oldPostcode, address);
+
+                    // Update the patient
+                    PatientQueries.updatePatient(newPatient);
+
+                    // Update subscription
+                    if (healthcarePlan.getSelectedIndex() == 0) {
+                        // Unsubscribe
+                        SubscriptionQueries.deleteSubscription(newPatient.getPatientID());
+                    } else {
+                        // Upgrade to another plan or stay the same
+                        if (healthcarePlan.getSelectedItem() != patientTable.getValueAt(row, 6)) {
+                            HealthCarePlan upgradePlan = HealthCarePlanQueries
+                                .getPlan(String.valueOf(healthcarePlan.getSelectedItem()));
+
+                            // If the patient wants to subscribe a plan after registeration
+                            if (SubscriptionQueries.getSubscription(newPatient.getPatientID())
+                                == null) {
+                                Calendar cal = Calendar.getInstance();
+                                Date startDate = Date
+                                    .valueOf(
+                                        new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+                                cal.add(Calendar.YEAR, 1);
+                                cal.add(Calendar.DATE, -1);
+                                Date endDate = Date
+                                    .valueOf(
+                                        new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+
+                                Subscription newSubscription = new Subscription(
+                                    newPatient.getPatientID(),
+                                    upgradePlan.getPlanName(),
+                                    startDate,
+                                    endDate,
+                                    upgradePlan.getCheckUp(),
+                                    upgradePlan.getHygieneVisit(),
+                                    upgradePlan.getRepairWork()
+                                );
+
+                                SubscriptionQueries.insertSubscription(newSubscription);
+                            } else {
+                                // If the patient wants to upgrade his plan
+                                Subscription oldSubscription = SubscriptionQueries
+                                    .getSubscription(newPatient.getPatientID());
+
+                                HealthCarePlan oldPlan = HealthCarePlanQueries
+                                    .getPlan(oldSubscription.getPlanName());
+
+                                Subscription newSubscription = new Subscription(
+                                    oldSubscription.getPatientID(),
+                                    upgradePlan.getPlanName(),
+                                    oldSubscription.getStartDate(),
+                                    oldSubscription.getEndDate(),
+                                    oldSubscription.getCheckUpLeft() + Math
+                                        .abs(oldPlan.getCheckUp() - upgradePlan.getCheckUp()),
+                                    oldSubscription.getHygieneVisitLeft() + Math.abs(
+                                        oldPlan.getHygieneVisit() - upgradePlan.getHygieneVisit()),
+                                    oldSubscription.getRepairWorkLeft() + Math
+                                        .abs(oldPlan.getRepairWork() - upgradePlan.getRepairWork())
+                                );
+
+                                SubscriptionQueries.updateSubscription(newSubscription);
+                            }
+                        }
+                    }
+
+                    // Update the table
+                    PatientQueries.getPatientList(patientTable);
                 }
 
-                // Refresh the list of patients from Database
-                PatientQueries.getPatientList(patientTable);
-
+                // Close the add or editing frame
                 dispose();
             }
+
         });
         confirmPanel.add(saveButton);
 

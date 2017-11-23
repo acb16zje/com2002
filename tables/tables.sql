@@ -22,8 +22,6 @@ CREATE TABLE Patient (
 
 CREATE TABLE Partner (
   partnerID INT         NOT NULL,
-  forename  VARCHAR(20) NULL,
-  surname   VARCHAR(30) NOT NULL,
   PRIMARY KEY (partnerID)
 );
 
@@ -68,10 +66,10 @@ CREATE TABLE Treatment (
 );
 
 CREATE TABLE Record (
-  treatmentGiven VARCHAR(30) NOT NULL,
-  startTime      TIME        NOT NULL,
-  date           DATE        NOT NULL,
-  partnerID      INT         NOT NULL,
+  treatmentGiven VARCHAR(30),
+  startTime      TIME NOT NULL,
+  date           DATE NOT NULL,
+  partnerID      INT  NOT NULL,
   PRIMARY KEY (treatmentGiven, date, startTime, partnerID),
   FOREIGN KEY (date, startTime, partnerID) REFERENCES Appointment (date, startTime, partnerID),
   FOREIGN KEY (treatmentGiven) REFERENCES Treatment (name)
