@@ -26,11 +26,11 @@ CREATE TABLE Partner (
 );
 
 CREATE TABLE HealthCarePlan (
-  planName     VARCHAR(30) NOT NULL,
-  monthlyFee   INT         NOT NULL,
-  checkUp      INT         NOT NULL,
-  hygieneVisit INT         NOT NULL,
-  repairWork   INT         NOT NULL,
+  planName     VARCHAR(30)    NOT NULL,
+  monthlyFee   DECIMAL(10, 2)  NOT NULL,
+  checkUp      INT            NOT NULL,
+  hygieneVisit INT            NOT NULL,
+  repairWork   INT            NOT NULL,
   PRIMARY KEY (planName)
 );
 
@@ -59,9 +59,9 @@ CREATE TABLE Appointment (
 );
 
 CREATE TABLE Treatment (
-  name VARCHAR(30) NOT NULL,
-  type VARCHAR(20) NOT NULL,
-  cost INT         NOT NULL,
+  name VARCHAR(30)    NOT NULL,
+  type VARCHAR(20)    NOT NULL,
+  cost DECIMAL(10, 2)  NOT NULL,
   PRIMARY KEY (name)
 );
 
