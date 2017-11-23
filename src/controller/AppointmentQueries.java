@@ -101,7 +101,8 @@ public class AppointmentQueries {
             db.closeConnection();
         }
     }
-
+    
+    //returns a boolean list that represents time avaibility 
     public static Boolean[] getAvailableTime(java.util.Date date, int partnerID) {
         Boolean[] avaibilityBoolean = new Boolean[24];
         Arrays.fill(avaibilityBoolean, true);
@@ -140,6 +141,7 @@ public class AppointmentQueries {
         return avaibilityBoolean;
     }
 
+    //checks if time is valid for partner
     public static Boolean validTime(Time startTime, Time endTime, java.util.Date date,
         int partnerID) {
         Boolean[] avaibilityList = getAvailableTime(date, partnerID);
@@ -155,6 +157,7 @@ public class AppointmentQueries {
         return true;
     }
 
+    //check if time is valid for patient
     public static Boolean validPatientTime(Time startTime, Time endTime, java.util.Date date,
         int patientID, int partnerID) {
         Boolean[] selectedList = new Boolean[24];
@@ -282,22 +285,25 @@ public class AppointmentQueries {
 
     public static void main(String[] args) {
 
+//        System.out.println(AppointmentQueries
+//            .getAppointment(DateHandler.newDate(2017, 12, 25), 0, 0, Time.valueOf("12:00:00")));
+//
+//        Appointment app = new Appointment(DateHandler.newDate(2017, 12, 25),
+//            Time.valueOf("13:00:00"), Time.valueOf("14:00:00"), 0, 0);
+//        Appointment app2 = new Appointment(DateHandler.newDate(2017, 11, 22),
+//            Time.valueOf("09:00:00"), Time.valueOf("11:00:00"), 0, 0);
+//
+//        System.out.println(app);
+//        AppointmentQueries.insertAppointment(app);
+//        AppointmentQueries.insertAppointment(app2);
+//
+//        System.out.println(AppointmentQueries.getAllAppointments());
+//
+//        Address testAddress = new Address("-", "-", "-", "-", "-");
+
         System.out.println(AppointmentQueries
-            .getAppointment(DateHandler.newDate(2017, 12, 25), 0, 0, Time.valueOf("12:00:00")));
-
-        Appointment app = new Appointment(DateHandler.newDate(2017, 12, 25),
-            Time.valueOf("13:00:00"), Time.valueOf("14:00:00"), 0, 0);
-        Appointment app2 = new Appointment(DateHandler.newDate(2017, 11, 22),
-            Time.valueOf("09:00:00"), Time.valueOf("11:00:00"), 0, 0);
-
-        System.out.println(app);
-        AppointmentQueries.insertAppointment(app);
-        AppointmentQueries.insertAppointment(app2);
-
-        System.out.println(AppointmentQueries.getAllAppointments());
-
-        Address testAddress = new Address("-", "-", "-", "-", "-");
-
+                .getAppointment(DateHandler.newDate(2018, 1, 1), 0, 1, Time.valueOf("10:00:00")));
+        
 //        PatientQueries
 //            .insertPatient(new Patient(1, "Miss", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
 //                "0783649208", testAddress));
