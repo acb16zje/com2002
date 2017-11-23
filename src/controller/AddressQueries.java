@@ -42,7 +42,6 @@ public class AddressQueries {
         }
 
         return address;
-
     }
 
     public static boolean isUniqueAddress(String houseNo, String postcode) {
@@ -72,7 +71,6 @@ public class AddressQueries {
 
         return false;
     }
-
 
     public static void insertAddress(Address address) {
         Database db = new Database();

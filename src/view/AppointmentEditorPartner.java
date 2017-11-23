@@ -6,35 +6,29 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Objects;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 public class AppointmentEditorPartner extends JDialog {
-
-    private final JPanel contentPanel = new JPanel();
-    private JTable table;
-    private JTextField nameTextField;
-    private JTextField idTextField;
-    private JTextField startTimeTextField;
-    private JTextField endTimeTextField;
 
     /**
      * Create the dialog.
      */
-    public AppointmentEditorPartner() {
+    public AppointmentEditorPartner(String label) {
         // Main content panel
         getContentPane().setLayout(null);
-        contentPanel.setBounds(0, 0, 476, 561);
+        JPanel contentPanel = new JPanel();
+        contentPanel.setBounds(0, 0, 476, 605);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel);
         contentPanel.setLayout(new BorderLayout(0, 0));
@@ -43,32 +37,11 @@ public class AppointmentEditorPartner extends JDialog {
         JPanel infoPanel = new JPanel();
         contentPanel.add(infoPanel, BorderLayout.NORTH);
         GridBagLayout gbl_infoPanel = new GridBagLayout();
-        gbl_infoPanel.columnWidths = new int[]{23, 115, 276, 47, 0};
-        gbl_infoPanel.rowHeights = new int[]{40, 40, 40, 40, 40, 0};
+        gbl_infoPanel.columnWidths = new int[]{46, 115, 276, 47, 0};
+        gbl_infoPanel.rowHeights = new int[]{43, 40, 40, 40, 40, 13, 0};
         gbl_infoPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_infoPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_infoPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         infoPanel.setLayout(gbl_infoPanel);
-
-        // Label for patient name
-        JLabel nameLabel = new JLabel("Patient Name:");
-        GridBagConstraints gbc_nameLabel = new GridBagConstraints();
-        gbc_nameLabel.anchor = GridBagConstraints.WEST;
-        gbc_nameLabel.insets = new Insets(0, 0, 5, 5);
-        gbc_nameLabel.gridx = 1;
-        gbc_nameLabel.gridy = 0;
-        infoPanel.add(nameLabel, gbc_nameLabel);
-
-        // Text field for displaying patient name
-        nameTextField = new JTextField();
-        nameTextField.setFont(new Font("Dialog", Font.PLAIN, 16));
-        nameTextField.setEditable(false);
-        GridBagConstraints gbc_nameTextField = new GridBagConstraints();
-        gbc_nameTextField.insets = new Insets(0, 0, 5, 5);
-        gbc_nameTextField.fill = GridBagConstraints.HORIZONTAL;
-        gbc_nameTextField.gridx = 2;
-        gbc_nameTextField.gridy = 0;
-        infoPanel.add(nameTextField, gbc_nameTextField);
-        nameTextField.setColumns(10);
 
         // Label for patient ID
         JLabel idLabel = new JLabel("Patient ID:");
@@ -80,7 +53,7 @@ public class AppointmentEditorPartner extends JDialog {
         infoPanel.add(idLabel, gbc_idLabel);
 
         // Text field for displaying patient ID
-        idTextField = new JTextField();
+        JTextField idTextField = new JTextField();
         idTextField.setFont(new Font("Dialog", Font.PLAIN, 16));
         idTextField.setEditable(false);
         GridBagConstraints gbc_idTextField = new GridBagConstraints();
@@ -91,24 +64,45 @@ public class AppointmentEditorPartner extends JDialog {
         infoPanel.add(idTextField, gbc_idTextField);
         idTextField.setColumns(10);
 
+        // Label for patient name
+        JLabel nameLabel = new JLabel("Patient Name:");
+        GridBagConstraints gbc_nameLabel = new GridBagConstraints();
+        gbc_nameLabel.anchor = GridBagConstraints.WEST;
+        gbc_nameLabel.insets = new Insets(0, 0, 5, 5);
+        gbc_nameLabel.gridx = 1;
+        gbc_nameLabel.gridy = 2;
+        infoPanel.add(nameLabel, gbc_nameLabel);
+
+        // Text field for displaying patient name
+        JTextField nameTextField = new JTextField();
+        nameTextField.setFont(new Font("Dialog", Font.PLAIN, 16));
+        nameTextField.setEditable(false);
+        GridBagConstraints gbc_nameTextField = new GridBagConstraints();
+        gbc_nameTextField.insets = new Insets(0, 0, 5, 5);
+        gbc_nameTextField.fill = GridBagConstraints.HORIZONTAL;
+        gbc_nameTextField.gridx = 2;
+        gbc_nameTextField.gridy = 2;
+        infoPanel.add(nameTextField, gbc_nameTextField);
+        nameTextField.setColumns(10);
+
         // Label for start time
         JLabel startTimeLabel = new JLabel("Start Time:");
         GridBagConstraints gbc_startTimeLabel = new GridBagConstraints();
         gbc_startTimeLabel.anchor = GridBagConstraints.WEST;
         gbc_startTimeLabel.insets = new Insets(0, 0, 5, 5);
         gbc_startTimeLabel.gridx = 1;
-        gbc_startTimeLabel.gridy = 2;
+        gbc_startTimeLabel.gridy = 3;
         infoPanel.add(startTimeLabel, gbc_startTimeLabel);
 
         // Text field for displaying start time
-        startTimeTextField = new JTextField();
+        JTextField startTimeTextField = new JTextField();
         startTimeTextField.setEditable(false);
         startTimeTextField.setFont(new Font("Dialog", Font.PLAIN, 16));
         GridBagConstraints gbc_startTimeTextField = new GridBagConstraints();
         gbc_startTimeTextField.insets = new Insets(0, 0, 5, 5);
         gbc_startTimeTextField.fill = GridBagConstraints.HORIZONTAL;
         gbc_startTimeTextField.gridx = 2;
-        gbc_startTimeTextField.gridy = 2;
+        gbc_startTimeTextField.gridy = 3;
         infoPanel.add(startTimeTextField, gbc_startTimeTextField);
         startTimeTextField.setColumns(10);
 
@@ -118,48 +112,64 @@ public class AppointmentEditorPartner extends JDialog {
         gbc_endTimeLabel.anchor = GridBagConstraints.WEST;
         gbc_endTimeLabel.insets = new Insets(0, 0, 5, 5);
         gbc_endTimeLabel.gridx = 1;
-        gbc_endTimeLabel.gridy = 3;
+        gbc_endTimeLabel.gridy = 4;
         infoPanel.add(endTimeLabel, gbc_endTimeLabel);
 
         // Text field for displaying end time
-        endTimeTextField = new JTextField();
+        JTextField endTimeTextField = new JTextField();
         endTimeTextField.setEditable(false);
         endTimeTextField.setFont(new Font("Dialog", Font.PLAIN, 16));
         GridBagConstraints gbc_endTimeTextField = new GridBagConstraints();
         gbc_endTimeTextField.insets = new Insets(0, 0, 5, 5);
         gbc_endTimeTextField.fill = GridBagConstraints.HORIZONTAL;
         gbc_endTimeTextField.gridx = 2;
-        gbc_endTimeTextField.gridy = 3;
+        gbc_endTimeTextField.gridy = 4;
         infoPanel.add(endTimeTextField, gbc_endTimeTextField);
         endTimeTextField.setColumns(10);
 
-        // Button for adding another treatment row
-        JButton btnAddTreatmentRow = new JButton("Add Treatment Row");
-        GridBagConstraints gbc_btnAddTreatmentRow = new GridBagConstraints();
-        gbc_btnAddTreatmentRow.gridwidth = 4;
-        gbc_btnAddTreatmentRow.insets = new Insets(0, 0, 0, 5);
-        gbc_btnAddTreatmentRow.gridx = 0;
-        gbc_btnAddTreatmentRow.gridy = 4;
-        infoPanel.add(btnAddTreatmentRow, gbc_btnAddTreatmentRow);
-        btnAddTreatmentRow.addActionListener(e ->
-            ((DefaultTableModel) table.getModel()).addRow(new Object[]{}));
+        JPanel treatmentPanel = new JPanel();
+        contentPanel.add(treatmentPanel, BorderLayout.CENTER);
 
-        // Scroll pane for the treatment table
-        JScrollPane scrollPane = new JScrollPane();
-        contentPanel.add(scrollPane, BorderLayout.CENTER);
+        JLabel checkUpHygieneLabel = new JLabel();
+        checkUpHygieneLabel.setBounds(50, 42, 115, 28);
+        treatmentPanel.setLayout(null);
+        checkUpHygieneLabel.setFont(new Font("Dialog", Font.BOLD, 16));
+        treatmentPanel.add(checkUpHygieneLabel);
 
-        table = new JTable();
-        table.setCellSelectionEnabled(true);
-        table.setRowHeight(30);
-        table.setModel(new DefaultTableModel(
-            new Object[][]{
-                {null},
-            },
-            new String[]{
-                "Treatment"
-            }
-        ));
-        scrollPane.setViewportView(table);
+        JSpinner checkUpHygieneSpinner = new JSpinner();
+        checkUpHygieneSpinner.setBounds(314, 41, 115, 28);
+        checkUpHygieneSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
+        treatmentPanel.add(checkUpHygieneSpinner);
+
+        JLabel silverAmalgamLabel = new JLabel("Silver amalgam filling:");
+        silverAmalgamLabel.setBounds(50, 116, 188, 19);
+        silverAmalgamLabel.setFont(new Font("Dialog", Font.BOLD, 16));
+        treatmentPanel.add(silverAmalgamLabel);
+
+        JSpinner silverAmalgamSpinner = new JSpinner();
+        silverAmalgamSpinner.setBounds(314, 111, 115, 28);
+        silverAmalgamSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
+        treatmentPanel.add(silverAmalgamSpinner);
+
+        JLabel whiteCompositeLabel = new JLabel("White composite filling:");
+        whiteCompositeLabel.setBounds(50, 186, 207, 19);
+        whiteCompositeLabel.setFont(new Font("Dialog", Font.BOLD, 16));
+        treatmentPanel.add(whiteCompositeLabel);
+
+        JSpinner whiteCompositeSpinner = new JSpinner();
+        whiteCompositeSpinner.setBounds(314, 181, 115, 28);
+        whiteCompositeSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
+        treatmentPanel.add(whiteCompositeSpinner);
+
+        JLabel goldCrownLabel = new JLabel("Fitting gold crown:");
+        goldCrownLabel.setBounds(50, 258, 166, 19);
+        goldCrownLabel.setFont(new Font("Dialog", Font.BOLD, 16));
+        treatmentPanel.add(goldCrownLabel);
+
+        JSpinner goldCrownSpinner = new JSpinner();
+        goldCrownSpinner.setBounds(314, 254, 115, 28);
+        goldCrownSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
+        treatmentPanel.add(goldCrownSpinner);
 
         // Panel for finalizing the appointment
         JPanel finalPanel = new JPanel();
@@ -177,20 +187,9 @@ public class AppointmentEditorPartner extends JDialog {
 
         // The Finish button
         JButton okButton = new JButton("Finish");
-        buttonPanel.add(okButton);
         okButton.addActionListener(e -> {
-            int count = table.getModel().getRowCount();
-            boolean hasTreatment = false;
-            for (int i = 0; i < count; i++) {
-                if (table.getModel().getValueAt(i, 0) != null) {
-                    hasTreatment = true;
-                    dispose();
-                }
-            }
-            if (!hasTreatment) {
-                JOptionPane.showMessageDialog(null, "No Treatment Inserted");
-            }
         });
+        buttonPanel.add(okButton);
         okButton.setActionCommand("OK");
         getRootPane().setDefaultButton(okButton);
 
@@ -200,10 +199,29 @@ public class AppointmentEditorPartner extends JDialog {
         cancelButton.setActionCommand("Cancel");
         cancelButton.addActionListener(e -> dispose());
 
+        // Dentist and Hygienist variation
+        if (Objects.equals(label, "Dentist")) {
+            checkUpHygieneLabel.setText("Check-up");
+        } else {
+            checkUpHygieneLabel.setText("Hygiene");
+            silverAmalgamLabel.setEnabled(false);
+            silverAmalgamLabel.setVisible(false);
+            silverAmalgamSpinner.setEnabled(false);
+            silverAmalgamSpinner.setVisible(false);
+            whiteCompositeLabel.setEnabled(false);
+            whiteCompositeLabel.setVisible(false);
+            whiteCompositeSpinner.setEnabled(false);
+            whiteCompositeSpinner.setVisible(false);
+            goldCrownLabel.setEnabled(false);
+            goldCrownLabel.setVisible(false);
+            goldCrownSpinner.setEnabled(false);
+            goldCrownSpinner.setVisible(false);
+        }
+
         // Basic settings
         setResizable(false);
         setTitle("Edit Appointment");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 478, 600);
+        setBounds(100, 100, 478, 632);
     }
 }

@@ -320,8 +320,8 @@ public class SecretaryInterface extends JFrame {
                     hygienistViewButton, 1));
         });
         hygienistAppointmentPanel.add(hygienistBookButton);
-        hygienistAppointmentPanel.add(hygienistCancelButton);
         hygienistAppointmentPanel.add(hygienistViewButton);
+        hygienistAppointmentPanel.add(hygienistCancelButton);
 
         // Listeners for dates
         hygienistWeek.addActionListener(
@@ -387,7 +387,7 @@ public class SecretaryInterface extends JFrame {
 
         // List of registered patients
         JTable patientTable = new JTable();
-        patientTable.setRowHeight(25);
+        patientTable.setRowHeight(30);
         patientTable.getTableHeader().setReorderingAllowed(false);
         patient.add(new JScrollPane(patientTable), BorderLayout.CENTER);
         patientTable.setModel(new DefaultTableModel(
@@ -433,17 +433,6 @@ public class SecretaryInterface extends JFrame {
             frame.setVisible(true);
         });
 
-        // Delete patient button
-        JButton deletePatientButton = new JButton("Delete Patient");
-        deletePatientButton.setEnabled(false);
-        editorPanel.add(deletePatientButton);
-        deletePatientButton.addActionListener(e -> {
-            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
-            if (a == JOptionPane.YES_OPTION) {
-                // insert delete patient sql stuff here
-            }
-        });
-
         // View the patient registered plan
         JPanel planPanel = new JPanel();
         patientPanel.add(planPanel);
@@ -469,7 +458,6 @@ public class SecretaryInterface extends JFrame {
 
                 if (row == -1) {
                     editPatientButton.setEnabled(false);
-                    deletePatientButton.setEnabled(false);
                 } else {
                     Object cell = patientTable.getValueAt(row, 6);
                     if (cell == null) {
@@ -479,7 +467,6 @@ public class SecretaryInterface extends JFrame {
                     }
 
                     editPatientButton.setEnabled(true);
-                    deletePatientButton.setEnabled(true);
                 }
             }
         });

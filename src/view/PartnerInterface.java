@@ -10,6 +10,7 @@ import java.awt.Insets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -30,7 +31,7 @@ public class PartnerInterface extends JFrame {
         SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
         Calendar currentCalendar = Calendar.getInstance();
         int partnerID;
-        if (partner == "Dentist") {
+        if (Objects.equals(partner, "Dentist")) {
             partnerID = 0;
         } else {
             partnerID = 1;
@@ -97,7 +98,8 @@ public class PartnerInterface extends JFrame {
         JTable timetable = new JTable();
         timetable.setCellSelectionEnabled(true);
         timetable.setFillsViewportHeight(true);
-        timetable.setRowHeight(20);
+        timetable.setRowHeight(30);
+        timetable.getTableHeader().setReorderingAllowed(false);
         timetable
             .setModel(new DefaultTableModel(WeekGenerator.appointmentList(), new String[]{"Time",
                           timeFormat.format(currentCalendar.getTime())}) {
@@ -111,12 +113,21 @@ public class PartnerInterface extends JFrame {
         Date monDate = currentCalendar.getTime();
         AppointmentQueries.getDayAppointmentList(timetable, monDate, partnerID, 1);
 
+        JButton editAppointmentButton = new JButton("Edit Appointment");
+        editAppointmentButton.setEnabled(false);
+        editAppointmentButton.addActionListener(e -> {
+            AppointmentEditorPartner dialog = new AppointmentEditorPartner(partner);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        });
+        editAppointmentButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
         // Yesterday button
         JButton yesterdayButton = new JButton("Yesterday");
         yesterdayButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
         yesterdayButton
             .addActionListener(
-                new PartnerListener(-1, currentCalendar, timetable, dayLabel, partnerID));
+                new PartnerListener(-1, currentCalendar, timetable, dayLabel, partnerID, editAppointmentButton));
         GridBagConstraints gbc_yesterdayButton = new GridBagConstraints();
         gbc_yesterdayButton.fill = GridBagConstraints.BOTH;
         gbc_yesterdayButton.insets = new Insets(0, 0, 0, 5);
@@ -129,7 +140,7 @@ public class PartnerInterface extends JFrame {
         tomorrowButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
         tomorrowButton
             .addActionListener(
-                new PartnerListener(1, currentCalendar, timetable, dayLabel, partnerID));
+                new PartnerListener(1, currentCalendar, timetable, dayLabel, partnerID, editAppointmentButton));
         GridBagConstraints gbc_tomorrowButton = new GridBagConstraints();
         gbc_tomorrowButton.fill = GridBagConstraints.BOTH;
         gbc_tomorrowButton.gridx = 4;
@@ -144,20 +155,14 @@ public class PartnerInterface extends JFrame {
         gbc_panel.gridy = 2;
         contentPane.add(panel, gbc_panel);
         panel.setLayout(new GridLayout(0, 1, 0, 0));
-
-        JButton editAppointmentButton = new JButton("Edit Appointment");
-        editAppointmentButton.addActionListener(e -> {
-            AppointmentEditorPartner dialog = new AppointmentEditorPartner();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        });
-        editAppointmentButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
         panel.add(editAppointmentButton);
+
+        PartnerListener.buttonDisabler(timetable, editAppointmentButton);
 
         // Basic settings
         setTitle("Sheffield Dental Care");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 800, 550);
+        setBounds(100, 100, 800, 700);
         setLocationRelativeTo(null);
     }
 }
