@@ -136,7 +136,21 @@ public class AppointmentQueries {
          }
          return avaibilityBoolean;
     }
-
+    
+    public static Boolean validTime(Time startTime, Time endTime, java.util.Date date, int partnerID) {
+		Boolean[] avaibilityList = getAvailableTime(date,partnerID);
+		LocalTime start = startTime.toLocalTime();
+     	LocalTime end = endTime.toLocalTime();
+     	int cellsTaken = ((int) MINUTES.between(start,end))/20;
+     	int startCell = ((int) MINUTES.between(LocalTime.parse("09:00:00"),start))/20;
+     	for (int i =startCell; i < cellsTaken+startCell; i++) {
+     		if (!avaibilityList[i]) {
+     			return false;
+     		}
+     	}
+    	return true;
+    }
+    
     public static ArrayList<Appointment> getAllAppointments() {
         Database db = new Database();
         Connection con = db.getCon();

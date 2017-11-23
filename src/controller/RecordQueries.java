@@ -17,7 +17,7 @@ import util.DateHandler;
  */
 public class RecordQueries {
 
-    public static Record getByRecord(String treatmentGiven, Time startTime, Date date,
+    public static Record getByRecord( Time startTime, Date date,
         int partnerID) {
         Database db = new Database();
         Connection con = db.getCon();
@@ -25,11 +25,10 @@ public class RecordQueries {
         Record record = null;
         try {
             pstmt = con.prepareStatement(
-                "SELECT * FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ? AND partnerID = ?");
-            pstmt.setString(1, treatmentGiven);
-            pstmt.setTime(2, startTime);
-            pstmt.setDate(3, date);
-            pstmt.setInt(4, partnerID);
+                "SELECT * FROM Record WHERE startTime = ? AND date = ? AND partnerID = ?");
+            pstmt.setTime(1, startTime);
+            pstmt.setDate(2, date);
+            pstmt.setInt(3, partnerID);
             ResultSet res = pstmt.executeQuery();
             while (res.next()) {
                 record = new Record(res.getString(1),
@@ -144,7 +143,7 @@ public class RecordQueries {
         Record r = new Record("Check Up", Time.valueOf("12:00:00"), DateHandler
             .newDate(2017, 12, 25), 0);
         System.out
-            .println(RecordQueries.getByRecord("Check Up", Time.valueOf("12:00:00"), DateHandler
+            .println(RecordQueries.getByRecord( Time.valueOf("12:00:00"), DateHandler
                 .newDate(2017, 12, 25), 0));
 
         RecordQueries.updateRecord(r, r);
