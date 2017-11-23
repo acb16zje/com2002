@@ -62,7 +62,7 @@ public class BookAppointment extends JDialog {
 
         // Text field for patient ID
         JTextField patientID = new JTextField();
-        ((AbstractDocument) patientID.getDocument()).setDocumentFilter(new IntegerFilter());
+        ((AbstractDocument) patientID.getDocument()).setDocumentFilter(new IntegerFilter(10));
         patientID.setBounds(147, 112, 154, 23);
         patientID.setFont(new Font("Dialog", Font.PLAIN, 16));
         patientID.setColumns(10);
@@ -402,7 +402,7 @@ public class BookAppointment extends JDialog {
                     }
                 } else {
                     if (isValidDate(inputDate)) {
-                    	
+
                     	SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                     	String startDateStr =
                                 comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/"

@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -107,8 +108,8 @@ public class AppointmentTableListener implements ActionListener {
                 Object cell = partnerTable.getValueAt(row, column);
                 if (column == 0 || cell == null) {
                     cancelButton.setEnabled(false);
-                    viewButton.setEnabled(false);  
-                } 
+                    viewButton.setEnabled(false);
+                }
                 else {
                 	if (((String)cell).substring(0,1).equals("0")) {
                     	cancelButton.setEnabled(true);
@@ -121,8 +122,8 @@ public class AppointmentTableListener implements ActionListener {
 
             }
         });
-        
-        partnerTable.addKeyListener(new KeyListener() {		
+
+        partnerTable.addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
@@ -137,7 +138,7 @@ public class AppointmentTableListener implements ActionListener {
                 	if (((String)cell).substring(0,1).equals("0")) {
                     	cancelButton.setEnabled(true);
                         viewButton.setEnabled(false);
-                	} else {	
+                	} else {
                 		cancelButton.setEnabled(true);
                 		viewButton.setEnabled(true);
                 	}
@@ -153,14 +154,13 @@ public class AppointmentTableListener implements ActionListener {
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
 			}
-		
+
 		});
     }
      public static void refreshTable(JTable partnerTable, String selectedWeek, int partnerID,JButton cancelButton,
     	        JButton viewButton) {
     	 Date monDate;
  		try {
- 			System.out.println("refereshing");
  			monDate = timeFormat.parse(selectedWeek);
  			Date[] daysInWeekList = WeekGenerator.daysInWeekList(monDate);
  			partnerTable.setModel(
@@ -187,15 +187,15 @@ public class AppointmentTableListener implements ActionListener {
  			e1.printStackTrace();
  		}
      }
-     
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (changingSpinner == "year") {
+        if (Objects.equals(changingSpinner, "year")) {
             calendar.set(Calendar.YEAR, (int) partnerYear.getSelectedItem());
-            partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
-        } else if (changingSpinner == "month") {
+            partnerWeek.setModel(new DefaultComboBoxModel<>(WeekGenerator.weekList(calendar)));
+        } else if (Objects.equals(changingSpinner, "month")) {
             calendar.set(Calendar.MONTH, (int) partnerMonth.getSelectedItem() - 1);
-            partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
+            partnerWeek.setModel(new DefaultComboBoxModel<>(WeekGenerator.weekList(calendar)));
         }
         String selectedWeek = ((String) partnerWeek.getSelectedItem()).substring(0, 10);
 

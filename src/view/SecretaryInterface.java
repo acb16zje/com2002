@@ -113,7 +113,7 @@ public class SecretaryInterface extends JFrame {
         // Bottom panel, contain all the buttons
         JPanel dentistAppointmentPanel = new JPanel();
         dentistAppointment.add(dentistAppointmentPanel, BorderLayout.SOUTH);
-        
+
      // View appointment button for dentist
         JButton dentistViewButton = new JButton("View Appointment");
         dentistViewButton.setEnabled(false);
@@ -134,9 +134,9 @@ public class SecretaryInterface extends JFrame {
     				// TODO Auto-generated catch block
     				e1.printStackTrace();
     		}
-        });   
-        
-        
+        });
+
+
         // Cancel appointment button for dentist
         JButton dentistCancelButton = new JButton("Cancel Appointment");
         dentistCancelButton.setEnabled(false);
@@ -161,7 +161,6 @@ public class SecretaryInterface extends JFrame {
 				}
             }
         });
-       
         // Book appointment button for dentist
         JButton dentistBookButton = new JButton("Book Appointment");
         dentistBookButton.addActionListener(e -> {
@@ -208,12 +207,12 @@ public class SecretaryInterface extends JFrame {
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
-            
+
         });
 
         //printing appointment on dentist table
         AppointmentTableListener.refreshTable(dentistTable,((String) dentistWeek.getSelectedItem()).substring(0, 10),0,dentistCancelButton,dentistViewButton);
-        		
+
         // Main panel for hygienist appointment
         JPanel hygienistAppointment = new JPanel();
         tabbedPane.addTab("Hygienist Appointment", null, hygienistAppointment, null);
@@ -360,7 +359,7 @@ public class SecretaryInterface extends JFrame {
 
         // Text field for patient ID
         JTextField patientID = new JTextField();
-        ((AbstractDocument) patientID.getDocument()).setDocumentFilter(new IntegerFilter());
+        ((AbstractDocument) patientID.getDocument()).setDocumentFilter(new IntegerFilter(10));
         searchPatientPanel.add(patientID);
         patientID.setColumns(20);
 
@@ -415,14 +414,9 @@ public class SecretaryInterface extends JFrame {
         editPatientButton.setEnabled(false);
         editorPanel.add(editPatientButton);
         editPatientButton.addActionListener(e -> {
-            int rowSelected = patientTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select a patient!");
-            } else {
-                PatientEditor frame = new PatientEditor("Edit", patientTable);
-                frame.setModal(true);
-                frame.setVisible(true);
-            }
+            PatientEditor frame = new PatientEditor("Edit", patientTable);
+            frame.setModal(true);
+            frame.setVisible(true);
         });
 
         // Delete patient button
@@ -430,14 +424,9 @@ public class SecretaryInterface extends JFrame {
         deletePatientButton.setEnabled(false);
         editorPanel.add(deletePatientButton);
         deletePatientButton.addActionListener(e -> {
-            int rowSelected = patientTable.getSelectedRow();
-            if (rowSelected == -1) {
-                JOptionPane.showMessageDialog(null, "Select a patient!");
-            } else {
-                int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
-                if (a == JOptionPane.YES_OPTION) {
-                    // insert delete patient sql stuff here
-                }
+            int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+            if (a == JOptionPane.YES_OPTION) {
+                // insert delete patient sql stuff here
             }
         });
 
@@ -456,12 +445,26 @@ public class SecretaryInterface extends JFrame {
             dialog.setVisible(true);
         });
 
-        // Disable the edit patient, delete button and view patient plan button when
+        // Disable the edit patient, delete button and view patient plan button when invalid click
         patientTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                editPatientButton.setEnabled(true);
-                deletePatientButton.setEnabled(true);
-                viewPatientPlanButton.setEnabled(true);
+                JTable target = (JTable) e.getSource();
+                int row = target.getSelectedRow();
+
+                if (row == -1) {
+                    editPatientButton.setEnabled(false);
+                    deletePatientButton.setEnabled(false);
+                } else {
+                    Object cell = patientTable.getValueAt(row, 6);
+                    if (cell == null) {
+                        viewPatientPlanButton.setEnabled(false);
+                    } else {
+                        viewPatientPlanButton.setEnabled(true);
+                    }
+
+                    editPatientButton.setEnabled(true);
+                    deletePatientButton.setEnabled(true);
+                }
             }
         });
 
