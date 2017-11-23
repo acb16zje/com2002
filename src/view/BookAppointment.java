@@ -2,12 +2,7 @@ package view;
 
 import controller.AppointmentQueries;
 import controller.BookingListener;
-import controller.DateListener;
 import controller.PatientQueries;
-import controller.RecordQueries;
-import model.Appointment;
-import model.Record;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -29,7 +24,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
-
+import model.Appointment;
 import util.DateHandler;
 import util.IntegerFilter;
 
@@ -111,7 +106,7 @@ public class BookAppointment extends JDialog {
         comboStartTime.setBounds(147, 193, 68, 24);
         comboStartTime.setEditable(false);
         contentPanel.add(comboStartTime);
-        
+
         //get all available time
         Boolean[] avaibilityBoolean = AppointmentQueries.getAvailableTime( DateHandler.newDate((int) comboYear.getSelectedItem(),(int)comboMonth.getSelectedItem(),(int)comboDay.getSelectedItem()), partnerID);
         int cellValue = 0;
@@ -325,7 +320,7 @@ public class BookAppointment extends JDialog {
                     } else if (comp1.isShowing() && Integer.parseInt(((JTextField) comp1).getText()) > PatientQueries.getNewPatientID()-1) {
                     	completed = false;
                     	break;
-                    }	
+                    }
                 }
             }
 
@@ -354,7 +349,6 @@ public class BookAppointment extends JDialog {
                         Calendar endCal = Calendar.getInstance();
                         endCal.setTime(endDate);
                         int diff = endDate.compareTo(startDate);
-                        System.out.println(diff);
                         if (diff <= 0 || !isValidDate(startCal) || !isValidDate(endCal)) {
                             JOptionPane.showMessageDialog(null, "Invalid Time");
                         } else {

@@ -114,26 +114,26 @@ public class SecretaryInterface extends JFrame {
         JPanel dentistAppointmentPanel = new JPanel();
         dentistAppointment.add(dentistAppointmentPanel, BorderLayout.SOUTH);
 
-     // View appointment button for dentist
+        // View appointment button for dentist
         JButton dentistViewButton = new JButton("View Appointment");
         dentistViewButton.setEnabled(false);
         dentistViewButton.addActionListener(e -> {
-                int rowSelected = dentistTable.getSelectedRow();
-                int colSelected = dentistTable.getSelectedColumn();
-                int patientID = Integer.parseInt(((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(0,1));
-                String time = ((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(2,7);
-                String date = ((String)dentistTable.getColumnName(colSelected)).substring(4, 14);
-                Appointment viewApp;
-    			try {
-    				viewApp = AppointmentQueries.getAppointment( new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 0, patientID, Time.valueOf(time+":00"));
-    				ViewAppointment dialog = new ViewAppointment(viewApp);
-    		        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-    		        dialog.setModal(true);
-    		        dialog.setVisible(true);
-    			} catch (ParseException e1) {
-    				// TODO Auto-generated catch block
-    				e1.printStackTrace();
-    		}
+            int rowSelected = dentistTable.getSelectedRow();
+            int colSelected = dentistTable.getSelectedColumn();
+            int patientID = Integer.parseInt(((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(0,1));
+            String time = ((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(2,7);
+            String date = ((String)dentistTable.getColumnName(colSelected)).substring(4, 14);
+            Appointment viewApp;
+            try {
+                viewApp = AppointmentQueries.getAppointment( new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 0, patientID, Time.valueOf(time+":00"));
+                ViewAppointment dialog = new ViewAppointment(viewApp);
+                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                dialog.setModal(true);
+                dialog.setVisible(true);
+            } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         });
 
 
@@ -141,24 +141,24 @@ public class SecretaryInterface extends JFrame {
         JButton dentistCancelButton = new JButton("Cancel Appointment");
         dentistCancelButton.setEnabled(false);
         dentistCancelButton.addActionListener(e -> {
-        	int rowSelected = dentistTable.getSelectedRow();
+            int rowSelected = dentistTable.getSelectedRow();
             int colSelected = dentistTable.getSelectedColumn();
             int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
             if (a == JOptionPane.YES_OPTION) {
-            	int patientID = Integer.parseInt(((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(0,1));
-        		String time = ((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(2,7);
-        		String date = ((String)dentistTable.getColumnName(colSelected)).substring(4, 14);
+                int patientID = Integer.parseInt(((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(0,1));
+                String time = ((String)dentistTable.getValueAt(rowSelected, colSelected)).substring(2,7);
+                String date = ((String)dentistTable.getColumnName(colSelected)).substring(4, 14);
                 try {
-                	if (patientID != 0) {
-                	// Insert wipe all appointment related Record here
-                	//	RecordQueries.deleteRecord( RecordQueries.getByRecord(Time.valueOf(time+":00"),new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),0));
-                	}
-                	AppointmentQueries.deleteAppointment(new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 0, Time.valueOf(time+":00"));
-                	AppointmentTableListener.refreshTable(dentistTable,((String) dentistWeek.getSelectedItem()).substring(0, 10),0,dentistCancelButton,dentistViewButton);
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+                    if (patientID != 0) {
+                        // Insert wipe all appointment related Record here
+                        //	RecordQueries.deleteRecord( RecordQueries.getByRecord(Time.valueOf(time+":00"),new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),0));
+                    }
+                    AppointmentQueries.deleteAppointment(new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 0, Time.valueOf(time+":00"));
+                    AppointmentTableListener.refreshTable(dentistTable,((String) dentistWeek.getSelectedItem()).substring(0, 10),0,dentistCancelButton,dentistViewButton);
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         });
         // Book appointment button for dentist
@@ -452,7 +452,9 @@ public class SecretaryInterface extends JFrame {
         viewPatientPlanButton.setEnabled(false);
         planPanel.add(viewPatientPlanButton);
         viewPatientPlanButton.addActionListener(e -> {
-            HealthcarePlan dialog = new HealthcarePlan();
+            int row = patientTable.getSelectedRow();
+            int patientid = Integer.valueOf(String.valueOf(patientTable.getValueAt(row, 0)));
+            ViewPatientPlan dialog = new ViewPatientPlan(patientid);
             dialog.setModal(true);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setVisible(true);

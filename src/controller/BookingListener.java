@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-
 import util.DateHandler;
 
 public class BookingListener implements ActionListener {
@@ -46,7 +45,7 @@ public class BookingListener implements ActionListener {
         } else {
             comboDay.setSelectedItem(tempCal.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
-        
+
         Boolean[] avaibilityBoolean = AppointmentQueries.getAvailableTime( DateHandler.newDate((int)comboYear.getSelectedItem(),(int)comboMonth.getSelectedItem(),(int) comboDay.getSelectedItem()), partnerID);
         comboTime.setModel(new DefaultComboBoxModel());
         int cellValue = 0;
