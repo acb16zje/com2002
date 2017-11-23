@@ -11,15 +11,58 @@ import java.sql.Statement;
  */
 public class Database {
 
-    public static Connection getConnection() {
-        Connection con = null;
+    Connection con;  //Connect to db
 
-        try {
-            con = DriverManager.getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team006", "team006", "72b1d11b");
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+    public Database() {
+        this.con = connect();
+    }
 
+    public Connection getCon() {
         return con;
     }
+
+    private java.sql.Connection connect() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con = DriverManager
+                .getConnection("jdbc:mysql://stusql.dcs.shef.ac.uk/team006", "team006", "72b1d11b");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+    /**
+     * Close connection
+     */
+    public void closeConnection() {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Close statement
+     * @param st The statement
+     */
+    public void closeStmt(Statement st) {
+        if (st != null) {
+            try {
+                st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            System.out.println("statement closed");
+        }
+    }
+
+    public void endAll(Statement st) {
+        closeStmt(st);
+        closeConnection();
+    }
+
 }

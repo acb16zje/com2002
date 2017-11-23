@@ -26,7 +26,8 @@ import util.DateHandler;
 public class AppointmentQueries {
 
     public static Appointment getAppointment(Date d, int partnerID, int patientID, Time time) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         Appointment appointment = null;
         try {
@@ -50,6 +51,7 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
+            db.closeConnection();
         }
 
         return appointment;
@@ -58,7 +60,8 @@ public class AppointmentQueries {
 
     public static void getDayAppointmentList(JTable appointmentTable, java.util.Date date,
         int partnerID, int cols) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         DefaultTableModel model = (DefaultTableModel) appointmentTable.getModel();
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -95,13 +98,15 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
+            db.closeConnection();
         }
     }
 
     public static Boolean[] getAvailableTime(java.util.Date date, int partnerID) {
         Boolean[] avaibilityBoolean = new Boolean[24];
         Arrays.fill(avaibilityBoolean, true);
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
         try {
@@ -130,6 +135,7 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
+            db.closeConnection();
         }
         return avaibilityBoolean;
     }
@@ -193,7 +199,8 @@ public class AppointmentQueries {
     }
 
     public static ArrayList<Appointment> getAllAppointments() {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         ArrayList<Appointment> appointments = new ArrayList<>();
         try {
@@ -216,14 +223,15 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return appointments;
     }
 
     public static void insertAppointment(Appointment appointment) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Appointment VALUES (?, ?, ?, ?, ?)");
@@ -243,12 +251,13 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
     public static void deleteAppointment(Date d, int partnerID, Time time) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -267,32 +276,7 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
-
-        }
-    }
-
-    public static void updateAppointment(Appointment appointment) {
-        Connection con = Database.getConnection();
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = con.prepareStatement(
-                "UPDATE Appointment SET patientID = ? WHERE date = ? AND partnerID = ? AND startTime = ?");
-            pstmt.setInt(1, appointment.getPatientID());
-            pstmt.setDate(2, appointment.getDate());
-            pstmt.setInt(3, appointment.getPartnerID());
-            pstmt.setTime(4, appointment.getStartTime());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
+            db.closeConnection();
         }
     }
 

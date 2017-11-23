@@ -8,14 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Treatment;
 
-/**
- * @author Jake Sturgeon
- * @version 1.0 on 19/11/2017
- */
 public class TreatmentQueries {
 
     public static Treatment getByName(String name) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         Treatment treatment = null;
         try {
@@ -35,7 +32,7 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return treatment;
@@ -43,7 +40,8 @@ public class TreatmentQueries {
     }
 
     public static void insertTreatment(Treatment treatment) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Treatment VALUES (?, ?, ?)");
@@ -61,12 +59,13 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
     public static void updateTreatment(Treatment treatment) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -85,12 +84,13 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
     public static void deleteTreatment(String name) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         Treatment treatment = null;
         try {
@@ -107,13 +107,14 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
 
     public static ArrayList<Treatment> getAllTreatments() {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         ArrayList<Treatment> patients = new ArrayList<>();
         try {
@@ -132,7 +133,7 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return patients;

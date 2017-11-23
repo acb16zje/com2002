@@ -11,8 +11,8 @@ import model.Address;
 public class AddressQueries {
 
     public static Address getAddress(String houseNumber, String postCode) {
-
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         Address address = null;
         try {
@@ -38,7 +38,7 @@ public class AddressQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return address;
@@ -46,7 +46,8 @@ public class AddressQueries {
     }
 
     public static boolean isUniqueAddress(String houseNo, String postcode) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -66,44 +67,16 @@ public class AddressQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return false;
     }
 
-    public static ArrayList<Address> getAllAddresses() {
-        Connection con = Database.getConnection();
-        PreparedStatement pstmt = null;
-        ArrayList<Address> addresses = new ArrayList<>();
-        try {
-            pstmt = con.prepareStatement("SELECT * FROM Address");
-            ResultSet res = pstmt.executeQuery();
-            while (res.next()) {
-                addresses.add(new Address(res.getString(1),
-                    res.getString(2),
-                    res.getString(3),
-                    res.getString(4),
-                    res.getString(5)));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-
-        return addresses;
-    }
 
     public static void insertAddress(Address address) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Address VALUES (?, ?, ?, ?, ?)");
@@ -123,12 +96,13 @@ public class AddressQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
     public static void updateAddress(String houseNumber, String postCode, Address address) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("SET foreign_key_checks = 0");
@@ -155,7 +129,7 @@ public class AddressQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 }

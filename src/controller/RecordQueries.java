@@ -18,7 +18,8 @@ import util.DateHandler;
 public class RecordQueries {
 
     public static Record getByRecord(Time startTime, Date date, int partnerID) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         Record record = null;
         try {
@@ -44,7 +45,7 @@ public class RecordQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return record;
@@ -52,7 +53,8 @@ public class RecordQueries {
     }
 
     public static void insertRecord(Record record) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Record VALUES (?, ?, ?, ?)");
@@ -71,12 +73,13 @@ public class RecordQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
     public static void deleteRecord(Record record) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -96,7 +99,7 @@ public class RecordQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
@@ -106,9 +109,10 @@ public class RecordQueries {
     }
 
     public static ArrayList<Record> getAllRecords() {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
-        ArrayList<Record> records = new ArrayList<Record>();
+        ArrayList<Record> records = new ArrayList<>();
         try {
             pstmt = con.prepareStatement("SELECT * FROM Record");
             ResultSet res = pstmt.executeQuery();
@@ -128,7 +132,7 @@ public class RecordQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return records;

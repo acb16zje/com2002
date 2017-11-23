@@ -11,7 +11,8 @@ import model.HealthCarePlan;
 public class HealthCarePlanQueries {
 
     public static HealthCarePlan getPlan(String planName) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         HealthCarePlan plan = null;
         try {
@@ -35,7 +36,7 @@ public class HealthCarePlanQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return plan;
@@ -48,7 +49,8 @@ public class HealthCarePlanQueries {
      * @return Array of plan names
      */
     public static ArrayList getAllPlanName() {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         ArrayList<String> planName = new ArrayList<>();
         planName.add("");
@@ -69,14 +71,15 @@ public class HealthCarePlanQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return planName;
     }
 
     public static int getMonthlyFee(String planName) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con
@@ -95,7 +98,7 @@ public class HealthCarePlanQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return 0;

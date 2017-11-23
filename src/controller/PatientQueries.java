@@ -18,7 +18,8 @@ public class PatientQueries {
      * @param patientTable The patients table
      */
     public static void getPatientList(JTable patientTable) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
 
         try {
@@ -49,11 +50,13 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
+            db.closeConnection();
         }
     }
 
     public static Patient getByID(int ID) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         Patient patient = null;
         try {
@@ -79,14 +82,15 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return patient;
     }
 
     public static void insertPatient(Patient patient) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Patient VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -109,12 +113,13 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
     public static void updatePatient(Patient patient) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -138,12 +143,13 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
     public static int getNewPatientID() {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         int maxID = 0;
         try {
@@ -161,7 +167,7 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return maxID;

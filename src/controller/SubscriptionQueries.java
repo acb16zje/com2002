@@ -10,7 +10,8 @@ import model.Subscription;
 public class SubscriptionQueries {
 
     public static Subscription getSubscription(int patientID) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         Subscription subscription = null;
         try {
@@ -37,14 +38,15 @@ public class SubscriptionQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
 
         return subscription;
     }
 
     public static void insertSubscription(Subscription subscription) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Subscription VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -66,12 +68,13 @@ public class SubscriptionQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
     public static void deleteSubscription(int patientID) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con
@@ -88,12 +91,13 @@ public class SubscriptionQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 
     public static void updateSubscription(Subscription subscription) {
-        Connection con = Database.getConnection();
+        Database db = new Database();
+        Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("SET foreign_key_checks = 0");
@@ -120,7 +124,7 @@ public class SubscriptionQueries {
                     e.printStackTrace();
                 }
             }
-
+            db.closeConnection();
         }
     }
 }
