@@ -32,19 +32,6 @@ public class AppointmentTableListener implements ActionListener {
     private String changingSpinner;
     private int partnerID;
 
-    /**
-     * Initial constructor for generator the startup table
-     *
-     * @param table The partner appointment table
-     * @param cancelButton The cancel button
-     * @param viewButton The view button
-     */
-    public AppointmentTableListener(JTable table, JButton cancelButton, JButton viewButton) {
-        this.table = table;
-        this.cancelButton = cancelButton;
-        this.viewButton = viewButton;
-    }
-
     public AppointmentTableListener(JComboBox w, JComboBox m, JComboBox y, Calendar c, JTable table,
         JButton cancelButton, JButton viewButton, String s, int partnerID) {
         this.partnerWeek = w;
