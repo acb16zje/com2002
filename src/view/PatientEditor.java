@@ -349,7 +349,8 @@ public class PatientEditor extends JDialog {
                 } else {
                     // Old data
                     int row = patientTable.getSelectedRow();
-                    int patientID = Integer.valueOf(String.valueOf(patientTable.getValueAt(row, 0)));
+                    int patientID = Integer
+                        .valueOf(String.valueOf(patientTable.getValueAt(row, 0)));
                     Patient oldPatient = PatientQueries.getByID(patientID);
                     String oldHouseNo = oldPatient.getAddress().getHouseNo();
                     String oldPostcode = oldPatient.getAddress().getPostcode();
@@ -381,14 +382,17 @@ public class PatientEditor extends JDialog {
                                 .getPlan(String.valueOf(healthcarePlan.getSelectedItem()));
 
                             // If the patient wants to subscribe a plan after registeration
-                            if (SubscriptionQueries.getSubscription(newPatient.getPatientID()) == null) {
+                            if (SubscriptionQueries.getSubscription(newPatient.getPatientID())
+                                == null) {
                                 Calendar cal = Calendar.getInstance();
                                 Date startDate = Date
-                                    .valueOf(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+                                    .valueOf(
+                                        new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
                                 cal.add(Calendar.YEAR, 1);
                                 cal.add(Calendar.DATE, -1);
                                 Date endDate = Date
-                                    .valueOf(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+                                    .valueOf(
+                                        new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
 
                                 Subscription newSubscription = new Subscription(
                                     newPatient.getPatientID(),
@@ -403,7 +407,8 @@ public class PatientEditor extends JDialog {
                                 SubscriptionQueries.insertSubscription(newSubscription);
                             } else {
                                 // If the patient wants to upgrade his plan
-                                Subscription oldSubscription = SubscriptionQueries.getSubscription(newPatient.getPatientID());
+                                Subscription oldSubscription = SubscriptionQueries
+                                    .getSubscription(newPatient.getPatientID());
 
                                 HealthCarePlan oldPlan = HealthCarePlanQueries
                                     .getPlan(oldSubscription.getPlanName());
@@ -413,9 +418,12 @@ public class PatientEditor extends JDialog {
                                     upgradePlan.getPlanName(),
                                     oldSubscription.getStartDate(),
                                     oldSubscription.getEndDate(),
-                                    oldSubscription.getCheckUpLeft() + Math.abs(oldPlan.getCheckUp() - upgradePlan.getCheckUp()),
-                                    oldSubscription.getHygieneVisitLeft() + Math.abs(oldPlan.getHygieneVisit() - upgradePlan.getHygieneVisit()),
-                                    oldSubscription.getRepairWorkLeft() +  Math.abs(oldPlan.getRepairWork() - upgradePlan.getRepairWork())
+                                    oldSubscription.getCheckUpLeft() + Math
+                                        .abs(oldPlan.getCheckUp() - upgradePlan.getCheckUp()),
+                                    oldSubscription.getHygieneVisitLeft() + Math.abs(
+                                        oldPlan.getHygieneVisit() - upgradePlan.getHygieneVisit()),
+                                    oldSubscription.getRepairWorkLeft() + Math
+                                        .abs(oldPlan.getRepairWork() - upgradePlan.getRepairWork())
                                 );
 
                                 SubscriptionQueries.updateSubscription(newSubscription);

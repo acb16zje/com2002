@@ -41,7 +41,7 @@ public class PartnerListener implements ActionListener {
         label.setText(new SimpleDateFormat("EEEE").format(calendar.getTime()) + " " + timeFormat
             .format(calendar.getTime()));
         Date monDate = calendar.getTime();
-		AppointmentQueries.getDayAppointmentList(table,monDate,id,1);
+        AppointmentQueries.getDayAppointmentList(table, monDate, id, 1);
     }
 
 }

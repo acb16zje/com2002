@@ -26,9 +26,7 @@ import util.DateHandler;
 public class AppointmentQueries {
 
     public static Appointment getAppointment(Date d, int partnerID, int patientID, Time time) {
-
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         Appointment appointment = null;
         try {
@@ -52,39 +50,39 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
         }
 
         return appointment;
 
     }
 
-    public static void getDayAppointmentList(JTable appointmentTable, java.util.Date date, int partnerID, int cols) {
-        Database db = new Database();
-        Connection con = db.getCon();
+    public static void getDayAppointmentList(JTable appointmentTable, java.util.Date date,
+        int partnerID, int cols) {
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
-        DefaultTableModel model = (DefaultTableModel)appointmentTable.getModel();
-        ArrayList<Appointment> appointments = new ArrayList<Appointment>();
+        DefaultTableModel model = (DefaultTableModel) appointmentTable.getModel();
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
         try {
-            pstmt = con.prepareStatement("SELECT startTime,endTime,patientID FROM Appointment WHERE date = ? AND partnerID = ?");
+            pstmt = con.prepareStatement(
+                "SELECT startTime, endTime, patientID FROM Appointment WHERE date = ? AND partnerID = ?");
             pstmt.setDate(1, sqlDate);
             pstmt.setInt(2, partnerID);
             ResultSet res = pstmt.executeQuery();
             while (res.next()) {
-            	LocalTime startTime = res.getTime(1).toLocalTime();
-            	LocalTime endTime = res.getTime(2).toLocalTime();
-            	int cellsTaken = ((int) MINUTES.between(startTime,endTime))/20;
-            	int startCell = ((int) MINUTES.between(LocalTime.parse("09:00:00"),startTime))/20;
-            	Patient tempPatient = PatientQueries.getByID(res.getInt(3));
-            	for (int i = startCell; i < cellsTaken+startCell;i++) {
-            		if (res.getInt(3) == 0) {
-            			model.setValueAt(res.getInt(3)+" "+startTime+" HOLIDAY",i, cols);
-            		}
-            		else {
-            			model.setValueAt(res.getInt(3)+" "+startTime+" "+tempPatient.getFullName(),i, cols);
-            		}
-            	}
+                LocalTime startTime = res.getTime(1).toLocalTime();
+                LocalTime endTime = res.getTime(2).toLocalTime();
+                int cellsTaken = ((int) MINUTES.between(startTime, endTime)) / 20;
+                int startCell = ((int) MINUTES.between(LocalTime.parse("09:00:00"), startTime)) /20;
+                //Patient tempPatient = PatientQueries.getByID(res.getInt(3)); // Performance loss
+                for (int i = startCell; i < cellsTaken + startCell; i++) {
+                    if (res.getInt(3) == 0) {
+                        model.setValueAt(0 + " " + startTime + " HOLIDAY", i, cols);
+                    } else {
+                        model.setValueAt(
+                            res.getInt(3) + " " + startTime + " ", i,
+                            cols);
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,66 +94,64 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
         }
     }
 
     public static Boolean[] getAvailableTime(java.util.Date date, int partnerID) {
-
-    	Boolean[] avaibilityBoolean = new Boolean[24];
-    	Arrays.fill(avaibilityBoolean, true);
-    	 Database db = new Database();
-         Connection con = db.getCon();
-         PreparedStatement pstmt = null;
-         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-         try {
-             pstmt = con.prepareStatement("SELECT startTime,endTime FROM Appointment WHERE date = ? AND partnerID = ?");
-             pstmt.setDate(1, sqlDate);
-             pstmt.setInt(2, partnerID);
-             ResultSet res = pstmt.executeQuery();
-             while (res.next()) {
-            	LocalTime startTime = res.getTime(1).toLocalTime();
-             	LocalTime endTime = res.getTime(2).toLocalTime();
-             	int cellsTaken = ((int) MINUTES.between(startTime,endTime))/20;
-             	int startCell = ((int) MINUTES.between(LocalTime.parse("09:00:00"),startTime))/20;
-             	for (int i =startCell; i < cellsTaken+startCell; i++) {
-             		avaibilityBoolean[i] = false;
-             	}
-             }
-         } catch (SQLException e) {
-                 e.printStackTrace();
-         } finally {
-             if (pstmt != null) {
-                 try {
-                     pstmt.close();
-                 } catch (SQLException e) {
-                     e.printStackTrace();
-                 }
-             }
-             db.closeConnection();
-         }
-         return avaibilityBoolean;
-    }
-    
-    public static Boolean validTime(Time startTime, Time endTime, java.util.Date date, int partnerID) {
-		Boolean[] avaibilityList = getAvailableTime(date,partnerID);
-		LocalTime start = startTime.toLocalTime();
-     	LocalTime end = endTime.toLocalTime();
-     	int cellsTaken = ((int) MINUTES.between(start,end))/20;
-     	int startCell = ((int) MINUTES.between(LocalTime.parse("09:00:00"),start))/20;
-     	for (int i =startCell; i < cellsTaken+startCell; i++) {
-     		if (!avaibilityList[i]) {
-     			return false;
-     		}
-     	}
-    	return true;
-    }
-    
-    public static ArrayList<Appointment> getAllAppointments() {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Boolean[] avaibilityBoolean = new Boolean[24];
+        Arrays.fill(avaibilityBoolean, true);
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
-        ArrayList<Appointment> appointments = new ArrayList<Appointment>();
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        try {
+            pstmt = con.prepareStatement(
+                "SELECT startTime,endTime FROM Appointment WHERE date = ? AND partnerID = ?");
+            pstmt.setDate(1, sqlDate);
+            pstmt.setInt(2, partnerID);
+            ResultSet res = pstmt.executeQuery();
+            while (res.next()) {
+                LocalTime startTime = res.getTime(1).toLocalTime();
+                LocalTime endTime = res.getTime(2).toLocalTime();
+                int cellsTaken = ((int) MINUTES.between(startTime, endTime)) / 20;
+                int startCell =
+                    ((int) MINUTES.between(LocalTime.parse("09:00:00"), startTime)) / 20;
+                for (int i = startCell; i < cellsTaken + startCell; i++) {
+                    avaibilityBoolean[i] = false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return avaibilityBoolean;
+    }
+
+    public static Boolean validTime(Time startTime, Time endTime, java.util.Date date,
+        int partnerID) {
+        Boolean[] avaibilityList = getAvailableTime(date, partnerID);
+        LocalTime start = startTime.toLocalTime();
+        LocalTime end = endTime.toLocalTime();
+        int cellsTaken = ((int) MINUTES.between(start, end)) / 20;
+        int startCell = ((int) MINUTES.between(LocalTime.parse("09:00:00"), start)) / 20;
+        for (int i = startCell; i < cellsTaken + startCell; i++) {
+            if (!avaibilityList[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static ArrayList<Appointment> getAllAppointments() {
+        Connection con = Database.getConnection();
+        PreparedStatement pstmt = null;
+        ArrayList<Appointment> appointments = new ArrayList<>();
         try {
             pstmt = con.prepareStatement("SELECT * FROM Appointment");
             ResultSet res = pstmt.executeQuery();
@@ -176,15 +172,14 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
 
         return appointments;
     }
 
     public static void insertAppointment(Appointment appointment) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Appointment VALUES (?, ?, ?, ?, ?)");
@@ -204,13 +199,12 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
     }
 
     public static void deleteAppointment(Date d, int partnerID, Time time) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -218,7 +212,7 @@ public class AppointmentQueries {
             pstmt.setDate(1, d);
             pstmt.setInt(2, partnerID);
             pstmt.setTime(3, time);
-            System.out.println(d+" "+partnerID+" "+time);
+            System.out.println(d + " " + partnerID + " " + time);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -230,13 +224,12 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
     }
 
     public static void updateAppointment(Appointment appointment) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -256,22 +249,22 @@ public class AppointmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
     }
 
     public static void main(String[] args) {
 
         System.out.println(AppointmentQueries
-            .getAppointment(DateHandler.newDate(2017, 12, 25), 0,0, Time.valueOf("12:00:00")));
+            .getAppointment(DateHandler.newDate(2017, 12, 25), 0, 0, Time.valueOf("12:00:00")));
 
         Appointment app = new Appointment(DateHandler.newDate(2017, 12, 25),
-            Time.valueOf("13:00:00"),Time.valueOf("14:00:00"), 0, 0);
+            Time.valueOf("13:00:00"), Time.valueOf("14:00:00"), 0, 0);
         Appointment app2 = new Appointment(DateHandler.newDate(2017, 11, 22),
-                Time.valueOf("09:00:00"),Time.valueOf("11:00:00"), 0, 0);
+            Time.valueOf("09:00:00"), Time.valueOf("11:00:00"), 0, 0);
 
         System.out.println(app);
-       AppointmentQueries.insertAppointment(app);
+        AppointmentQueries.insertAppointment(app);
         AppointmentQueries.insertAppointment(app2);
 
         System.out.println(AppointmentQueries.getAllAppointments());

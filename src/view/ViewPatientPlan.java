@@ -1,7 +1,6 @@
 package view;
 
 import controller.HealthCarePlanQueries;
-import controller.PatientQueries;
 import controller.SubscriptionQueries;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -16,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import model.Patient;
 import model.Subscription;
 
 public class ViewPatientPlan extends JDialog {
@@ -201,7 +199,8 @@ public class ViewPatientPlan extends JDialog {
         Subscription subscription = SubscriptionQueries.getSubscription(patientID);
 
         healthcarePlan.setText(subscription.getPlanName());
-        monthlyPay.setText("\u00A3 " + String.valueOf(HealthCarePlanQueries.getMonthlyFee(subscription.getPlanName())));
+        monthlyPay.setText("\u00A3 " + String
+            .valueOf(HealthCarePlanQueries.getMonthlyFee(subscription.getPlanName())));
         startDate.setText(sdf.format(subscription.getStartDate()));
         endDate.setText(sdf.format(subscription.getEndDate()));
         checkUpLeft.setText(String.valueOf(subscription.getCheckUpLeft()));

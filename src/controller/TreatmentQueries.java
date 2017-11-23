@@ -15,8 +15,7 @@ import model.Treatment;
 public class TreatmentQueries {
 
     public static Treatment getByName(String name) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         Treatment treatment = null;
         try {
@@ -36,7 +35,7 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
 
         return treatment;
@@ -44,8 +43,7 @@ public class TreatmentQueries {
     }
 
     public static void insertTreatment(Treatment treatment) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Treatment VALUES (?, ?, ?)");
@@ -63,13 +61,12 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
     }
 
     public static void updateTreatment(Treatment treatment) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -88,13 +85,12 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
     }
 
     public static void deleteTreatment(String name) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         Treatment treatment = null;
         try {
@@ -111,16 +107,15 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
     }
 
 
     public static ArrayList<Treatment> getAllTreatments() {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
-        ArrayList<Treatment> patients = new ArrayList<Treatment>();
+        ArrayList<Treatment> patients = new ArrayList<>();
         try {
             pstmt = con.prepareStatement("SELECT * FROM Treatment");
             ResultSet res = pstmt.executeQuery();
@@ -137,7 +132,7 @@ public class TreatmentQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
 
         return patients;

@@ -153,11 +153,13 @@ public class ViewAppointment extends JDialog {
         ButtonGroup type = new ButtonGroup();
         type.add(checkUpRadioButton);
         type.add(treatmentRadioButton);
-        System.out.println(MINUTES.between(app.getEndTime().toLocalTime(),app.getStartTime().toLocalTime()));
-        if (MINUTES.between(app.getStartTime().toLocalTime(),app.getEndTime().toLocalTime()) == 60) {
-        	type.setSelected(treatmentRadioButton.getModel(), true);
+        System.out.println(
+            MINUTES.between(app.getEndTime().toLocalTime(), app.getStartTime().toLocalTime()));
+        if (MINUTES.between(app.getStartTime().toLocalTime(), app.getEndTime().toLocalTime())
+            == 60) {
+            type.setSelected(treatmentRadioButton.getModel(), true);
         } else {
-        	type.setSelected(checkUpRadioButton.getModel(), true);
+            type.setSelected(checkUpRadioButton.getModel(), true);
         }
 
         JLabel partnerLabel = new JLabel("Partner:");
@@ -190,9 +192,9 @@ public class ViewAppointment extends JDialog {
         partner.add(dentistRadioButton);
         partner.add(hygienistRadioButton);
         if (app.getPartnerID() == 0) {
-        	partner.setSelected(dentistRadioButton.getModel(), true);
+            partner.setSelected(dentistRadioButton.getModel(), true);
         } else {
-        	partner.setSelected(hygienistRadioButton.getModel(), true);
+            partner.setSelected(hygienistRadioButton.getModel(), true);
         }
 
         patientIDLabel = new JLabel("Patient ID:");

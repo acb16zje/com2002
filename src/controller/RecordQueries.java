@@ -17,10 +17,8 @@ import util.DateHandler;
  */
 public class RecordQueries {
 
-    public static Record getByRecord( Time startTime, Date date,
-        int partnerID) {
-        Database db = new Database();
-        Connection con = db.getCon();
+    public static Record getByRecord(Time startTime, Date date, int partnerID) {
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         Record record = null;
         try {
@@ -46,7 +44,7 @@ public class RecordQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
 
         return record;
@@ -54,8 +52,7 @@ public class RecordQueries {
     }
 
     public static void insertRecord(Record record) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Record VALUES (?, ?, ?, ?)");
@@ -74,13 +71,12 @@ public class RecordQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
     }
 
     public static void deleteRecord(Record record) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -99,8 +95,8 @@ public class RecordQueries {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-             }
-            db.closeConnection();
+            }
+
         }
     }
 
@@ -110,8 +106,7 @@ public class RecordQueries {
     }
 
     public static ArrayList<Record> getAllRecords() {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         ArrayList<Record> records = new ArrayList<Record>();
         try {
@@ -133,7 +128,7 @@ public class RecordQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
 
         return records;
@@ -143,7 +138,7 @@ public class RecordQueries {
         Record r = new Record("Check Up", Time.valueOf("12:00:00"), DateHandler
             .newDate(2017, 12, 25), 0);
         System.out
-            .println(RecordQueries.getByRecord( Time.valueOf("12:00:00"), DateHandler
+            .println(RecordQueries.getByRecord(Time.valueOf("12:00:00"), DateHandler
                 .newDate(2017, 12, 25), 0));
 
         RecordQueries.updateRecord(r, r);

@@ -108,19 +108,22 @@ public class BookAppointment extends JDialog {
         contentPanel.add(comboStartTime);
 
         //get all available time
-        Boolean[] avaibilityBoolean = AppointmentQueries.getAvailableTime( DateHandler.newDate((int) comboYear.getSelectedItem(),(int)comboMonth.getSelectedItem(),(int)comboDay.getSelectedItem()), partnerID);
+        Boolean[] avaibilityBoolean = AppointmentQueries.getAvailableTime(DateHandler
+            .newDate((int) comboYear.getSelectedItem(), (int) comboMonth.getSelectedItem(),
+                (int) comboDay.getSelectedItem()), partnerID);
         int cellValue = 0;
         for (int hour = 9; hour < 17; hour++) {
             for (int min = 0; min < 6; min += 2) {
-            	if (avaibilityBoolean[cellValue]) {
-	                if (hour == 9) {
-	                    comboStartTime
-	                        .addItem("0" + String.valueOf(hour) + ":" + String.valueOf(min) + "0");
-	                } else {
-	                    comboStartTime.addItem(String.valueOf(hour) + ":" + String.valueOf(min) + "0");
-	                }
-            	}
-            	cellValue++;
+                if (avaibilityBoolean[cellValue]) {
+                    if (hour == 9) {
+                        comboStartTime
+                            .addItem("0" + String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+                    } else {
+                        comboStartTime
+                            .addItem(String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+                    }
+                }
+                cellValue++;
             }
         }
 
@@ -180,39 +183,54 @@ public class BookAppointment extends JDialog {
         comboEndTime.setEnabled(false);
         contentPanel.add(comboEndTime);
         int cellEndValue = 0;
-        Boolean[] endAvaibilityBoolean = AppointmentQueries.getAvailableTime( DateHandler.newDate((int) comboEndYear.getSelectedItem(),(int)comboEndMonth.getSelectedItem(),(int)comboEndDay.getSelectedItem()), partnerID);
+        Boolean[] endAvaibilityBoolean = AppointmentQueries.getAvailableTime(DateHandler
+            .newDate((int) comboEndYear.getSelectedItem(), (int) comboEndMonth.getSelectedItem(),
+                (int) comboEndDay.getSelectedItem()), partnerID);
         for (int hour = 9; hour <= 17; hour++) {
             if (hour == 9) {
                 for (int min = 2; min < 6; min += 2) {
-                	if (endAvaibilityBoolean[cellEndValue]) {
-	                    comboEndTime
-	                        .addItem("0" + String.valueOf(hour) + ":" + String.valueOf(min) + "0");
-                	}
-                	cellEndValue++;
+                    if (endAvaibilityBoolean[cellEndValue]) {
+                        comboEndTime
+                            .addItem("0" + String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+                    }
+                    cellEndValue++;
                 }
             } else if (hour == 17) {
-            	if (endAvaibilityBoolean[cellEndValue]) {
-            		comboEndTime.addItem("17:00");
-            	}
+                if (endAvaibilityBoolean[cellEndValue]) {
+                    comboEndTime.addItem("17:00");
+                }
             } else {
                 for (int min = 0; min < 6; min += 2) {
-                	if (endAvaibilityBoolean[cellEndValue]) {
-                		comboEndTime.addItem(String.valueOf(hour) + ":" + String.valueOf(min) + "0");
-                	}
-                	cellEndValue++;
+                    if (endAvaibilityBoolean[cellEndValue]) {
+                        comboEndTime
+                            .addItem(String.valueOf(hour) + ":" + String.valueOf(min) + "0");
+                    }
+                    cellEndValue++;
                 }
             }
         }
 
         // Listener for start month and year
-        comboDay.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboStartTime,"Start",partnerID));
-        comboMonth.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboStartTime,"Start",partnerID));
-        comboYear.addActionListener(new BookingListener(comboDay, comboMonth, comboYear, comboStartTime,"Start",partnerID));
+        comboDay.addActionListener(
+            new BookingListener(comboDay, comboMonth, comboYear, comboStartTime, "Start",
+                partnerID));
+        comboMonth.addActionListener(
+            new BookingListener(comboDay, comboMonth, comboYear, comboStartTime, "Start",
+                partnerID));
+        comboYear.addActionListener(
+            new BookingListener(comboDay, comboMonth, comboYear, comboStartTime, "Start",
+                partnerID));
 
         // Listener for end month and year
-        comboEndDay.addActionListener(new BookingListener(comboEndDay, comboEndMonth, comboEndYear, comboEndTime,"End",partnerID));
-        comboEndMonth.addActionListener(new BookingListener(comboEndDay, comboEndMonth, comboEndYear, comboEndTime,"End",partnerID));
-        comboEndYear.addActionListener(new BookingListener(comboEndDay, comboEndMonth, comboEndYear, comboEndTime,"End",partnerID));
+        comboEndDay.addActionListener(
+            new BookingListener(comboEndDay, comboEndMonth, comboEndYear, comboEndTime, "End",
+                partnerID));
+        comboEndMonth.addActionListener(
+            new BookingListener(comboEndDay, comboEndMonth, comboEndYear, comboEndTime, "End",
+                partnerID));
+        comboEndYear.addActionListener(
+            new BookingListener(comboEndDay, comboEndMonth, comboEndYear, comboEndTime, "End",
+                partnerID));
 
         // Button group for check up, treatment. holiday
         ButtonGroup treatmentGroup = new ButtonGroup();
@@ -317,9 +335,10 @@ public class BookAppointment extends JDialog {
                     if (((JTextField) comp1).getText().isEmpty() && comp1.isShowing()) {
                         completed = false;
                         break;
-                    } else if (comp1.isShowing() && Integer.parseInt(((JTextField) comp1).getText()) > PatientQueries.getNewPatientID()-1) {
-                    	completed = false;
-                    	break;
+                    } else if (comp1.isShowing() && Integer.parseInt(((JTextField) comp1).getText())
+                        > PatientQueries.getNewPatientID() - 1) {
+                        completed = false;
+                        break;
                     }
                 }
             }
@@ -353,43 +372,69 @@ public class BookAppointment extends JDialog {
                         if (diff <= 0 || !isValidDate(startCal) || !isValidDate(endCal)) {
                             JOptionPane.showMessageDialog(null, "Invalid Time");
                         } else {
-                        	Calendar holCal = GregorianCalendar.getInstance();
-                        	holCal.setTime(startDate);
-                        	long totalDays = endDate.getTime() - startDate.getTime();
-                        	float daysBetween = (totalDays / (1000*60*60*24))+1;
-                        	if (daysBetween > 1) {
-                        		//check if whole holiday is valid
-                        		boolean validHol = true;
-                        		validHol = AppointmentQueries.validTime(new java.sql.Time(startDate.getTime()),Time.valueOf("17:00:00"),new java.sql.Date(holCal.getTime().getTime()),partnerID);
-        						holCal.add(Calendar.DAY_OF_YEAR, 1);
-                        		for (int i = 1;i<daysBetween-1 && validHol;i++) {
-                        			validHol = AppointmentQueries.validTime(Time.valueOf("09:00:00"),Time.valueOf("17:00:00"),new java.sql.Date(holCal.getTime().getTime()),partnerID);
-                        			holCal.add(Calendar.DAY_OF_YEAR, 1);
-                        		}
-                        		if (validHol) {
-                        			validHol = AppointmentQueries.validTime(Time.valueOf("09:00:00"),new java.sql.Time(endDate.getTime()),new java.sql.Date(holCal.getTime().getTime()),partnerID);
-                        		}
-                        		//insert holiday is valid
-                        		if (validHol) {
-	                        		holCal.setTime(startDate);
-	        						AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(holCal.getTime().getTime()),new java.sql.Time(startDate.getTime()),Time.valueOf("17:00:00"),0,partnerID));
-		                        	holCal.add(Calendar.DAY_OF_YEAR, 1);
-	                        		for (int i = 1;i<daysBetween-1;i++) {
-		                        		AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(holCal.getTime().getTime()),Time.valueOf("09:00:00"),Time.valueOf("17:00:00"),0,partnerID));
-		                        		holCal.add(Calendar.DAY_OF_YEAR, 1);
-	                        		}
-	                        		AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(holCal.getTime().getTime()),Time.valueOf("09:00:00"),new java.sql.Time(endDate.getTime()),0,partnerID));
-	                        		dispose();
-                        		} else {
-                        			JOptionPane.showMessageDialog(null, "Invalid Time");
-                        		}
-                        	} else if (AppointmentQueries.validTime(new java.sql.Time(startDate.getTime()),new java.sql.Time(endDate.getTime()),new java.sql.Date(holCal.getTime().getTime()),partnerID)) {
-                        		AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(holCal.getTime().getTime()),new java.sql.Time(startDate.getTime()),new java.sql.Time(endDate.getTime()),0,partnerID));
-                        		dispose();
-                        	} else {
-                        		JOptionPane.showMessageDialog(null, "Invalid Time");	
-                        	}
-	                            
+                            Calendar holCal = GregorianCalendar.getInstance();
+                            holCal.setTime(startDate);
+                            long totalDays = endDate.getTime() - startDate.getTime();
+                            float daysBetween = (totalDays / (1000 * 60 * 60 * 24)) + 1;
+                            if (daysBetween > 1) {
+                                //check if whole holiday is valid
+                                boolean validHol = true;
+                                validHol = AppointmentQueries
+                                    .validTime(new java.sql.Time(startDate.getTime()),
+                                        Time.valueOf("17:00:00"),
+                                        new java.sql.Date(holCal.getTime().getTime()), partnerID);
+                                holCal.add(Calendar.DAY_OF_YEAR, 1);
+                                for (int i = 1; i < daysBetween - 1 && validHol; i++) {
+                                    validHol = AppointmentQueries
+                                        .validTime(Time.valueOf("09:00:00"),
+                                            Time.valueOf("17:00:00"),
+                                            new java.sql.Date(holCal.getTime().getTime()),
+                                            partnerID);
+                                    holCal.add(Calendar.DAY_OF_YEAR, 1);
+                                }
+                                if (validHol) {
+                                    validHol = AppointmentQueries
+                                        .validTime(Time.valueOf("09:00:00"),
+                                            new java.sql.Time(endDate.getTime()),
+                                            new java.sql.Date(holCal.getTime().getTime()),
+                                            partnerID);
+                                }
+                                //insert holiday is valid
+                                if (validHol) {
+                                    holCal.setTime(startDate);
+                                    AppointmentQueries.insertAppointment(new Appointment(
+                                        new java.sql.Date(holCal.getTime().getTime()),
+                                        new java.sql.Time(startDate.getTime()),
+                                        Time.valueOf("17:00:00"), 0, partnerID));
+                                    holCal.add(Calendar.DAY_OF_YEAR, 1);
+                                    for (int i = 1; i < daysBetween - 1; i++) {
+                                        AppointmentQueries.insertAppointment(new Appointment(
+                                            new java.sql.Date(holCal.getTime().getTime()),
+                                            Time.valueOf("09:00:00"), Time.valueOf("17:00:00"), 0,
+                                            partnerID));
+                                        holCal.add(Calendar.DAY_OF_YEAR, 1);
+                                    }
+                                    AppointmentQueries.insertAppointment(new Appointment(
+                                        new java.sql.Date(holCal.getTime().getTime()),
+                                        Time.valueOf("09:00:00"),
+                                        new java.sql.Time(endDate.getTime()), 0, partnerID));
+                                    dispose();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Invalid Time");
+                                }
+                            } else if (AppointmentQueries
+                                .validTime(new java.sql.Time(startDate.getTime()),
+                                    new java.sql.Time(endDate.getTime()),
+                                    new java.sql.Date(holCal.getTime().getTime()), partnerID)) {
+                                AppointmentQueries.insertAppointment(
+                                    new Appointment(new java.sql.Date(holCal.getTime().getTime()),
+                                        new java.sql.Time(startDate.getTime()),
+                                        new java.sql.Time(endDate.getTime()), 0, partnerID));
+                                dispose();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Invalid Time");
+                            }
+
                         }
                     } catch (ParseException e1) {
                         // TODO Auto-generated catch block
@@ -398,31 +443,38 @@ public class BookAppointment extends JDialog {
                 } else {
                     if (isValidDate(inputDate)) {
 
-                    	SimpleDateFormat timeFormatCompare = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                    	String startDateStr =
-                                comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/"
-                                    + comboYear.getSelectedItem() + " " + comboStartTime
-                                    .getSelectedItem();
-                    	Date startDate;
-						try {
-							startDate = timeFormatCompare.parse(startDateStr);
-							Calendar startCal = Calendar.getInstance();
-	                        startCal.setTime(startDate);
-	                    	if (treatmentRadioButton.isSelected()) {
-	                    		startCal.add(Calendar.HOUR, 1);
-	                    	} else if (checkUpRadioButton.isSelected()) {
-	                    		startCal.add(Calendar.MINUTE, 20);
-	                    	}
-	                    	if (AppointmentQueries.validTime(new java.sql.Time(startDate.getTime()),new java.sql.Time(startCal.getTime().getTime()),new java.sql.Date(startCal.getTime().getTime()),partnerID)) {
-	                    		AppointmentQueries.insertAppointment(new Appointment(new java.sql.Date(startDate.getTime()),new java.sql.Time(startDate.getTime()),new java.sql.Time(startCal.getTime().getTime()),Integer.parseInt(patientID.getText()),partnerID));
-	                    		dispose();
-	                    	} else {
-	                    		JOptionPane.showMessageDialog(null, "Invalid Time");
-	                    	}
-	                    } catch (ParseException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+                        SimpleDateFormat timeFormatCompare = new SimpleDateFormat(
+                            "dd/MM/yyyy HH:mm");
+                        String startDateStr =
+                            comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/"
+                                + comboYear.getSelectedItem() + " " + comboStartTime
+                                .getSelectedItem();
+                        Date startDate;
+                        try {
+                            startDate = timeFormatCompare.parse(startDateStr);
+                            Calendar startCal = Calendar.getInstance();
+                            startCal.setTime(startDate);
+                            if (treatmentRadioButton.isSelected()) {
+                                startCal.add(Calendar.HOUR, 1);
+                            } else if (checkUpRadioButton.isSelected()) {
+                                startCal.add(Calendar.MINUTE, 20);
+                            }
+                            if (AppointmentQueries.validTime(new java.sql.Time(startDate.getTime()),
+                                new java.sql.Time(startCal.getTime().getTime()),
+                                new java.sql.Date(startCal.getTime().getTime()), partnerID)) {
+                                AppointmentQueries.insertAppointment(
+                                    new Appointment(new java.sql.Date(startDate.getTime()),
+                                        new java.sql.Time(startDate.getTime()),
+                                        new java.sql.Time(startCal.getTime().getTime()),
+                                        Integer.parseInt(patientID.getText()), partnerID));
+                                dispose();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Invalid Time");
+                            }
+                        } catch (ParseException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
                     } else {
                         JOptionPane.showMessageDialog(null, "We're closed on Saturday and Sunday");
                     }

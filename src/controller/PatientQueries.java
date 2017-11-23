@@ -18,8 +18,7 @@ public class PatientQueries {
      * @param patientTable The patients table
      */
     public static void getPatientList(JTable patientTable) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
 
         try {
@@ -50,13 +49,11 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
         }
     }
 
     public static Patient getByID(int ID) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         Patient patient = null;
         try {
@@ -82,15 +79,14 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
 
         return patient;
     }
 
     public static void insertPatient(Patient patient) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO Patient VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -113,40 +109,12 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
-        }
-    }
-    
-    public static void deletePatient(int ID) {
-        Database db = new Database();
-        Connection con = db.getCon();
-        PreparedStatement pstmt = null;
-        Patient patient = null;
-        try {
-            pstmt = con.prepareStatement("DELETE FROM Patient WHERE patientID = ?");
-            pstmt.setInt(1, ID);
-            pstmt.executeUpdate();
-            pstmt = con.prepareStatement(
-                "UPDATE Patient SET patientID = patientID - 1 WHERE patientID > ?");
-            pstmt.setInt(1, ID);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            db.closeConnection();
+
         }
     }
 
     public static void updatePatient(Patient patient) {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(
@@ -170,13 +138,12 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
     }
 
     public static int getNewPatientID() {
-        Database db = new Database();
-        Connection con = db.getCon();
+        Connection con = Database.getConnection();
         PreparedStatement pstmt = null;
         int maxID = 0;
         try {
@@ -194,7 +161,7 @@ public class PatientQueries {
                     e.printStackTrace();
                 }
             }
-            db.closeConnection();
+
         }
 
         return maxID;
