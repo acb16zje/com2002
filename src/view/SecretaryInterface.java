@@ -198,11 +198,10 @@ public class SecretaryInterface extends JFrame {
         JButton dentistSearchButton = new JButton("Search Appointment");
         dentistAppointmentPanel.add(dentistSearchButton);
         dentistSearchButton.addActionListener(e -> {
-            AppointmentSearch dialog = new AppointmentSearch();
+            AppointmentSearch dialog = new AppointmentSearch(0, dentistTable, dentistWeek, dentistMonth, dentistYear,dentistCancelButton, dentistViewButton);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
-
         });
 
         // Printing appointment on dentist table
@@ -346,7 +345,7 @@ public class SecretaryInterface extends JFrame {
         // Hygienist search button
         JButton hygienistSearchButton = new JButton("Search Appointment");
         hygienistSearchButton.addActionListener(e -> {
-            AppointmentSearch dialog = new AppointmentSearch();
+            AppointmentSearch dialog = new AppointmentSearch(1, hygienistTable, hygienistWeek, hygienistMonth, hygienistYear,hygienistCancelButton, hygienistViewButton);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);

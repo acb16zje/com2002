@@ -60,7 +60,7 @@ public class PatientEditor extends JDialog {
         panel.add(titleLabel);
 
         // ComboBox for title, eg MR, MS, MISS
-        JComboBox<String> comboTitle = new JComboBox<>(new String[]{"Mr", "Mrs", "Ms", "Miss"});
+        JComboBox<String> comboTitle = new JComboBox<>(new String[]{"Mr", "Mrs", "Ms"});
         comboTitle.setBounds(154, 45, 62, 24);
         panel.add(comboTitle);
 

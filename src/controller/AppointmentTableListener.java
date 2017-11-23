@@ -149,10 +149,10 @@ public class AppointmentTableListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (Objects.equals(changingSpinner, "year")) {
             calendar.set(Calendar.YEAR, (int) partnerYear.getSelectedItem());
-            partnerWeek.setModel(new DefaultComboBoxModel<>(WeekGenerator.weekList(calendar)));
+            partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
         } else if (Objects.equals(changingSpinner, "month")) {
             calendar.set(Calendar.MONTH, (int) partnerMonth.getSelectedItem() - 1);
-            partnerWeek.setModel(new DefaultComboBoxModel<>(WeekGenerator.weekList(calendar)));
+            partnerWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(calendar)));
         }
         String selectedWeek = ((String) partnerWeek.getSelectedItem()).substring(0, 10);
 
