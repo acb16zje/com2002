@@ -256,8 +256,6 @@ public class SecretaryInterface extends JFrame {
         JPanel hygienistAppointmentPanel = new JPanel();
         hygienistAppointment.add(hygienistAppointmentPanel, BorderLayout.SOUTH);
 
-        
-
         // Hygienist view appointment button
         JButton hygienistViewButton = new JButton("View Appointment");
         hygienistViewButton.setEnabled(false);
