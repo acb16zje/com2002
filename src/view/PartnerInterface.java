@@ -7,6 +7,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import model.Appointment;
 import util.WeekGenerator;
 
 public class PartnerInterface extends JFrame {
@@ -116,9 +119,25 @@ public class PartnerInterface extends JFrame {
         JButton editAppointmentButton = new JButton("Edit Appointment");
         editAppointmentButton.setEnabled(false);
         editAppointmentButton.addActionListener(e -> {
-            AppointmentEditorPartner dialog = new AppointmentEditorPartner(partner);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
+            int rowSelected = timetable.getSelectedRow();
+            int colSelected = timetable.getSelectedColumn();
+            int patientID = Integer.parseInt(
+                ((String) timetable.getValueAt(rowSelected, colSelected)).substring(0, 1));
+            String time = ((String) timetable.getValueAt(rowSelected, colSelected))
+                .substring(2, 7);
+            String date = timetable.getColumnName(colSelected).substring(0, 10);
+            Appointment viewApp;
+            try {
+                viewApp = AppointmentQueries.getAppointment(
+                    new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),
+                    partnerID,
+                    patientID, Time.valueOf(time + ":00"));
+                AppointmentEditorPartner dialog = new AppointmentEditorPartner(partner, viewApp);
+                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                dialog.setVisible(true);
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
         });
         editAppointmentButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
@@ -127,7 +146,8 @@ public class PartnerInterface extends JFrame {
         yesterdayButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
         yesterdayButton
             .addActionListener(
-                new PartnerListener(-1, currentCalendar, timetable, dayLabel, partnerID, editAppointmentButton));
+                new PartnerListener(-1, currentCalendar, timetable, dayLabel, partnerID,
+                    editAppointmentButton));
         GridBagConstraints gbc_yesterdayButton = new GridBagConstraints();
         gbc_yesterdayButton.fill = GridBagConstraints.BOTH;
         gbc_yesterdayButton.insets = new Insets(0, 0, 0, 5);
@@ -140,7 +160,8 @@ public class PartnerInterface extends JFrame {
         tomorrowButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
         tomorrowButton
             .addActionListener(
-                new PartnerListener(1, currentCalendar, timetable, dayLabel, partnerID, editAppointmentButton));
+                new PartnerListener(1, currentCalendar, timetable, dayLabel, partnerID,
+                    editAppointmentButton));
         GridBagConstraints gbc_tomorrowButton = new GridBagConstraints();
         gbc_tomorrowButton.fill = GridBagConstraints.BOTH;
         gbc_tomorrowButton.gridx = 4;

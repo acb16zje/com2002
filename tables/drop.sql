@@ -1,8 +1,8 @@
-DROP TABLE Record;
-DROP TABLE Treatment;
-DROP TABLE Appointment;
-DROP TABLE Subscription;
-DROP TABLE HealthCarePlan;
-DROP TABLE Partner;
-DROP TABLE Patient;
-DROP TABLE Address;
+DROP TABLE IF EXISTS Record;
+DROP TABLE IF EXISTS Treatment;
+DROP TABLE IF EXISTS Appointment;
+DROP TABLE IF EXISTS Subscription;
+DROP TABLE IF EXISTS HealthCarePlan;
+DROP TABLE IF EXISTS Partner;
+DROP TABLE IF EXISTS Patient;
+DROP TABLE IF EXISTS Address;

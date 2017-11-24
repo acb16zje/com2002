@@ -88,6 +88,33 @@ public class PatientQueries {
         return patient;
     }
 
+    public static String getNameByID(int ID) {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con
+                .prepareStatement("SELECT forename, surname FROM Patient WHERE patientID = ?");
+            pstmt.setInt(1, ID);
+            ResultSet res = pstmt.executeQuery();
+            res.next();
+            return res.getString(1) + " " + res.getString(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+
+        return "";
+    }
+
     public static void insertPatient(Patient patient) {
         Database db = new Database();
         Connection con = db.getCon();

@@ -15,9 +15,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import model.Address;
 import model.Appointment;
-import util.DateHandler;
 
 /**
  * @author Jake Sturgeon
@@ -101,8 +99,8 @@ public class AppointmentQueries {
             db.closeConnection();
         }
     }
-    
-    //returns a boolean list that represents time avaibility 
+
+    //returns a boolean list that represents time avaibility
     public static Boolean[] getAvailableTime(java.util.Date date, int partnerID) {
         Boolean[] avaibilityBoolean = new Boolean[24];
         Arrays.fill(avaibilityBoolean, true);
@@ -201,6 +199,35 @@ public class AppointmentQueries {
         return true;
     }
 
+    public static boolean isAppointmentCompleted(Time startTime, Date date, int partnerID) {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement(
+                "SELECT COUNT(1) FROM Record WHERE startTime = ? AND date = ? AND partnerID = ?");
+            pstmt.setTime(1, startTime);
+            pstmt.setDate(2, date);
+            pstmt.setInt(3, partnerID);
+            ResultSet res = pstmt.executeQuery();
+            res.next();
+            return res.getInt(1) != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+
+        return true;
+    }
+
     public static ArrayList<Appointment> getAllAppointments() {
         Database db = new Database();
         Connection con = db.getCon();
@@ -258,6 +285,7 @@ public class AppointmentQueries {
         }
     }
 
+
     public static void deleteAppointment(Date d, int partnerID, Time time) {
         Database db = new Database();
         Connection con = db.getCon();
@@ -282,48 +310,4 @@ public class AppointmentQueries {
             db.closeConnection();
         }
     }
-
-    public static void main(String[] args) {
-
-//        System.out.println(AppointmentQueries
-//            .getAppointment(DateHandler.newDate(2017, 12, 25), 0, 0, Time.valueOf("12:00:00")));
-//
-//        Appointment app = new Appointment(DateHandler.newDate(2017, 12, 25),
-//            Time.valueOf("13:00:00"), Time.valueOf("14:00:00"), 0, 0);
-//        Appointment app2 = new Appointment(DateHandler.newDate(2017, 11, 22),
-//            Time.valueOf("09:00:00"), Time.valueOf("11:00:00"), 0, 0);
-//
-//        System.out.println(app);
-//        AppointmentQueries.insertAppointment(app);
-//        AppointmentQueries.insertAppointment(app2);
-//
-//        System.out.println(AppointmentQueries.getAllAppointments());
-//
-//        Address testAddress = new Address("-", "-", "-", "-", "-");
-
-        System.out.println(AppointmentQueries
-                .getAppointment(DateHandler.newDate(2018, 1, 1), 0, 1, Time.valueOf("10:00:00")));
-        
-//        PatientQueries
-//            .insertPatient(new Patient(1, "Miss", "Curly", "Boi", DateHandler.newDate(1969, 07, 06),
-//                "0783649208", testAddress));
-//        app = new Appointment(DateHandler.newDate(2000, 8, 27), Time.valueOf("03:45:00"),Time.valueOf("04:45:00"), 1, 0);
-//        Appointment app3 = new Appointment(DateHandler.newDate(2017, 11, 22),
-//                Time.valueOf("11:00:00"),Time.valueOf("12:40:00"), 1, 1);
-//        AppointmentQueries.insertAppointment(app3);
-//        AppointmentQueries.updateAppointment(app);
-//        System.out.println(AppointmentQueries.getAllAppointments());
-
-//        AppointmentQueries.deleteAppointment(app.getDate(), app.getPartnerID(), app.getStartTime());
-//        AppointmentQueries.deleteAppointment(app2.getDate(), app2.getPartnerID(), app2.getStartTime());
-//        AppointmentQueries.deleteAppointment(app3.getDate(), app3.getPartnerID(), app3.getStartTime());
-//        PatientQueries.deletePatient(1);
-//    	Boolean[] test = AppointmentQueries.getAvailableTime(DateHandler.newDate(2017, 12, 25), 0);
-//    	for (int i = 0; i<test.length; i++ ) {
-//    		System.out.println(test[i]);
-//    	}
-//        System.out.println(AppointmentQueries.getAllAppointments());
-
-    }
-
 }

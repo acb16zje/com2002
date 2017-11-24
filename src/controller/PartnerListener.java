@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,12 +41,11 @@ public class PartnerListener implements ActionListener {
                 int column = target.getSelectedColumn();
                 int row = target.getSelectedRow();
                 Object cell = partnerTable.getValueAt(row, column);
-                if (column == 0 || cell == null) {
+                if (column == 0 || cell == null || ((String) cell).substring(0, 1).equals("0")) {
                     editButton.setEnabled(false);
                 } else {
                     editButton.setEnabled(true);
                 }
-
             }
         });
 
@@ -58,7 +56,7 @@ public class PartnerListener implements ActionListener {
                 int column = target.getSelectedColumn();
                 int row = target.getSelectedRow();
                 Object cell = partnerTable.getValueAt(row, column);
-                if (column == 0 || cell == null) {
+                if (column == 0 || cell == null || ((String) cell).substring(0, 1).equals("0")) {
                     editButton.setEnabled(false);
                 } else {
                     editButton.setEnabled(true);

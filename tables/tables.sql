@@ -21,13 +21,13 @@ CREATE TABLE Patient (
 );
 
 CREATE TABLE Partner (
-  partnerID INT         NOT NULL,
+  partnerID INT NOT NULL,
   PRIMARY KEY (partnerID)
 );
 
 CREATE TABLE HealthCarePlan (
   planName     VARCHAR(30)    NOT NULL,
-  monthlyFee   DECIMAL(10, 2)  NOT NULL,
+  monthlyFee   DECIMAL(10, 2) NOT NULL,
   checkUp      INT            NOT NULL,
   hygieneVisit INT            NOT NULL,
   repairWork   INT            NOT NULL,
@@ -59,9 +59,9 @@ CREATE TABLE Appointment (
 );
 
 CREATE TABLE Treatment (
-  name VARCHAR(30)    NOT NULL,
-  type VARCHAR(20)    NOT NULL,
-  cost DECIMAL(10, 2)  NOT NULL,
+  name VARCHAR(30) NOT NULL,
+  type VARCHAR(20) NOT NULL,
+  cost INT         NOT NULL,
   PRIMARY KEY (name)
 );
 
@@ -70,6 +70,8 @@ CREATE TABLE Record (
   startTime      TIME NOT NULL,
   date           DATE NOT NULL,
   partnerID      INT  NOT NULL,
+  quantity       INT  NOT NULL,
+  amountOwed     INT  NOT NULL,
   PRIMARY KEY (treatmentGiven, date, startTime, partnerID),
   FOREIGN KEY (date, startTime, partnerID) REFERENCES Appointment (date, startTime, partnerID),
   FOREIGN KEY (treatmentGiven) REFERENCES Treatment (name)

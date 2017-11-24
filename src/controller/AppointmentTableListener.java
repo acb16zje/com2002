@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,7 +21,6 @@ import util.WeekGenerator;
 
 public class AppointmentTableListener implements ActionListener {
 
-    private static Date monDate;
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
     private JTable table;
     private JComboBox partnerYear;
@@ -53,26 +53,41 @@ public class AppointmentTableListener implements ActionListener {
      * @param viewButton The view button
      */
     public static void buttonDisabler(JTable partnerTable, JButton cancelButton,
-        JButton viewButton) {
+        JButton viewButton, int partnerID) {
         partnerTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 JTable target = (JTable) e.getSource();
                 int column = target.getSelectedColumn();
                 int row = target.getSelectedRow();
                 Object cell = partnerTable.getValueAt(row, column);
+
                 if (column == 0 || cell == null) {
                     cancelButton.setEnabled(false);
                     viewButton.setEnabled(false);
                 } else {
-                    if (((String) cell).substring(0, 1).equals("0")) {
-                        cancelButton.setEnabled(true);
-                        viewButton.setEnabled(false);
-                    } else {
-                        cancelButton.setEnabled(true);
-                        viewButton.setEnabled(true);
+                    try {
+                        String time = ((String) partnerTable.getValueAt(row, column))
+                            .substring(2, 7);
+                        String dateString = partnerTable.getColumnName(column).substring(4, 14);
+                        Time startTime = Time.valueOf(time + ":00");
+                        java.sql.Date date = new java.sql.Date(
+                            timeFormat.parse(dateString).getTime());
+
+                        if (((String) cell).substring(0, 1).equals("0")) {
+                            cancelButton.setEnabled(true);
+                            viewButton.setEnabled(false);
+                        } else if (AppointmentQueries
+                            .isAppointmentCompleted(startTime, date, partnerID)) {
+                            cancelButton.setEnabled(false);
+                            viewButton.setEnabled(true);
+                        } else {
+                            cancelButton.setEnabled(true);
+                            viewButton.setEnabled(true);
+                        }
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
                     }
                 }
-
             }
         });
 
@@ -83,16 +98,32 @@ public class AppointmentTableListener implements ActionListener {
                 int column = target.getSelectedColumn();
                 int row = target.getSelectedRow();
                 Object cell = partnerTable.getValueAt(row, column);
+
                 if (column == 0 || cell == null) {
                     cancelButton.setEnabled(false);
                     viewButton.setEnabled(false);
                 } else {
-                    if (((String) cell).substring(0, 1).equals("0")) {
-                        cancelButton.setEnabled(true);
-                        viewButton.setEnabled(false);
-                    } else {
-                        cancelButton.setEnabled(true);
-                        viewButton.setEnabled(true);
+                    try {
+                        String time = ((String) partnerTable.getValueAt(row, column))
+                            .substring(2, 7);
+                        String dateString = partnerTable.getColumnName(column).substring(4, 14);
+                        Time startTime = Time.valueOf(time + ":00");
+                        java.sql.Date date = new java.sql.Date(
+                            timeFormat.parse(dateString).getTime());
+
+                        if (((String) cell).substring(0, 1).equals("0")) {
+                            cancelButton.setEnabled(true);
+                            viewButton.setEnabled(false);
+                        } else if (AppointmentQueries
+                            .isAppointmentCompleted(startTime, date, partnerID)) {
+                            cancelButton.setEnabled(false);
+                            viewButton.setEnabled(true);
+                        } else {
+                            cancelButton.setEnabled(true);
+                            viewButton.setEnabled(true);
+                        }
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
                     }
                 }
             }

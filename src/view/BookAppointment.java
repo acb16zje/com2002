@@ -264,8 +264,6 @@ public class BookAppointment extends JDialog {
 
         // Radio button for treatment
         JRadioButton treatmentRadioButton = new JRadioButton("Treatment");
-        treatmentRadioButton.setBounds(260, 71, 99, 23);
-        contentPanel.add(treatmentRadioButton);
         treatmentRadioButton.addActionListener(e -> {
             endDateLabel.setVisible(false);
             endDateLabel.setEnabled(false);
@@ -282,7 +280,11 @@ public class BookAppointment extends JDialog {
             patientID.setVisible(true);
             patientID.setEnabled(true);
         });
-        treatmentGroup.add(treatmentRadioButton);
+        if (partnerID == 0) {
+            treatmentRadioButton.setBounds(260, 71, 99, 23);
+            contentPanel.add(treatmentRadioButton);
+            treatmentGroup.add(treatmentRadioButton);
+        }
 
         // Radio button for holiday
         JRadioButton holidayRadioButton = new JRadioButton("Holiday");

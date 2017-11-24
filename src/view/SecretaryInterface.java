@@ -148,7 +148,7 @@ public class SecretaryInterface extends JFrame {
                 try {
                     if (patientID != 0) {
                         // Insert wipe all appointment related Record here
-                        //	RecordQueries.deleteRecord( RecordQueries.getByRecord(Time.valueOf(time+":00"),new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),0));
+                        // RecordQueries.deleteRecord( RecordQueries.getByRecord(Time.valueOf(time+":00"),new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),0));
                     }
                     AppointmentQueries.deleteAppointment(
                         new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),
@@ -192,13 +192,14 @@ public class SecretaryInterface extends JFrame {
 
         // Disable the cancel and view appointment button when it is clicked on empty slot
         AppointmentTableListener
-            .buttonDisabler(dentistTable, dentistCancelButton, dentistViewButton);
+            .buttonDisabler(dentistTable, dentistCancelButton, dentistViewButton, 0);
 
         // Search appointment button for dentist
         JButton dentistSearchButton = new JButton("Search Appointment");
         dentistAppointmentPanel.add(dentistSearchButton);
         dentistSearchButton.addActionListener(e -> {
-            AppointmentSearch dialog = new AppointmentSearch(0, dentistTable, dentistWeek, dentistMonth, dentistYear,dentistCancelButton, dentistViewButton);
+            AppointmentSearch dialog = new AppointmentSearch(0, dentistTable, dentistWeek,
+                dentistMonth, dentistYear, dentistCancelButton, dentistViewButton);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
@@ -340,12 +341,13 @@ public class SecretaryInterface extends JFrame {
 
         // Disable the cancel and view appointment button when it is clicked on empty slot
         AppointmentTableListener
-            .buttonDisabler(hygienistTable, hygienistCancelButton, hygienistViewButton);
+            .buttonDisabler(hygienistTable, hygienistCancelButton, hygienistViewButton, 1);
 
         // Hygienist search button
         JButton hygienistSearchButton = new JButton("Search Appointment");
         hygienistSearchButton.addActionListener(e -> {
-            AppointmentSearch dialog = new AppointmentSearch(1, hygienistTable, hygienistWeek, hygienistMonth, hygienistYear,hygienistCancelButton, hygienistViewButton);
+            AppointmentSearch dialog = new AppointmentSearch(1, hygienistTable, hygienistWeek,
+                hygienistMonth, hygienistYear, hygienistCancelButton, hygienistViewButton);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
@@ -436,6 +438,16 @@ public class SecretaryInterface extends JFrame {
         JPanel planPanel = new JPanel();
         patientPanel.add(planPanel);
 
+        JButton viewOutstandingButton = new JButton("View Outstanding");
+        viewOutstandingButton.addActionListener(e -> {
+            ViewPatientOutstanding dialog = new ViewPatientOutstanding();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setModal(true);
+            dialog.setVisible(true);
+        });
+        viewOutstandingButton.setEnabled(false);
+        planPanel.add(viewOutstandingButton);
+
         // View the patient registered plan button
         JButton viewPatientPlanButton = new JButton("View Patient Plan");
         viewPatientPlanButton.setEnabled(false);
@@ -454,9 +466,9 @@ public class SecretaryInterface extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 JTable target = (JTable) e.getSource();
                 int row = target.getSelectedRow();
-
                 if (row == -1) {
                     editPatientButton.setEnabled(false);
+                    viewOutstandingButton.setEnabled(false);
                 } else {
                     Object cell = patientTable.getValueAt(row, 6);
                     if (cell == null) {
@@ -466,6 +478,7 @@ public class SecretaryInterface extends JFrame {
                     }
 
                     editPatientButton.setEnabled(true);
+                    viewOutstandingButton.setEnabled(true);
                 }
             }
         });
