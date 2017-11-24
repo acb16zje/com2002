@@ -32,6 +32,8 @@ import javax.swing.text.AbstractDocument;
 import model.Appointment;
 import util.IntegerFilter;
 import util.WeekGenerator;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SecretaryInterface extends JFrame {
 
@@ -435,6 +437,16 @@ public class SecretaryInterface extends JFrame {
         // View the patient registered plan
         JPanel planPanel = new JPanel();
         patientPanel.add(planPanel);
+        
+        JButton viewOutstandingButton = new JButton("View Outstanding");
+        viewOutstandingButton.addActionListener(e ->{
+        	ViewPatientOutstanding dialog = new ViewPatientOutstanding();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setModal(true);
+            dialog.setVisible(true);	
+        });
+        viewOutstandingButton.setEnabled(false);
+        planPanel.add(viewOutstandingButton);
 
         // View the patient registered plan button
         JButton viewPatientPlanButton = new JButton("View Patient Plan");
@@ -454,9 +466,9 @@ public class SecretaryInterface extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 JTable target = (JTable) e.getSource();
                 int row = target.getSelectedRow();
-
                 if (row == -1) {
                     editPatientButton.setEnabled(false);
+                    viewOutstandingButton.setEnabled(false);
                 } else {
                     Object cell = patientTable.getValueAt(row, 6);
                     if (cell == null) {
@@ -466,6 +478,7 @@ public class SecretaryInterface extends JFrame {
                     }
 
                     editPatientButton.setEnabled(true);
+                    viewOutstandingButton.setEnabled(true);
                 }
             }
         });
