@@ -9,14 +9,14 @@ public class Record {
     private Time startTime;
     private Date date;
     private int partnerID;
-    private int amountOwned;
+    private int amountOwed;
 
-    public Record(String treatmentGiven, Time startTime, Date date, int partnerID, int amountOwned) {
+    public Record(String treatmentGiven, Time startTime, Date date, int partnerID, int amountOwed) {
         this.treatmentGiven = treatmentGiven;
         this.startTime = startTime;
         this.date = date;
         this.partnerID = partnerID;
-        this.amountOwned = amountOwned;
+        this.amountOwed = amountOwed;
     }
 
     public String getTreatmentGiven() {
@@ -51,12 +51,12 @@ public class Record {
         this.partnerID = partnerID;
     }
 
-    public int getAmountOwned() {
-        return amountOwned;
+    public int getAmountOwed() {
+        return amountOwed;
     }
 
-    public void setAmountOwned(int amountOwned) {
-        this.amountOwned = amountOwned;
+    public void setAmountOwed(int amountOwed) {
+        this.amountOwed = amountOwed;
     }
 
     @Override
