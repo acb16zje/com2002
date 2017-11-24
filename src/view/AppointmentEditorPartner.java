@@ -200,6 +200,7 @@ public class AppointmentEditorPartner extends JDialog {
             whiteCompositeSpinner.setEnabled(false);
             goldCrownSpinner.setEnabled(false);
             chckbxAppointmentCompleted.setEnabled(false);
+            chckbxAppointmentCompleted.setSelected(true);
 
             if (Objects.equals(label, "Dentist")) {
                 // Get the record of the completed appointment of dentist
@@ -254,7 +255,6 @@ public class AppointmentEditorPartner extends JDialog {
                     sumOfTreatment += (Integer) ((JSpinner) comp).getValue();
                 }
             }
-
 
             if (sumOfTreatment == 0) {
                 JOptionPane.showMessageDialog(null, "Please record a treatment");
