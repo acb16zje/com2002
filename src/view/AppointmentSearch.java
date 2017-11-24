@@ -163,11 +163,12 @@ public class AppointmentSearch extends JDialog {
 						SimpleDateFormat weekTimeFormat = new SimpleDateFormat("dd-MM-yyyy");
 						tableYear.setSelectedItem(comboYear.getSelectedItem());
 						tableMonth.setSelectedItem(comboMonth.getSelectedItem());
-						tempCal.set(Calendar.DAY_OF_WEEK, 2);
+						loopCal.set(Calendar.DAY_OF_WEEK, 2);
 						String monday = weekTimeFormat.format(loopCal.getTime());
-						tempCal.set(Calendar.DAY_OF_WEEK, 6);
+						loopCal.set(Calendar.DAY_OF_WEEK, 6);
 						String friday = weekTimeFormat.format(loopCal.getTime());
 						tableWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(loopCal)));
+						System.out.println(monday+" - "+friday);
 						tableWeek.setSelectedItem(monday+" - "+friday);
 						AppointmentTableListener.refreshTable(partnerTable, monday, partnerID, cancelPartnerButton, viewPartnerButton);	
 						dispose();
