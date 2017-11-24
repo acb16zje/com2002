@@ -64,7 +64,7 @@ public class RecordQueries {
             pstmt.setTime(2, record.getStartTime());
             pstmt.setDate(3, record.getDate());
             pstmt.setInt(4, record.getPartnerID());
-            pstmt.setInt(5, record.getAmountOwned());
+            pstmt.setInt(5, record.getAmountOwed());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -107,12 +107,12 @@ public class RecordQueries {
         return false;
     }
 
-    public static int getAmountOwnedByName(String name, Appointment app) {
+    public static int getAmountOwedByName(String name, Appointment app) {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("SELECT amountOwned FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ?");
+            pstmt = con.prepareStatement("SELECT amountOwed FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ?");
             pstmt.setString(1, name);
             pstmt.setTime(2, app.getStartTime());
             pstmt.setDate(3, app.getDate());

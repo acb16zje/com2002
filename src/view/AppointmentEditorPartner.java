@@ -203,10 +203,10 @@ public class AppointmentEditorPartner extends JDialog {
 
             if (Objects.equals(label, "Dentist")) {
                 // Get the record of the completed appointment of dentist
-                int checkUpAmount = RecordQueries.getAmountOwnedByName("Check Up", app);
-                int silverAmalgamAmount = RecordQueries.getAmountOwnedByName("Silver Amalgam Filling", app);
-                int whiteCompositeAmount = RecordQueries.getAmountOwnedByName("White Composite Resin Filling", app);
-                int goldCrownAmount = RecordQueries.getAmountOwnedByName("White Composite Resin Filling", app);
+                int checkUpAmount = RecordQueries.getAmountOwedByName("Check Up", app);
+                int silverAmalgamAmount = RecordQueries.getAmountOwedByName("Silver Amalgam Filling", app);
+                int whiteCompositeAmount = RecordQueries.getAmountOwedByName("White Composite Resin Filling", app);
+                int goldCrownAmount = RecordQueries.getAmountOwedByName("White Composite Resin Filling", app);
 
                 if (checkUpAmount != 0) {
                     checkUpHygieneSpinner.setValue(checkUpAmount / 45);
@@ -233,7 +233,7 @@ public class AppointmentEditorPartner extends JDialog {
                 }
             } else {
                 // Get the record of the competed appointment of hygienist
-                int hygieneAmount = RecordQueries.getAmountOwnedByName("Hygiene", app);
+                int hygieneAmount = RecordQueries.getAmountOwedByName("Hygiene", app);
 
                 if (hygieneAmount != 0) {
                     checkUpHygieneSpinner.setValue(hygieneAmount / 45);
