@@ -37,7 +37,7 @@ class PatientEditor extends JDialog {
     /**
      * Create the frame.
      */
-    public PatientEditor(String label, JTable patientTable) {
+    public PatientEditor(String label, JTable patientTable, JButton editButton, JButton billButton, JButton planButton) {
         // Main content panel
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -176,7 +176,7 @@ class PatientEditor extends JDialog {
 
         // Text field for district
         JTextField district = new JTextField();
-        ((AbstractDocument) district.getDocument()).setDocumentFilter(new CharLengthFilter(20));
+        ((AbstractDocument) district.getDocument()).setDocumentFilter(new CharLengthFilter(28));
         district.setBounds(154, 326, 200, 23);
         district.setFont(new Font("Dialog", Font.PLAIN, 16));
         district.setColumns(20);
@@ -189,7 +189,7 @@ class PatientEditor extends JDialog {
 
         // Text field for city
         JTextField city = new JTextField();
-        ((AbstractDocument) city.getDocument()).setDocumentFilter(new CharLengthFilter(20));
+        ((AbstractDocument) city.getDocument()).setDocumentFilter(new CharacterFilter(20));
         city.setBounds(154, 366, 200, 23);
         city.setFont(new Font("Dialog", Font.PLAIN, 16));
         city.setColumns(20);
@@ -239,7 +239,7 @@ class PatientEditor extends JDialog {
             houseNo.setText(patient.getAddress().getHouseNo());
             street.setText(patient.getAddress().getStreet());
             district.setText(patient.getAddress().getDistrict());
-            city.setText(patient.getAddress().getStreet());
+            city.setText(patient.getAddress().getCity());
             postcode.setText(patient.getAddress().getPostcode());
             healthcarePlan.setSelectedItem(patientTable.getValueAt(row, 6));
         }
@@ -435,7 +435,7 @@ class PatientEditor extends JDialog {
                     }
 
                     // Update the table
-                    PatientQueries.getPatientList(patientTable);
+                    PatientQueries.getPatientList(patientTable, editButton, billButton, planButton);
                 }
 
                 // Close the add or editing frame

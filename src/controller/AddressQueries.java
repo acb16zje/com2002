@@ -20,6 +20,7 @@ public class AddressQueries {
             pstmt.setString(1, houseNumber);
             pstmt.setString(2, postCode);
             ResultSet res = pstmt.executeQuery();
+
             while (res.next()) {
                 address = new Address(houseNumber,
                     res.getString(2),

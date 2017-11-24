@@ -408,9 +408,6 @@ class SecretaryInterface extends JFrame {
         patientTable.getColumnModel().getColumn(1).setPreferredWidth(10);
         patientPanel.setLayout(new BoxLayout(patientPanel, BoxLayout.X_AXIS));
 
-        // Get the list of patients from Database
-        PatientQueries.getPatientList(patientTable);
-
         // Bottom panel
         JPanel editorPanel = new JPanel();
         patientPanel.add(editorPanel);
@@ -418,26 +415,15 @@ class SecretaryInterface extends JFrame {
         // Add a new patient button
         JButton addPatientButton = new JButton("Add Patient");
         editorPanel.add(addPatientButton);
-        addPatientButton.addActionListener(e -> {
-            PatientEditor frame = new PatientEditor("Add", patientTable);
-            frame.setModal(true);
-            frame.setVisible(true);
-        });
 
         // Edit patient button
         JButton editPatientButton = new JButton("Edit Patient");
         editPatientButton.setEnabled(false);
         editorPanel.add(editPatientButton);
-        editPatientButton.addActionListener(e -> {
-            PatientEditor frame = new PatientEditor("Edit", patientTable);
-            frame.setModal(true);
-            frame.setVisible(true);
-        });
 
         // View the patient registered plan
         JPanel planPanel = new JPanel();
         patientPanel.add(planPanel);
-
         JButton viewOutstandingButton = new JButton("View Outstanding");
         viewOutstandingButton.addActionListener(e -> {
             ViewPatientOutstanding dialog = new ViewPatientOutstanding();
@@ -461,6 +447,9 @@ class SecretaryInterface extends JFrame {
             dialog.setVisible(true);
         });
 
+        // Get the list of patients from Database
+        PatientQueries.getPatientList(patientTable, editPatientButton, viewOutstandingButton, viewPatientPlanButton);
+
         // Disable the edit patient, delete button and view patient plan button when invalid click
         patientTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -481,6 +470,17 @@ class SecretaryInterface extends JFrame {
                     viewOutstandingButton.setEnabled(true);
                 }
             }
+        });
+
+        addPatientButton.addActionListener(e -> {
+            PatientEditor frame = new PatientEditor("Add", patientTable, editPatientButton, viewOutstandingButton, viewPatientPlanButton);
+            frame.setModal(true);
+            frame.setVisible(true);
+        });
+        editPatientButton.addActionListener(e -> {
+            PatientEditor frame = new PatientEditor("Edit", patientTable, editPatientButton, viewOutstandingButton, viewPatientPlanButton);
+            frame.setModal(true);
+            frame.setVisible(true);
         });
 
         // Basic settings

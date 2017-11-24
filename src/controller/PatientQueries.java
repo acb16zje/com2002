@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import model.Patient;
@@ -17,7 +18,7 @@ public class PatientQueries {
      *
      * @param patientTable The patients table
      */
-    public static void getPatientList(JTable patientTable) {
+    public static void getPatientList(JTable patientTable, JButton editButton, JButton billButton, JButton planButton) {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
@@ -40,6 +41,10 @@ public class PatientQueries {
                     }
                 );
             }
+
+            editButton.setEnabled(false);
+            billButton.setEnabled(false);
+            planButton.setEnabled(false);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
