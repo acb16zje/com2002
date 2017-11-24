@@ -402,7 +402,7 @@ public class AppointmentEditorPartner extends JDialog {
                     SubscriptionQueries.updateSubscription(patientPlan);
                 } else {
                     if ((Integer) (checkUpHygieneSpinner.getValue()) > 0) {
-                        if (patientPlan == null || patientPlan.getCheckUpLeft() == 0) {
+                        if (patientPlan == null || patientPlan.getHygieneVisitLeft() == 0) {
                             RecordQueries.insertRecord(new Record(
                                 "Hygiene",
                                 app.getStartTime(),
@@ -426,9 +426,9 @@ public class AppointmentEditorPartner extends JDialog {
                             ));
 
                             if (prepaid <= 0) {
-                                patientPlan.setCheckUpLeft(0);
+                                patientPlan.setHygieneVisitLeft(0);
                             } else {
-                                patientPlan.setCheckUpLeft(prepaid);
+                                patientPlan.setHygieneVisitLeft(prepaid);
                             }
                         }
 
