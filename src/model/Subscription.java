@@ -13,7 +13,7 @@ public class Subscription {
     private int repairWorkLeft;
 
     /**
-     * Constructr for Subscription
+     * Constructor for Subscription
      *
      * @param patientID The ID of the patient
      * @param planName The name of the healthcare plan
@@ -44,30 +44,12 @@ public class Subscription {
     }
 
     /**
-     * Set the patient ID for the subscription
-     *
-     * @param patientID The patient ID for the subscription
-     */
-    public void setPatientID(int patientID) {
-        this.patientID = patientID;
-    }
-
-    /**
      * Get the name of the healthcare plan of the subscription
      *
      * @return The name of the healthcare plan of the subscription
      */
     public String getPlanName() {
         return planName;
-    }
-
-    /**
-     * Set the name of the healthcare plan for the subscription
-     *
-     * @param planName The name of the healthcare plan for the subscription
-     */
-    public void setPlanName(String planName) {
-        this.planName = planName;
     }
 
     /**
@@ -80,30 +62,12 @@ public class Subscription {
     }
 
     /**
-     * Set the start date for the subscription
-     *
-     * @param startDate The start date for the subscription
-     */
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
      * Get the end date of the subscription
      *
      * @return The end date of the subscription
      */
     public Date getEndDate() {
         return endDate;
-    }
-
-    /**
-     * Set the end date of the subscription
-     *
-     * @param endDate The end date of the subscription
-     */
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     /**
@@ -136,7 +100,7 @@ public class Subscription {
     /**
      * Set the amount of hygiene visit left in the subscription
      *
-     * @param hygieneVisitLeft The amount of hygiene vist left in the subscription
+     * @param hygieneVisitLeft The amount of hygiene visit left in the subscription
      */
     public void setHygieneVisitLeft(int hygieneVisitLeft) {
         this.hygieneVisitLeft = hygieneVisitLeft;

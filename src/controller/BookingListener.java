@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import util.DateHandler;
@@ -23,9 +24,9 @@ public class BookingListener implements ActionListener {
         this.comboMonth = comboMonth;
         this.comboYear = comboYear;
         this.comboTime = comboTime;
-        if (type == "Start") {
+        if (Objects.equals(type, "Start")) {
             this.type = 0;
-        } else if (type == "End") {
+        } else if (Objects.equals(type, "End")) {
             this.type = 1;
         }
         this.partnerID = partnerID;

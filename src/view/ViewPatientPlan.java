@@ -8,8 +8,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,7 +21,7 @@ import javax.swing.border.EmptyBorder;
 import model.HealthCarePlan;
 import model.Subscription;
 
-public class ViewPatientPlan extends JDialog {
+class ViewPatientPlan extends JDialog {
 
     /**
      * Create the dialog.
@@ -217,25 +215,23 @@ public class ViewPatientPlan extends JDialog {
         repairWork.setText(String.valueOf(subscription.getRepairWorkLeft()));
 
         //listener for resubscribe
-        resubscribeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                HealthCarePlan updateTreat = HealthCarePlanQueries
-                    .getPlan(subscription.getPlanName());
-                Calendar updateCal = new GregorianCalendar().getInstance();
-                Date startUpdate = new Date(updateCal.getTime().getTime());
-                updateCal.add(Calendar.YEAR, 1);
-                updateCal.add(Calendar.DAY_OF_YEAR, -1);
-                Date endUpdate = new Date(updateCal.getTime().getTime());
-                SubscriptionQueries.updateSubscription(
-                    new Subscription(patientID, subscription.getPlanName(), startUpdate, endUpdate,
-                        updateTreat.getCheckUp(), updateTreat.getHygieneVisit(),
-                        updateTreat.getRepairWork()));
-                startDate.setText(sdf.format(startUpdate.getTime()));
-                endDate.setText(sdf.format(endUpdate.getTime()));
-                checkUpLeft.setText(String.valueOf(updateTreat.getCheckUp()));
-                hygieneVisitLeft.setText(String.valueOf(updateTreat.getHygieneVisit()));
-                repairWork.setText(String.valueOf(updateTreat.getRepairWork()));
-            }
+        resubscribeButton.addActionListener(e -> {
+            HealthCarePlan updateTreat = HealthCarePlanQueries
+                .getPlan(subscription.getPlanName());
+            Calendar updateCal = new GregorianCalendar().getInstance();
+            Date startUpdate = new Date(updateCal.getTime().getTime());
+            updateCal.add(Calendar.YEAR, 1);
+            updateCal.add(Calendar.DAY_OF_YEAR, -1);
+            Date endUpdate = new Date(updateCal.getTime().getTime());
+            SubscriptionQueries.updateSubscription(
+                new Subscription(patientID, subscription.getPlanName(), startUpdate, endUpdate,
+                    updateTreat.getCheckUp(), updateTreat.getHygieneVisit(),
+                    updateTreat.getRepairWork()));
+            startDate.setText(sdf.format(startUpdate.getTime()));
+            endDate.setText(sdf.format(endUpdate.getTime()));
+            checkUpLeft.setText(String.valueOf(updateTreat.getCheckUp()));
+            hygieneVisitLeft.setText(String.valueOf(updateTreat.getHygieneVisit()));
+            repairWork.setText(String.valueOf(updateTreat.getRepairWork()));
         });
 
         // Basic settings

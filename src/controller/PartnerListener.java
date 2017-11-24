@@ -17,13 +17,13 @@ import util.WeekGenerator;
 
 public class PartnerListener implements ActionListener {
 
-    private SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
-    private int dayChange;
-    private Calendar calendar;
-    private JTable table;
-    private JLabel label;
-    private JButton editButton;
-    private int id;
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private final int dayChange;
+    private final Calendar calendar;
+    private final JTable table;
+    private final JLabel label;
+    private final JButton editButton;
+    private final int id;
 
     public PartnerListener(int i, Calendar c, JTable t, JLabel l, int id, JButton button) {
         this.dayChange = i;

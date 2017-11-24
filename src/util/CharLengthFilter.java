@@ -6,7 +6,7 @@ import javax.swing.text.DocumentFilter;
 
 public class CharLengthFilter extends DocumentFilter {
 
-    private int limit;
+    private final int limit;
 
     public CharLengthFilter(int limit) {
         this.limit = limit;

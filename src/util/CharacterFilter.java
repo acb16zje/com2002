@@ -28,14 +28,4 @@ public class CharacterFilter extends DocumentFilter {
         }
     }
 
-    @Override
-    public void remove(FilterBypass fb, int i, int i1) throws BadLocationException {
-        super.remove(fb, i, i1);
-    }
-
-    @Override
-    public void insertString(FilterBypass fb, int i, String string, AttributeSet as)
-        throws BadLocationException {
-        super.insertString(fb, i, string, as);
-    }
 }

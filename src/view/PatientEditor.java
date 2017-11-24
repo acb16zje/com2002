@@ -32,7 +32,7 @@ import util.CharLengthFilter;
 import util.CharacterFilter;
 import util.IntegerFilter;
 
-public class PatientEditor extends JDialog {
+class PatientEditor extends JDialog {
 
     /**
      * Create the frame.

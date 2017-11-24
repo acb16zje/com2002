@@ -11,7 +11,7 @@ import java.sql.Statement;
  */
 public class Database {
 
-    Connection con;  //Connect to db
+    private Connection con;  //Connect to db
 
     public Database() {
         this.con = connect();
@@ -47,9 +47,10 @@ public class Database {
 
     /**
      * Close statement
+     *
      * @param st The statement
      */
-    public void closeStmt(Statement st) {
+    private void closeStmt(Statement st) {
         if (st != null) {
             try {
                 st.close();
@@ -59,10 +60,4 @@ public class Database {
             System.out.println("statement closed");
         }
     }
-
-    public void endAll(Statement st) {
-        closeStmt(st);
-        closeConnection();
-    }
-
 }

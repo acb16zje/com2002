@@ -4,13 +4,13 @@ import java.sql.Date;
 
 public class Patient {
 
-    private int patientID;
+    private final int patientID;
     private String title;
     private String surname;
     private String forename;
     private String phone;
     private Date dateOfBirth;
-    private Address address;
+    private final Address address;
 
     /**
      * Constructor for patient

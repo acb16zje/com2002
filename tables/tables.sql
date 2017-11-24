@@ -60,7 +60,6 @@ CREATE TABLE Appointment (
 
 CREATE TABLE Treatment (
   name VARCHAR(30) NOT NULL,
-  type VARCHAR(20) NOT NULL,
   cost INT         NOT NULL,
   PRIMARY KEY (name)
 );

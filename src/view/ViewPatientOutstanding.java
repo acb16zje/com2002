@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,10 +18,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
-public class ViewPatientOutstanding extends JDialog {
-
-    private final JPanel contentPanel = new JPanel();
-    private JTextField textField;
+class ViewPatientOutstanding extends JDialog {
 
     /**
      * Create the dialog.
@@ -34,6 +29,7 @@ public class ViewPatientOutstanding extends JDialog {
         setModal(true);
         setBounds(100, 100, 450, 600);
         getContentPane().setLayout(new BorderLayout());
+        JPanel contentPanel = new JPanel();
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         contentPanel.setLayout(null);
@@ -49,7 +45,7 @@ public class ViewPatientOutstanding extends JDialog {
             Box box = new Box(BoxLayout.Y_AXIS);
             JPanel recordOwedPanel = new JPanel();
             recordOwedPanel.setBounds(10, 81, 424, 386);
-            recordOwedPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+            recordOwedPanel.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
             contentPanel.add(recordOwedPanel);
             recordOwedPanel.setLayout(new BoxLayout(recordOwedPanel, BoxLayout.X_AXIS));
 
@@ -59,7 +55,7 @@ public class ViewPatientOutstanding extends JDialog {
 
             for (int i = 0; i < 5; i++) {
                 JPanel panel = new JPanel();
-                panel.setBorder(new LineBorder((Color) new Color(0, 0, 0)));
+                panel.setBorder(new LineBorder(new Color(0, 0, 0)));
                 JLabel lblTreatment = new JLabel();
                 lblTreatment.setText("Treatment " + i);
                 JLabel lblOwed = new JLabel();
@@ -80,7 +76,7 @@ public class ViewPatientOutstanding extends JDialog {
             contentPanel.add(lblTotalOwed);
         }
         {
-            textField = new JTextField();
+            JTextField textField = new JTextField();
             textField.setBounds(248, 475, 186, 20);
             textField.setEditable(false);
             contentPanel.add(textField);
@@ -97,22 +93,14 @@ public class ViewPatientOutstanding extends JDialog {
             getContentPane().add(buttonPane, BorderLayout.SOUTH);
             {
                 JButton okButton = new JButton("OK");
-                okButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent arg0) {
-                        dispose();
-                    }
-                });
+                okButton.addActionListener(arg0 -> dispose());
                 okButton.setActionCommand("OK");
                 buttonPane.add(okButton);
                 getRootPane().setDefaultButton(okButton);
             }
             {
                 JButton cancelButton = new JButton("Cancel");
-                cancelButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent arg0) {
-                        dispose();
-                    }
-                });
+                cancelButton.addActionListener(arg0 -> dispose());
                 cancelButton.setActionCommand("Cancel");
                 buttonPane.add(cancelButton);
             }

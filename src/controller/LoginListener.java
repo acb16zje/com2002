@@ -7,7 +7,7 @@ import view.Login;
 
 public class LoginListener implements WindowListener {
 
-    private JFrame frame;
+    private final JFrame frame;
 
     public LoginListener(JFrame f) {
         this.frame = f;

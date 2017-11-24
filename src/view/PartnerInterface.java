@@ -25,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import model.Appointment;
 import util.WeekGenerator;
 
-public class PartnerInterface extends JFrame {
+class PartnerInterface extends JFrame {
 
     /**
      * Create the frame.

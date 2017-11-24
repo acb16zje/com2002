@@ -33,7 +33,7 @@ import model.Appointment;
 import util.IntegerFilter;
 import util.WeekGenerator;
 
-public class SecretaryInterface extends JFrame {
+class SecretaryInterface extends JFrame {
 
     private JTable dentistTable;
     private JTable hygienistTable;
@@ -290,7 +290,7 @@ public class SecretaryInterface extends JFrame {
                     ((String) hygienistTable.getValueAt(rowSelected, colSelected)).substring(0, 1));
                 String time = ((String) hygienistTable.getValueAt(rowSelected, colSelected))
                     .substring(2, 7);
-                String date = ((String) hygienistTable.getColumnName(colSelected)).substring(4, 14);
+                String date = hygienistTable.getColumnName(colSelected).substring(4, 14);
                 try {
                     if (patientID != 0) {
                         // Insert wipe all appointment related Record here

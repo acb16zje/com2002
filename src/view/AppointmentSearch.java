@@ -28,7 +28,7 @@ import javax.swing.border.EmptyBorder;
 import model.Appointment;
 import util.WeekGenerator;
 
-public class AppointmentSearch extends JDialog {
+class AppointmentSearch extends JDialog {
 
     /**
      * Create the dialog.
@@ -146,42 +146,51 @@ public class AppointmentSearch extends JDialog {
                 || Integer.parseInt(textField.getText()) > PatientQueries.getNewPatientID() - 1) {
                 JOptionPane.showMessageDialog(null, "Please Insert Valid Patient ID");
             } else {
-            	SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-            	String dateString = comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/" + comboYear.getSelectedItem()+" 09:00";
-            	Date selectedDate;
-            	try {
-					selectedDate = new java.sql.Date(timeFormat.parse(dateString).getTime());
-					Calendar loopCal = new GregorianCalendar();
-					loopCal.setTime(selectedDate);
-					boolean valid = false;
-					for (int i=0; i<24; i++ ) {
-						Appointment tempApp = AppointmentQueries.getAppointment(selectedDate,partnerID,Integer.parseInt(textField.getText()), new java.sql.Time(loopCal.getTime().getTime()));
-						if (tempApp != null) {
-								valid = true;
-						}
-						loopCal.add(Calendar.MINUTE, 20);
-					}
-					if (valid) {
-						SimpleDateFormat weekTimeFormat = new SimpleDateFormat("dd-MM-yyyy");
-						tableYear.setSelectedItem(comboYear.getSelectedItem());
-						tableMonth.setSelectedItem(comboMonth.getSelectedItem());
-						loopCal.set(Calendar.DAY_OF_WEEK, 2);
-						String monday = weekTimeFormat.format(loopCal.getTime());
-						loopCal.set(Calendar.DAY_OF_WEEK, 6);
-						String friday = weekTimeFormat.format(loopCal.getTime());
-						tableWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(loopCal)));
-						System.out.println(monday+" - "+friday);
-						tableWeek.setSelectedItem(monday+" - "+friday);
-						AppointmentTableListener.refreshTable(partnerTable, monday, partnerID, cancelPartnerButton, viewPartnerButton);	
-						dispose();
-					} else {
-						JOptionPane.showMessageDialog(null, "No Appointment is available for the patient selected");
-					}
-					
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} 		
+                SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+                String dateString =
+                    comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/"
+                        + comboYear.getSelectedItem() + " 09:00";
+                Date selectedDate;
+                try {
+                    selectedDate = new java.sql.Date(timeFormat.parse(dateString).getTime());
+                    Calendar loopCal = new GregorianCalendar();
+                    loopCal.setTime(selectedDate);
+                    boolean valid = false;
+                    for (int i = 0; i < 24; i++) {
+                        Appointment tempApp = AppointmentQueries
+                            .getAppointment(selectedDate, partnerID,
+                                Integer.parseInt(textField.getText()),
+                                new java.sql.Time(loopCal.getTime().getTime()));
+                        if (tempApp != null) {
+                            valid = true;
+                        }
+                        loopCal.add(Calendar.MINUTE, 20);
+                    }
+                    if (valid) {
+                        SimpleDateFormat weekTimeFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        tableYear.setSelectedItem(comboYear.getSelectedItem());
+                        tableMonth.setSelectedItem(comboMonth.getSelectedItem());
+                        loopCal.set(Calendar.DAY_OF_WEEK, 2);
+                        String monday = weekTimeFormat.format(loopCal.getTime());
+                        loopCal.set(Calendar.DAY_OF_WEEK, 6);
+                        String friday = weekTimeFormat.format(loopCal.getTime());
+                        tableWeek
+                            .setModel(new DefaultComboBoxModel(WeekGenerator.weekList(loopCal)));
+                        System.out.println(monday + " - " + friday);
+                        tableWeek.setSelectedItem(monday + " - " + friday);
+                        AppointmentTableListener
+                            .refreshTable(partnerTable, monday, partnerID, cancelPartnerButton,
+                                viewPartnerButton);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                            "No Appointment is available for the patient selected");
+                    }
+
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         });
         buttonPane.add(okButton);

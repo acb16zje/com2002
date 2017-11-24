@@ -2,11 +2,11 @@ package model;
 
 public class HealthCarePlan {
 
-    private String planName;
-    private int monthlyFee;
-    private int checkUp;
-    private int hygieneVisit;
-    private int repairWork;
+    private final String planName;
+    private final int monthlyFee;
+    private final int checkUp;
+    private final int hygieneVisit;
+    private final int repairWork;
 
     public HealthCarePlan(String planName, int monthlyFee, int checkUp, int hygieneVisit,
         int repairWork) {

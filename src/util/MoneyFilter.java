@@ -1,14 +1,15 @@
 package util;
 
 import java.awt.Toolkit;
+import java.util.Objects;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
-public class MoneyFilter extends DocumentFilter {
+class MoneyFilter extends DocumentFilter {
 
     private static boolean isValidMoney(String money) {
-        if (money == null || money == "") {
+        if (money == null || Objects.equals(money, "")) {
             return false;
         }
         String[] parts = money.split("\\.");

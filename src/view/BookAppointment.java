@@ -28,7 +28,7 @@ import model.Appointment;
 import util.DateHandler;
 import util.IntegerFilter;
 
-public class BookAppointment extends JDialog {
+class BookAppointment extends JDialog {
 
     /**
      * Create the dialog.
@@ -379,7 +379,7 @@ public class BookAppointment extends JDialog {
                             float daysBetween = (totalDays / (1000 * 60 * 60 * 24)) + 1;
                             if (daysBetween > 1) {
                                 //check if whole holiday is valid
-                                boolean validHol = true;
+                                boolean validHol;
                                 validHol = AppointmentQueries
                                     .validTime(new java.sql.Time(startDate.getTime()),
                                         Time.valueOf("17:00:00"),

@@ -1,6 +1,6 @@
 package model;
 
-public class Partner {
+class Partner {
 
     private int ID;
     private String forename;

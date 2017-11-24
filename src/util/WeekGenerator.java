@@ -8,16 +8,13 @@ import javax.swing.JComboBox;
 
 public class WeekGenerator {
 
-    static SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
-    static Calendar currentCalendar = Calendar.getInstance();
-    static int currentYear = currentCalendar.get(Calendar.YEAR);
-    static int currentMonth = currentCalendar.get(Calendar.MONTH);
-    static int currentWeek = currentCalendar.get(Calendar.WEEK_OF_YEAR);
-    static int selectedWeek;
+    private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private static Calendar currentCalendar = Calendar.getInstance();
+    private static int currentWeek = currentCalendar.get(Calendar.WEEK_OF_YEAR);
+    private static int selectedWeek;
 
     public static JComboBox weekSpinner(Calendar c) {
-        Calendar tempCal = c;
-        JComboBox tempSpinner = new JComboBox(weekList(tempCal));
+        JComboBox tempSpinner = new JComboBox(weekList(c));
         tempSpinner.setSelectedIndex(selectedWeek);
         return tempSpinner;
     }

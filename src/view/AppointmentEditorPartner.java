@@ -29,7 +29,7 @@ import model.Appointment;
 import model.Record;
 import model.Subscription;
 
-public class AppointmentEditorPartner extends JDialog {
+class AppointmentEditorPartner extends JDialog {
 
     /**
      * Create the dialog.
@@ -214,7 +214,7 @@ public class AppointmentEditorPartner extends JDialog {
                     int whiteCompositeAmount = RecordQueries
                         .getQuantityOwedByName("White Composite Resin Filling", app);
                     int goldCrownAmount = RecordQueries
-                        .getQuantityOwedByName("White Composite Resin Filling", app);
+                        .getQuantityOwedByName("Gold Crown Fitting", app);
 
                     silverAmalgamSpinner.setValue(silverAmalgamAmount);
                     whiteCompositeSpinner.setValue(whiteCompositeAmount);
@@ -282,14 +282,25 @@ public class AppointmentEditorPartner extends JDialog {
                                 patientPlan.getCheckUpLeft() - (Integer) (checkUpHygieneSpinner
                                     .getValue());
 
-                            RecordQueries.insertRecord(new Record(
-                                "Check Up",
-                                app.getStartTime(),
-                                app.getDate(),
-                                0,
-                                (Integer) (checkUpHygieneSpinner.getValue()),
-                                totalCost("Check Up", Math.abs(prepaid))
-                            ));
+                            if (prepaid >= 0) {
+                                RecordQueries.insertRecord(new Record(
+                                    "Check Up",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    0,
+                                    (Integer) (checkUpHygieneSpinner.getValue()),
+                                    totalCost("Check Up", 0)
+                                ));
+                            } else {
+                                RecordQueries.insertRecord(new Record(
+                                    "Check Up",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    0,
+                                    (Integer) (checkUpHygieneSpinner.getValue()),
+                                    totalCost("Check Up", Math.abs(prepaid))
+                                ));
+                            }
 
                             if (prepaid <= 0) {
                                 patientPlan.setCheckUpLeft(0);
@@ -315,14 +326,25 @@ public class AppointmentEditorPartner extends JDialog {
                                 patientPlan.getRepairWorkLeft() - (Integer) (silverAmalgamSpinner
                                     .getValue());
 
-                            RecordQueries.insertRecord(new Record(
-                                "Silver Amalgam Filling",
-                                app.getStartTime(),
-                                app.getDate(),
-                                0,
-                                (Integer) (silverAmalgamSpinner.getValue()),
-                                totalCost("Silver Amalgam Filling", Math.abs(prepaid))
-                            ));
+                            if (prepaid >= 0) {
+                                RecordQueries.insertRecord(new Record(
+                                    "Silver Amalgam Filling",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    0,
+                                    (Integer) (silverAmalgamSpinner.getValue()),
+                                    totalCost("Silver Amalgam Filling", 0)
+                                ));
+                            } else {
+                                RecordQueries.insertRecord(new Record(
+                                    "Silver Amalgam Filling",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    0,
+                                    (Integer) (silverAmalgamSpinner.getValue()),
+                                    totalCost("Silver Amalgam Filling", Math.abs(prepaid))
+                                ));
+                            }
 
                             if (prepaid <= 0) {
                                 patientPlan.setRepairWorkLeft(0);
@@ -348,14 +370,25 @@ public class AppointmentEditorPartner extends JDialog {
                                 patientPlan.getRepairWorkLeft() - (Integer) (whiteCompositeSpinner
                                     .getValue());
 
-                            RecordQueries.insertRecord(new Record(
-                                "White Composite Resin Filling",
-                                app.getStartTime(),
-                                app.getDate(),
-                                0,
-                                (Integer) (whiteCompositeSpinner.getValue()),
-                                totalCost("White Composite Resin Filling", Math.abs(prepaid))
-                            ));
+                            if (prepaid >= 0) {
+                                RecordQueries.insertRecord(new Record(
+                                    "White Composite Resin Filling",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    0,
+                                    (Integer) (whiteCompositeSpinner.getValue()),
+                                    totalCost("White Composite Resin Filling", 0)
+                                ));
+                            } else {
+                                RecordQueries.insertRecord(new Record(
+                                    "White Composite Resin Filling",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    0,
+                                    (Integer) (whiteCompositeSpinner.getValue()),
+                                    totalCost("White Composite Resin Filling", Math.abs(prepaid))
+                                ));
+                            }
 
                             if (prepaid <= 0) {
                                 patientPlan.setRepairWorkLeft(0);
@@ -381,14 +414,25 @@ public class AppointmentEditorPartner extends JDialog {
                                 patientPlan.getRepairWorkLeft() - (Integer) (goldCrownSpinner
                                     .getValue());
 
-                            RecordQueries.insertRecord(new Record(
-                                "Gold Crown Fitting",
-                                app.getStartTime(),
-                                app.getDate(),
-                                0,
-                                (Integer) (goldCrownSpinner.getValue()),
-                                totalCost("Gold Crown Fitting", Math.abs(prepaid))
-                            ));
+                            if (prepaid >= 0) {
+                                RecordQueries.insertRecord(new Record(
+                                    "Gold Crown Fitting",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    0,
+                                    (Integer) (goldCrownSpinner.getValue()),
+                                    totalCost("Gold Crown Fitting", 0)
+                                ));
+                            } else {
+                                RecordQueries.insertRecord(new Record(
+                                    "Gold Crown Fitting",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    0,
+                                    (Integer) (goldCrownSpinner.getValue()),
+                                    totalCost("Gold Crown Fitting", Math.abs(prepaid))
+                                ));
+                            }
 
                             if (prepaid <= 0) {
                                 patientPlan.setRepairWorkLeft(0);
@@ -416,14 +460,25 @@ public class AppointmentEditorPartner extends JDialog {
                                 patientPlan.getHygieneVisitLeft() - (Integer) (checkUpHygieneSpinner
                                     .getValue());
 
-                            RecordQueries.insertRecord(new Record(
-                                "Check Up",
-                                app.getStartTime(),
-                                app.getDate(),
-                                0,
-                                (Integer) (checkUpHygieneSpinner.getValue()),
-                                totalCost("Check Up", Math.abs(prepaid))
-                            ));
+                            if (prepaid >= 0) {
+                                RecordQueries.insertRecord(new Record(
+                                    "Hygiene",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    1,
+                                    (Integer) (checkUpHygieneSpinner.getValue()),
+                                    totalCost("Hygiene", 0)
+                                ));
+                            } else {
+                                RecordQueries.insertRecord(new Record(
+                                    "Hygiene",
+                                    app.getStartTime(),
+                                    app.getDate(),
+                                    1,
+                                    (Integer) (checkUpHygieneSpinner.getValue()),
+                                    totalCost("Hygiene", Math.abs(prepaid))
+                                ));
+                            }
 
                             if (prepaid <= 0) {
                                 patientPlan.setHygieneVisitLeft(0);
