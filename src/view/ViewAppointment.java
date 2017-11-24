@@ -2,6 +2,8 @@ package view;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
+import controller.AppointmentQueries;
+import controller.PatientQueries;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -21,8 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
-import controller.PatientQueries;
 import model.Appointment;
 
 public class ViewAppointment extends JDialog {
@@ -60,57 +60,99 @@ public class ViewAppointment extends JDialog {
 
         JPanel infoPanel = new JPanel();
         contentPanel.add(infoPanel, BorderLayout.CENTER);
-        infoPanel.setLayout(null);
+        GridBagLayout gbl_infoPanel = new GridBagLayout();
+        gbl_infoPanel.columnWidths = new int[]{50, 119, 183, 128, 0, 0};
+        gbl_infoPanel.rowHeights = new int[]{66, 40, 40, 40, 40, 40, 40, 40, 0, 0};
+        gbl_infoPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+        gbl_infoPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+            Double.MIN_VALUE};
+        infoPanel.setLayout(gbl_infoPanel);
 
         dateLabel = new JLabel("Date:");
-        dateLabel.setBounds(50, 82, 27, 14);
-        infoPanel.add(dateLabel);
+        GridBagConstraints gbc_dateLabel = new GridBagConstraints();
+        gbc_dateLabel.anchor = GridBagConstraints.WEST;
+        gbc_dateLabel.insets = new Insets(0, 0, 5, 5);
+        gbc_dateLabel.gridx = 1;
+        gbc_dateLabel.gridy = 1;
+        infoPanel.add(dateLabel, gbc_dateLabel);
 
         dateTextField = new JTextField();
-        dateTextField.setBounds(142, 76, 159, 27);
         dateTextField.setEditable(false);
         dateTextField.setFont(new Font("Dialog", Font.PLAIN, 16));
         dateTextField.setText(timeFormat.format(app.getDate().getTime()));
-        infoPanel.add(dateTextField);
+        GridBagConstraints gbc_dateTextField = new GridBagConstraints();
+        gbc_dateTextField.fill = GridBagConstraints.BOTH;
+        gbc_dateTextField.insets = new Insets(0, 0, 5, 5);
+        gbc_dateTextField.gridx = 2;
+        gbc_dateTextField.gridy = 1;
+        infoPanel.add(dateTextField, gbc_dateTextField);
         dateTextField.setColumns(10);
 
         startTimeLabel = new JLabel("Start Time:");
-        startTimeLabel.setBounds(50, 122, 53, 14);
-        infoPanel.add(startTimeLabel);
+        GridBagConstraints gbc_startTimeLabel = new GridBagConstraints();
+        gbc_startTimeLabel.fill = GridBagConstraints.HORIZONTAL;
+        gbc_startTimeLabel.insets = new Insets(0, 0, 5, 5);
+        gbc_startTimeLabel.gridx = 1;
+        gbc_startTimeLabel.gridy = 2;
+        infoPanel.add(startTimeLabel, gbc_startTimeLabel);
 
         startTime = new JTextField();
-        startTime.setBounds(142, 116, 159, 27);
         startTime.setEditable(false);
         startTime.setFont(new Font("Dialog", Font.PLAIN, 16));
         startTime.setColumns(10);
         startTime.setText(new SimpleDateFormat("HH:mm:ss").format(app.getStartTime()));
-        infoPanel.add(startTime);
+        GridBagConstraints gbc_startTime = new GridBagConstraints();
+        gbc_startTime.fill = GridBagConstraints.BOTH;
+        gbc_startTime.insets = new Insets(0, 0, 5, 5);
+        gbc_startTime.gridx = 2;
+        gbc_startTime.gridy = 2;
+        infoPanel.add(startTime, gbc_startTime);
 
         endTimeLabel = new JLabel("End Time:");
-        endTimeLabel.setBounds(50, 162, 47, 14);
-        infoPanel.add(endTimeLabel);
+        GridBagConstraints gbc_endTimeLabel = new GridBagConstraints();
+        gbc_endTimeLabel.anchor = GridBagConstraints.WEST;
+        gbc_endTimeLabel.insets = new Insets(0, 0, 5, 5);
+        gbc_endTimeLabel.gridx = 1;
+        gbc_endTimeLabel.gridy = 3;
+        infoPanel.add(endTimeLabel, gbc_endTimeLabel);
 
         endTime = new JTextField();
-        endTime.setBounds(142, 156, 159, 27);
         endTime.setFont(new Font("Dialog", Font.PLAIN, 16));
         endTime.setEditable(false);
         endTime.setText(new SimpleDateFormat("HH:mm:ss").format(app.getEndTime()));
-        infoPanel.add(endTime);
+        GridBagConstraints gbc_endTime = new GridBagConstraints();
+        gbc_endTime.fill = GridBagConstraints.BOTH;
+        gbc_endTime.insets = new Insets(0, 0, 5, 5);
+        gbc_endTime.gridx = 2;
+        gbc_endTime.gridy = 3;
+        infoPanel.add(endTime, gbc_endTime);
         endTime.setColumns(10);
 
         typeLabel = new JLabel("Type:");
-        typeLabel.setBounds(50, 202, 28, 14);
-        infoPanel.add(typeLabel);
+        GridBagConstraints gbc_typeLabel = new GridBagConstraints();
+        gbc_typeLabel.anchor = GridBagConstraints.WEST;
+        gbc_typeLabel.insets = new Insets(0, 0, 5, 5);
+        gbc_typeLabel.gridx = 1;
+        gbc_typeLabel.gridy = 4;
+        infoPanel.add(typeLabel, gbc_typeLabel);
 
         checkUpRadioButton = new JRadioButton("Check-up / hygiene");
-        checkUpRadioButton.setBounds(142, 198, 119, 23);
         checkUpRadioButton.setEnabled(false);
-        infoPanel.add(checkUpRadioButton);
+        GridBagConstraints gbc_checkUpRadioButton = new GridBagConstraints();
+        gbc_checkUpRadioButton.anchor = GridBagConstraints.WEST;
+        gbc_checkUpRadioButton.insets = new Insets(0, 0, 5, 5);
+        gbc_checkUpRadioButton.gridx = 2;
+        gbc_checkUpRadioButton.gridy = 4;
+        infoPanel.add(checkUpRadioButton, gbc_checkUpRadioButton);
 
         treatmentRadioButton = new JRadioButton("Treatment");
-        treatmentRadioButton.setBounds(306, 198, 75, 23);
         treatmentRadioButton.setEnabled(false);
-        infoPanel.add(treatmentRadioButton);
+        GridBagConstraints gbc_treatmentRadioButton = new GridBagConstraints();
+        gbc_treatmentRadioButton.fill = GridBagConstraints.HORIZONTAL;
+        gbc_treatmentRadioButton.insets = new Insets(0, 0, 5, 5);
+        gbc_treatmentRadioButton.gridx = 3;
+        gbc_treatmentRadioButton.gridy = 4;
+        infoPanel.add(treatmentRadioButton, gbc_treatmentRadioButton);
 
         ButtonGroup type = new ButtonGroup();
         type.add(checkUpRadioButton);
@@ -123,18 +165,30 @@ public class ViewAppointment extends JDialog {
         }
 
         JLabel partnerLabel = new JLabel("Partner:");
-        partnerLabel.setBounds(50, 242, 40, 14);
-        infoPanel.add(partnerLabel);
+        GridBagConstraints gbc_partnerLabel = new GridBagConstraints();
+        gbc_partnerLabel.anchor = GridBagConstraints.WEST;
+        gbc_partnerLabel.insets = new Insets(0, 0, 5, 5);
+        gbc_partnerLabel.gridx = 1;
+        gbc_partnerLabel.gridy = 5;
+        infoPanel.add(partnerLabel, gbc_partnerLabel);
 
         JRadioButton dentistRadioButton = new JRadioButton("Dentist");
-        dentistRadioButton.setBounds(142, 238, 59, 23);
         dentistRadioButton.setEnabled(false);
-        infoPanel.add(dentistRadioButton);
+        GridBagConstraints gbc_dentistRadioButton = new GridBagConstraints();
+        gbc_dentistRadioButton.anchor = GridBagConstraints.WEST;
+        gbc_dentistRadioButton.insets = new Insets(0, 0, 5, 5);
+        gbc_dentistRadioButton.gridx = 2;
+        gbc_dentistRadioButton.gridy = 5;
+        infoPanel.add(dentistRadioButton, gbc_dentistRadioButton);
 
         JRadioButton hygienistRadioButton = new JRadioButton("Hygienist");
-        hygienistRadioButton.setBounds(306, 238, 69, 23);
         hygienistRadioButton.setEnabled(false);
-        infoPanel.add(hygienistRadioButton);
+        GridBagConstraints gbc_hygienistRadioButton = new GridBagConstraints();
+        gbc_hygienistRadioButton.fill = GridBagConstraints.HORIZONTAL;
+        gbc_hygienistRadioButton.insets = new Insets(0, 0, 5, 5);
+        gbc_hygienistRadioButton.gridx = 3;
+        gbc_hygienistRadioButton.gridy = 5;
+        infoPanel.add(hygienistRadioButton, gbc_hygienistRadioButton);
 
         ButtonGroup partner = new ButtonGroup();
         partner.add(dentistRadioButton);
@@ -146,26 +200,43 @@ public class ViewAppointment extends JDialog {
         }
 
         patientIDLabel = new JLabel("Patient ID:");
-        patientIDLabel.setBounds(50, 282, 52, 14);
-        infoPanel.add(patientIDLabel);
+        GridBagConstraints gbc_patientIDLabel = new GridBagConstraints();
+        gbc_patientIDLabel.fill = GridBagConstraints.HORIZONTAL;
+        gbc_patientIDLabel.insets = new Insets(0, 0, 5, 5);
+        gbc_patientIDLabel.gridx = 1;
+        gbc_patientIDLabel.gridy = 6;
+        infoPanel.add(patientIDLabel, gbc_patientIDLabel);
 
         patientID = new JTextField();
-        patientID.setBounds(142, 276, 159, 27);
         patientID.setEditable(false);
         patientID.setFont(new Font("Dialog", Font.PLAIN, 16));
         patientID.setColumns(10);
         patientID.setText(String.valueOf(app.getPatientID()));
-        infoPanel.add(patientID);
-        
+        GridBagConstraints gbc_patientID = new GridBagConstraints();
+        gbc_patientID.fill = GridBagConstraints.BOTH;
+        gbc_patientID.insets = new Insets(0, 0, 5, 5);
+        gbc_patientID.gridx = 2;
+        gbc_patientID.gridy = 6;
+        infoPanel.add(patientID, gbc_patientID);
+
         lblPatientName = new JLabel("Patient Name:");
-        lblPatientName.setBounds(50, 326, 68, 14);
-        infoPanel.add(lblPatientName);
-        
+        GridBagConstraints gbc_lblPatientName = new GridBagConstraints();
+        gbc_lblPatientName.fill = GridBagConstraints.HORIZONTAL;
+        gbc_lblPatientName.insets = new Insets(0, 0, 5, 5);
+        gbc_lblPatientName.gridx = 1;
+        gbc_lblPatientName.gridy = 7;
+        infoPanel.add(lblPatientName, gbc_lblPatientName);
+
         patientName = new JTextField();
         patientName.setEditable(false);
-        patientName.setBounds(142, 320, 159, 27);
-        infoPanel.add(patientName);
-        patientName.setText(String.valueOf(PatientQueries.getByID(app.getPatientID()).getFullName()));
+        GridBagConstraints gbc_patientName = new GridBagConstraints();
+        gbc_patientName.fill = GridBagConstraints.BOTH;
+        gbc_patientName.insets = new Insets(0, 0, 5, 5);
+        gbc_patientName.gridx = 2;
+        gbc_patientName.gridy = 7;
+        infoPanel.add(patientName, gbc_patientName);
+        patientName
+            .setText(String.valueOf(PatientQueries.getByID(app.getPatientID()).getFullName()));
         patientName.setColumns(10);
 
         treatmentPanel = new JPanel();
@@ -176,21 +247,17 @@ public class ViewAppointment extends JDialog {
         treatmentPanel.add(scrollPane, BorderLayout.CENTER);
 
         table = new JTable();
-        table.setRowHeight(20);
+        table.setRowHeight(30);
         table.getTableHeader().setReorderingAllowed(false);
         table.setFillsViewportHeight(true);
         scrollPane.setViewportView(table);
         table.setModel(new DefaultTableModel(
-            new Object[][]{
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-            },
+            new Object[][]{},
             new String[]{
                 "Treatment", "Cost"
             }
         ));
+        AppointmentQueries.generateTreatmentTable(table, app);
 
         totalCostPanel = new JPanel();
         FlowLayout fl_totalCostPanel = (FlowLayout) totalCostPanel.getLayout();
@@ -225,7 +292,7 @@ public class ViewAppointment extends JDialog {
         buttonPane.add(cancelButton);
 
         setTitle("View Appointment");
-        setBounds(100, 100, 915, 466);
+        setBounds(100, 100, 987, 466);
         setResizable(false);
         setLocationRelativeTo(null);
     }

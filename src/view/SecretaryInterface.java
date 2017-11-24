@@ -148,7 +148,7 @@ public class SecretaryInterface extends JFrame {
                 try {
                     if (patientID != 0) {
                         // Insert wipe all appointment related Record here
-                        //	RecordQueries.deleteRecord( RecordQueries.getByRecord(Time.valueOf(time+":00"),new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),0));
+                        // RecordQueries.deleteRecord( RecordQueries.getByRecord(Time.valueOf(time+":00"),new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),0));
                     }
                     AppointmentQueries.deleteAppointment(
                         new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),
@@ -192,7 +192,7 @@ public class SecretaryInterface extends JFrame {
 
         // Disable the cancel and view appointment button when it is clicked on empty slot
         AppointmentTableListener
-            .buttonDisabler(dentistTable, dentistCancelButton, dentistViewButton);
+            .buttonDisabler(dentistTable, dentistCancelButton, dentistViewButton, 0);
 
         // Search appointment button for dentist
         JButton dentistSearchButton = new JButton("Search Appointment");
@@ -340,7 +340,7 @@ public class SecretaryInterface extends JFrame {
 
         // Disable the cancel and view appointment button when it is clicked on empty slot
         AppointmentTableListener
-            .buttonDisabler(hygienistTable, hygienistCancelButton, hygienistViewButton);
+            .buttonDisabler(hygienistTable, hygienistCancelButton, hygienistViewButton, 1);
 
         // Hygienist search button
         JButton hygienistSearchButton = new JButton("Search Appointment");

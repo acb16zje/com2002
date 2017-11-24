@@ -70,7 +70,7 @@ CREATE TABLE Record (
   startTime      TIME NOT NULL,
   date           DATE NOT NULL,
   partnerID      INT  NOT NULL,
-  amountOwed    INT  NOT NULL,
+  amountOwed     INT  NOT NULL,
   PRIMARY KEY (treatmentGiven, date, startTime, partnerID),
   FOREIGN KEY (date, startTime, partnerID) REFERENCES Appointment (date, startTime, partnerID),
   FOREIGN KEY (treatmentGiven) REFERENCES Treatment (name)

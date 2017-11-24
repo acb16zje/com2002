@@ -10,12 +10,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import model.Appointment;
 import model.Record;
-import util.DateHandler;
 
-/**
- * @author Jake Sturgeon
- * @version 1.0 on 19/11/2017
- */
 public class RecordQueries {
 
     public static Record getByRecord(Time startTime, Date date, int partnerID) {
@@ -85,7 +80,8 @@ public class RecordQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("SELECT COUNT(3) FROM Record WHERE startTime = ? AND date = ?");
+            pstmt = con
+                .prepareStatement("SELECT COUNT(3) FROM Record WHERE startTime = ? AND date = ?");
             pstmt.setTime(1, app.getStartTime());
             pstmt.setDate(2, app.getDate());
             ResultSet res = pstmt.executeQuery();
@@ -107,12 +103,14 @@ public class RecordQueries {
         return false;
     }
 
+
     public static int getAmountOwedByName(String name, Appointment app) {
         Database db = new Database();
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("SELECT amountOwed FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ?");
+            pstmt = con.prepareStatement(
+                "SELECT amountOwed FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ?");
             pstmt.setString(1, name);
             pstmt.setTime(2, app.getStartTime());
             pstmt.setDate(3, app.getDate());
