@@ -232,6 +232,9 @@ public class ViewPatientPlan extends JDialog {
                         updateTreat.getRepairWork()));
                 startDate.setText(sdf.format(startUpdate.getTime()));
                 endDate.setText(sdf.format(endUpdate.getTime()));
+                checkUpLeft.setText(String.valueOf(updateTreat.getCheckUp()));
+                hygieneVisitLeft.setText(String.valueOf(updateTreat.getHygieneVisit()));
+                repairWork.setText(String.valueOf(updateTreat.getRepairWork()));
             }
         });
 
