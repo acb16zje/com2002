@@ -413,7 +413,7 @@ public class AppointmentEditorPartner extends JDialog {
                             ));
                         } else {
                             int prepaid =
-                                patientPlan.getCheckUpLeft() - (Integer) (checkUpHygieneSpinner
+                                patientPlan.getHygieneVisitLeft() - (Integer) (checkUpHygieneSpinner
                                     .getValue());
 
                             RecordQueries.insertRecord(new Record(
