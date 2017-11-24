@@ -2,6 +2,8 @@ package view;
 
 import controller.HealthCarePlanQueries;
 import controller.SubscriptionQueries;
+import controller.TreatmentQueries;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -9,13 +11,23 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import model.HealthCarePlan;
 import model.Subscription;
+import model.Treatment;
+
+import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.awt.event.ActionEvent;
 
 public class ViewPatientPlan extends JDialog {
 
@@ -190,6 +202,9 @@ public class ViewPatientPlan extends JDialog {
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> dispose());
         buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        
+        JButton resubscribeButton = new JButton("Resubscribe");
+        buttonPane.add(resubscribeButton);
         okButton.setActionCommand("OK");
         buttonPane.add(okButton);
         getRootPane().setDefaultButton(okButton);
@@ -206,7 +221,22 @@ public class ViewPatientPlan extends JDialog {
         checkUpLeft.setText(String.valueOf(subscription.getCheckUpLeft()));
         hygieneVisitLeft.setText(String.valueOf(subscription.getHygieneVisitLeft()));
         repairWork.setText(String.valueOf(subscription.getRepairWorkLeft()));
-
+        
+        //listener for resubscribe
+        resubscribeButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		HealthCarePlan updateTreat = HealthCarePlanQueries.getPlan(subscription.getPlanName());
+        		Calendar updateCal = new GregorianCalendar().getInstance();
+        		Date startUpdate = new Date(updateCal.getTime().getTime());
+        		updateCal.add(Calendar.YEAR, 1);
+        		updateCal.add(Calendar.DAY_OF_YEAR, -1);
+        		Date endUpdate = new Date(updateCal.getTime().getTime());
+        		SubscriptionQueries.updateSubscription(new Subscription(patientID, subscription.getPlanName(), startUpdate, endUpdate, updateTreat.getCheckUp(), updateTreat.getHygieneVisit(), updateTreat.getRepairWork()));
+        		startDate.setText(sdf.format(startUpdate.getTime()));
+                endDate.setText(sdf.format(endUpdate.getTime()));
+        	}
+        });
+        
         // Basic settings
         setTitle("View Patient Plan");
         setBounds(100, 100, 488, 384);
