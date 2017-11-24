@@ -2,23 +2,30 @@ package view;
 
 import controller.AppointmentQueries;
 import controller.PatientQueries;
+import controller.RecordQueries;
+import controller.TreatmentQueries;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import model.Appointment;
+import model.Record;
 
 public class AppointmentEditorPartner extends JDialog {
 
@@ -137,7 +144,7 @@ public class AppointmentEditorPartner extends JDialog {
         checkUpHygieneLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         treatmentPanel.add(checkUpHygieneLabel);
 
-        JSpinner checkUpHygieneSpinner = new JSpinner();
+        JSpinner checkUpHygieneSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
         checkUpHygieneSpinner.setBounds(314, 41, 115, 28);
         checkUpHygieneSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
         treatmentPanel.add(checkUpHygieneSpinner);
@@ -147,17 +154,17 @@ public class AppointmentEditorPartner extends JDialog {
         silverAmalgamLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         treatmentPanel.add(silverAmalgamLabel);
 
-        JSpinner silverAmalgamSpinner = new JSpinner();
+        JSpinner silverAmalgamSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
         silverAmalgamSpinner.setBounds(314, 111, 115, 28);
         silverAmalgamSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
         treatmentPanel.add(silverAmalgamSpinner);
 
-        JLabel whiteCompositeLabel = new JLabel("White composite filling:");
+        JLabel whiteCompositeLabel = new JLabel("White composite resin filling:");
         whiteCompositeLabel.setBounds(50, 186, 207, 19);
         whiteCompositeLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         treatmentPanel.add(whiteCompositeLabel);
 
-        JSpinner whiteCompositeSpinner = new JSpinner();
+        JSpinner whiteCompositeSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
         whiteCompositeSpinner.setBounds(314, 181, 115, 28);
         whiteCompositeSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
         treatmentPanel.add(whiteCompositeSpinner);
@@ -167,7 +174,7 @@ public class AppointmentEditorPartner extends JDialog {
         goldCrownLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         treatmentPanel.add(goldCrownLabel);
 
-        JSpinner goldCrownSpinner = new JSpinner();
+        JSpinner goldCrownSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
         goldCrownSpinner.setBounds(314, 254, 115, 28);
         goldCrownSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
         treatmentPanel.add(goldCrownSpinner);
@@ -186,10 +193,127 @@ public class AppointmentEditorPartner extends JDialog {
         finalPanel.add(buttonPanel);
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
+        // Set value of JSpinner if the appointment is already completed
+        if (RecordQueries.recordAlreadyExist(app)) {
+            checkUpHygieneSpinner.setEnabled(false);
+            silverAmalgamSpinner.setEnabled(false);
+            whiteCompositeSpinner.setEnabled(false);
+            goldCrownSpinner.setEnabled(false);
+            chckbxAppointmentCompleted.setEnabled(false);
+
+            if (Objects.equals(label, "Dentist")) {
+                // Get the record of the completed appointment of dentist
+                int checkUpAmount = RecordQueries.getAmountOwnedByName("Check Up", app);
+                int silverAmalgamAmount = RecordQueries.getAmountOwnedByName("Silver Amalgam Filling", app);
+                int whiteCompositeAmount = RecordQueries.getAmountOwnedByName("White Composite Resin Filling", app);
+                int goldCrownAmount = RecordQueries.getAmountOwnedByName("White Composite Resin Filling", app);
+
+                if (checkUpAmount != 0) {
+                    checkUpHygieneSpinner.setValue(checkUpAmount / 45);
+                } else {
+                    checkUpHygieneSpinner.setValue(0);
+                }
+
+                if (silverAmalgamAmount != 0) {
+                    silverAmalgamSpinner.setValue(silverAmalgamAmount / 90);
+                } else {
+                    silverAmalgamSpinner.setValue(0);
+                }
+
+                if (whiteCompositeAmount != 0) {
+                    whiteCompositeSpinner.setValue(whiteCompositeAmount / 150);
+                } else {
+                    whiteCompositeSpinner.setValue(0);
+                }
+
+                if (goldCrownAmount != 0) {
+                    goldCrownSpinner.setValue(goldCrownAmount / 500);
+                } else {
+                    goldCrownSpinner.setValue(0);
+                }
+            } else {
+                // Get the record of the competed appointment of hygienist
+                int hygieneAmount = RecordQueries.getAmountOwnedByName("Hygiene", app);
+
+                if (hygieneAmount != 0) {
+                    checkUpHygieneSpinner.setValue(hygieneAmount / 45);
+                } else {
+                    checkUpHygieneSpinner.setValue(0);
+                }
+            }
+        }
+
         // The Finish button
         JButton okButton = new JButton("Finish");
         okButton.setEnabled(false);
         okButton.addActionListener(e -> {
+            Component[] components = treatmentPanel.getComponents();
+            int sumOfTreatment = 0;
+            for (Component comp : components) {
+                if (comp instanceof JSpinner) {
+                    sumOfTreatment += (Integer) ((JSpinner) comp).getValue();
+                }
+            }
+
+
+            if (sumOfTreatment == 0) {
+                JOptionPane.showMessageDialog(null, "Please record a treatment");
+            } else {
+                if (Objects.equals(label, "Dentist")) {
+                    if ((Integer) (checkUpHygieneSpinner.getValue()) > 0) {
+                        RecordQueries.insertRecord(new Record(
+                            "Check Up",
+                            app.getStartTime(),
+                            app.getDate(),
+                            0,
+                            totalCost("Check Up", (Integer) (checkUpHygieneSpinner.getValue()))
+                        ));
+                    }
+
+                    if ((Integer) (silverAmalgamSpinner.getValue()) > 0) {
+                        RecordQueries.insertRecord(new Record(
+                            "Silver Amalgam Filling",
+                            app.getStartTime(),
+                            app.getDate(),
+                            0,
+                            totalCost("Silver Amalgam Filling", (Integer) (silverAmalgamSpinner.getValue()))
+                        ));
+                    }
+
+                    if ((Integer) (whiteCompositeSpinner.getValue()) > 0) {
+                        RecordQueries.insertRecord(new Record(
+                            "White Composite Resin Filling",
+                            app.getStartTime(),
+                            app.getDate(),
+                            0,
+                            totalCost("White Composite Resin Filling", (Integer) (whiteCompositeSpinner.getValue()))
+                        ));
+                    }
+
+                    if ((Integer) (goldCrownSpinner.getValue()) > 0) {
+                        RecordQueries.insertRecord(new Record(
+                            "Gold Crown Fitting",
+                            app.getStartTime(),
+                            app.getDate(),
+                            0,
+                            totalCost("Gold Crown Fitting", (Integer) (goldCrownSpinner.getValue()))
+                        ));
+                    }
+                } else {
+                    if ((Integer) (checkUpHygieneSpinner.getValue()) > 0) {
+                        RecordQueries.insertRecord(new Record(
+                            "Hygiene",
+                            app.getStartTime(),
+                            app.getDate(),
+                            1,
+                            totalCost("Hygiene", (Integer) (checkUpHygieneSpinner.getValue()))
+                        ));
+                    }
+                }
+
+                // Close the dialog after all operations
+                dispose();
+            }
         });
         buttonPanel.add(okButton);
         okButton.setActionCommand("OK");
@@ -240,5 +364,9 @@ public class AppointmentEditorPartner extends JDialog {
         setTitle("Edit Appointment");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 478, 632);
+    }
+
+    public int totalCost(String treatmentName, int amount) {
+        return TreatmentQueries.getCost(treatmentName) * amount;
     }
 }

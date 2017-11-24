@@ -129,7 +129,8 @@ public class PartnerInterface extends JFrame {
             Appointment viewApp;
             try {
                 viewApp = AppointmentQueries.getAppointment(
-                    new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()), 1,
+                    new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),
+                    partnerID,
                     patientID, Time.valueOf(time + ":00"));
                 AppointmentEditorPartner dialog = new AppointmentEditorPartner(partner, viewApp);
                 dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -145,7 +146,8 @@ public class PartnerInterface extends JFrame {
         yesterdayButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
         yesterdayButton
             .addActionListener(
-                new PartnerListener(-1, currentCalendar, timetable, dayLabel, partnerID, editAppointmentButton));
+                new PartnerListener(-1, currentCalendar, timetable, dayLabel, partnerID,
+                    editAppointmentButton));
         GridBagConstraints gbc_yesterdayButton = new GridBagConstraints();
         gbc_yesterdayButton.fill = GridBagConstraints.BOTH;
         gbc_yesterdayButton.insets = new Insets(0, 0, 0, 5);
@@ -158,7 +160,8 @@ public class PartnerInterface extends JFrame {
         tomorrowButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
         tomorrowButton
             .addActionListener(
-                new PartnerListener(1, currentCalendar, timetable, dayLabel, partnerID, editAppointmentButton));
+                new PartnerListener(1, currentCalendar, timetable, dayLabel, partnerID,
+                    editAppointmentButton));
         GridBagConstraints gbc_tomorrowButton = new GridBagConstraints();
         gbc_tomorrowButton.fill = GridBagConstraints.BOTH;
         gbc_tomorrowButton.gridx = 4;

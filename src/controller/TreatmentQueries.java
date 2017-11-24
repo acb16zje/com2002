@@ -36,7 +36,32 @@ public class TreatmentQueries {
         }
 
         return treatment;
+    }
 
+    public static int getCost(String name) {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement("SELECT cost FROM Treatment WHERE name = ?");
+            pstmt.setString(1, name);
+            ResultSet res = pstmt.executeQuery();
+            res.next();
+            return res.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+
+        return 0;
     }
 
     public static void insertTreatment(Treatment treatment) {
@@ -111,7 +136,6 @@ public class TreatmentQueries {
         }
     }
 
-
     public static ArrayList<Treatment> getAllTreatments() {
         Database db = new Database();
         Connection con = db.getCon();
@@ -138,17 +162,4 @@ public class TreatmentQueries {
 
         return patients;
     }
-
-    public static void main(String[] args) {
-        System.out.println(TreatmentQueries.getByName("Check up"));
-        TreatmentQueries.insertTreatment(new Treatment("bant", "hygiene", 69));
-        System.out.println(TreatmentQueries.getByName("bant"));
-        TreatmentQueries.updateTreatment(new Treatment("bant", "repair", 169));
-        System.out.println(TreatmentQueries.getByName("bant"));
-        TreatmentQueries.deleteTreatment("bant");
-
-        System.out.println(TreatmentQueries.getAllTreatments());
-
-    }
-
 }

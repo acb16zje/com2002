@@ -42,12 +42,11 @@ public class PartnerListener implements ActionListener {
                 int column = target.getSelectedColumn();
                 int row = target.getSelectedRow();
                 Object cell = partnerTable.getValueAt(row, column);
-                if (column == 0 || cell == null) {
+                if (column == 0 || cell == null || ((String) cell).substring(0, 1).equals("0")) {
                     editButton.setEnabled(false);
                 } else {
                     editButton.setEnabled(true);
                 }
-
             }
         });
 
@@ -58,7 +57,7 @@ public class PartnerListener implements ActionListener {
                 int column = target.getSelectedColumn();
                 int row = target.getSelectedRow();
                 Object cell = partnerTable.getValueAt(row, column);
-                if (column == 0 || cell == null) {
+                if (column == 0 || cell == null || ((String) cell).substring(0, 1).equals("0")) {
                     editButton.setEnabled(false);
                 } else {
                     editButton.setEnabled(true);

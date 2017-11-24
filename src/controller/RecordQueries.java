@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
+import model.Appointment;
 import model.Record;
 import util.DateHandler;
 
@@ -33,7 +34,8 @@ public class RecordQueries {
                 record = new Record(res.getString(1),
                     res.getTime(2),
                     res.getDate(3),
-                    res.getInt(4));
+                    res.getInt(4),
+                    res.getInt(5));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,11 +59,12 @@ public class RecordQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("INSERT INTO Record VALUES (?, ?, ?, ?)");
+            pstmt = con.prepareStatement("INSERT INTO Record VALUES (?, ?, ?, ?, ?)");
             pstmt.setString(1, record.getTreatmentGiven());
             pstmt.setTime(2, record.getStartTime());
             pstmt.setDate(3, record.getDate());
             pstmt.setInt(4, record.getPartnerID());
+            pstmt.setInt(5, record.getAmountOwned());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,6 +78,61 @@ public class RecordQueries {
             }
             db.closeConnection();
         }
+    }
+
+    public static boolean recordAlreadyExist(Appointment app) {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement("SELECT COUNT(3) FROM Record WHERE startTime = ? AND date = ?");
+            pstmt.setTime(1, app.getStartTime());
+            pstmt.setDate(2, app.getDate());
+            ResultSet res = pstmt.executeQuery();
+            res.next();
+            return res.getInt(1) != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+
+        return false;
+    }
+
+    public static int getAmountOwnedByName(String name, Appointment app) {
+        Database db = new Database();
+        Connection con = db.getCon();
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement("SELECT amountOwned FROM Record WHERE treatmentGiven = ? AND startTime = ? AND date = ?");
+            pstmt.setString(1, name);
+            pstmt.setTime(2, app.getStartTime());
+            pstmt.setDate(3, app.getDate());
+            ResultSet res = pstmt.executeQuery();
+            res.next();
+            return res.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();
+        }
+
+        return 0;
     }
 
     public static void deleteRecord(Record record) {
@@ -117,10 +175,13 @@ public class RecordQueries {
             pstmt = con.prepareStatement("SELECT * FROM Record");
             ResultSet res = pstmt.executeQuery();
             while (res.next()) {
-                records.add(new Record(res.getString(1),
+                records.add(new Record(
+                    res.getString(1),
                     res.getTime(2),
                     res.getDate(3),
-                    res.getInt(4)));
+                    res.getInt(4),
+                    res.getInt(5))
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,17 +198,4 @@ public class RecordQueries {
 
         return records;
     }
-
-    public static void main(String[] args) {
-        Record r = new Record("Check Up", Time.valueOf("12:00:00"), DateHandler
-            .newDate(2017, 12, 25), 0);
-        System.out
-            .println(RecordQueries.getByRecord(Time.valueOf("12:00:00"), DateHandler
-                .newDate(2017, 12, 25), 0));
-
-        RecordQueries.updateRecord(r, r);
-
-        System.out.println(RecordQueries.getAllRecords());
-    }
-
 }
