@@ -9,13 +9,16 @@ public class Record {
     private Time startTime;
     private Date date;
     private int partnerID;
+    private int quantity;
     private int amountOwed;
 
-    public Record(String treatmentGiven, Time startTime, Date date, int partnerID, int amountOwed) {
+    public Record(String treatmentGiven, Time startTime, Date date, int partnerID, int quantity,
+        int amountOwed) {
         this.treatmentGiven = treatmentGiven;
         this.startTime = startTime;
         this.date = date;
         this.partnerID = partnerID;
+        this.quantity = quantity;
         this.amountOwed = amountOwed;
     }
 
@@ -49,6 +52,10 @@ public class Record {
 
     public void setPartnerID(int partnerID) {
         this.partnerID = partnerID;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     public int getAmountOwed() {

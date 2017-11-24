@@ -266,8 +266,8 @@ public class PatientEditor extends JDialog {
                 }
             }
             if (phoneNo.getText().length() < 11) {
-            	JOptionPane.showMessageDialog(null, "Invalid Phone No");
-            	completed = false;
+                JOptionPane.showMessageDialog(null, "Invalid Phone No");
+                completed = false;
             }
             // If all fields are filled in then register or edit the new patient
             if (completed) {

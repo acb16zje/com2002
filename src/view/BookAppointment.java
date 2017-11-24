@@ -281,9 +281,9 @@ public class BookAppointment extends JDialog {
             patientID.setEnabled(true);
         });
         if (partnerID == 0) {
-        	treatmentRadioButton.setBounds(260, 71, 99, 23);
+            treatmentRadioButton.setBounds(260, 71, 99, 23);
             contentPanel.add(treatmentRadioButton);
-        	treatmentGroup.add(treatmentRadioButton);
+            treatmentGroup.add(treatmentRadioButton);
         }
 
         // Radio button for holiday

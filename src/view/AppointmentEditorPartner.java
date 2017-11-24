@@ -1,8 +1,10 @@
 package view;
 
-import controller.AppointmentQueries;
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 import controller.PatientQueries;
 import controller.RecordQueries;
+import controller.SubscriptionQueries;
 import controller.TreatmentQueries;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -11,7 +13,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.LinkedHashMap;
 import java.util.Objects;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -26,6 +27,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import model.Appointment;
 import model.Record;
+import model.Subscription;
 
 public class AppointmentEditorPartner extends JDialog {
 
@@ -145,7 +147,7 @@ public class AppointmentEditorPartner extends JDialog {
         treatmentPanel.add(checkUpHygieneLabel);
 
         JSpinner checkUpHygieneSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
-        checkUpHygieneSpinner.setBounds(314, 41, 115, 28);
+        checkUpHygieneSpinner.setBounds(353, 41, 76, 28);
         checkUpHygieneSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
         treatmentPanel.add(checkUpHygieneSpinner);
 
@@ -155,17 +157,17 @@ public class AppointmentEditorPartner extends JDialog {
         treatmentPanel.add(silverAmalgamLabel);
 
         JSpinner silverAmalgamSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
-        silverAmalgamSpinner.setBounds(314, 111, 115, 28);
+        silverAmalgamSpinner.setBounds(353, 111, 76, 28);
         silverAmalgamSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
         treatmentPanel.add(silverAmalgamSpinner);
 
         JLabel whiteCompositeLabel = new JLabel("White composite resin filling:");
-        whiteCompositeLabel.setBounds(50, 186, 207, 19);
+        whiteCompositeLabel.setBounds(50, 186, 268, 19);
         whiteCompositeLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         treatmentPanel.add(whiteCompositeLabel);
 
         JSpinner whiteCompositeSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
-        whiteCompositeSpinner.setBounds(314, 181, 115, 28);
+        whiteCompositeSpinner.setBounds(353, 181, 76, 28);
         whiteCompositeSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
         treatmentPanel.add(whiteCompositeSpinner);
 
@@ -175,7 +177,7 @@ public class AppointmentEditorPartner extends JDialog {
         treatmentPanel.add(goldCrownLabel);
 
         JSpinner goldCrownSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
-        goldCrownSpinner.setBounds(314, 254, 115, 28);
+        goldCrownSpinner.setBounds(353, 254, 76, 28);
         goldCrownSpinner.setFont(new Font("Dialog", Font.PLAIN, 20));
         treatmentPanel.add(goldCrownSpinner);
 
@@ -204,50 +206,53 @@ public class AppointmentEditorPartner extends JDialog {
 
             if (Objects.equals(label, "Dentist")) {
                 // Get the record of the completed appointment of dentist
-                int checkUpAmount = RecordQueries.getAmountOwedByName("Check Up", app);
-                int silverAmalgamAmount = RecordQueries.getAmountOwedByName("Silver Amalgam Filling", app);
-                int whiteCompositeAmount = RecordQueries.getAmountOwedByName("White Composite Resin Filling", app);
-                int goldCrownAmount = RecordQueries.getAmountOwedByName("White Composite Resin Filling", app);
+                if (MINUTES
+                    .between(app.getStartTime().toLocalTime(), app.getEndTime().toLocalTime())
+                    == 60) {
+                    int silverAmalgamAmount = RecordQueries
+                        .getQuantityOwedByName("Silver Amalgam Filling", app);
+                    int whiteCompositeAmount = RecordQueries
+                        .getQuantityOwedByName("White Composite Resin Filling", app);
+                    int goldCrownAmount = RecordQueries
+                        .getQuantityOwedByName("White Composite Resin Filling", app);
 
-                if (checkUpAmount != 0) {
-                    checkUpHygieneSpinner.setValue(checkUpAmount / 45);
+                    silverAmalgamSpinner.setValue(silverAmalgamAmount);
+                    whiteCompositeSpinner.setValue(whiteCompositeAmount);
+                    goldCrownSpinner.setValue(goldCrownAmount);
                 } else {
-                    checkUpHygieneSpinner.setValue(0);
-                }
-
-                if (silverAmalgamAmount != 0) {
-                    silverAmalgamSpinner.setValue(silverAmalgamAmount / 90);
-                } else {
-                    silverAmalgamSpinner.setValue(0);
-                }
-
-                if (whiteCompositeAmount != 0) {
-                    whiteCompositeSpinner.setValue(whiteCompositeAmount / 150);
-                } else {
-                    whiteCompositeSpinner.setValue(0);
-                }
-
-                if (goldCrownAmount != 0) {
-                    goldCrownSpinner.setValue(goldCrownAmount / 500);
-                } else {
-                    goldCrownSpinner.setValue(0);
+                    int checkUpAmount = RecordQueries.getQuantityOwedByName("Check Up", app);
+                    checkUpHygieneSpinner.setValue(checkUpAmount);
                 }
             } else {
                 // Get the record of the competed appointment of hygienist
-                int hygieneAmount = RecordQueries.getAmountOwedByName("Hygiene", app);
-
-                if (hygieneAmount != 0) {
-                    checkUpHygieneSpinner.setValue(hygieneAmount / 45);
-                } else {
-                    checkUpHygieneSpinner.setValue(0);
-                }
+                int hygieneAmount = RecordQueries.getQuantityOwedByName("Hygiene", app);
+                checkUpHygieneSpinner.setValue(hygieneAmount);
             }
+        }
+
+        // Check if the dentist appointment is check up or treatment
+        if (MINUTES.between(app.getStartTime().toLocalTime(), app.getEndTime().toLocalTime())
+            == 60) {
+            checkUpHygieneLabel.setVisible(false);
+            checkUpHygieneSpinner.setVisible(false);
+            checkUpHygieneSpinner.setEnabled(false);
+        } else {
+            silverAmalgamLabel.setVisible(false);
+            silverAmalgamSpinner.setVisible(false);
+            silverAmalgamSpinner.setEnabled(false);
+            whiteCompositeLabel.setVisible(false);
+            whiteCompositeSpinner.setVisible(false);
+            whiteCompositeSpinner.setEnabled(false);
+            goldCrownLabel.setVisible(false);
+            goldCrownSpinner.setVisible(false);
+            goldCrownSpinner.setEnabled(false);
         }
 
         // The Finish button
         JButton okButton = new JButton("Finish");
         okButton.setEnabled(false);
         okButton.addActionListener(e -> {
+            // Check if there is a treatment recorded
             Component[] components = treatmentPanel.getComponents();
             int sumOfTreatment = 0;
             for (Component comp : components) {
@@ -259,55 +264,175 @@ public class AppointmentEditorPartner extends JDialog {
             if (sumOfTreatment == 0) {
                 JOptionPane.showMessageDialog(null, "Please record a treatment");
             } else {
+                Subscription patientPlan = SubscriptionQueries.getSubscription(app.getPatientID());
+
                 if (Objects.equals(label, "Dentist")) {
                     if ((Integer) (checkUpHygieneSpinner.getValue()) > 0) {
-                        RecordQueries.insertRecord(new Record(
-                            "Check Up",
-                            app.getStartTime(),
-                            app.getDate(),
-                            0,
-                            totalCost("Check Up", (Integer) (checkUpHygieneSpinner.getValue()))
-                        ));
+                        if (patientPlan == null || patientPlan.getCheckUpLeft() == 0) {
+                            RecordQueries.insertRecord(new Record(
+                                "Check Up",
+                                app.getStartTime(),
+                                app.getDate(),
+                                0,
+                                (Integer) (checkUpHygieneSpinner.getValue()),
+                                totalCost("Check Up", (Integer) (checkUpHygieneSpinner.getValue()))
+                            ));
+                        } else {
+                            int prepaid =
+                                patientPlan.getCheckUpLeft() - (Integer) (checkUpHygieneSpinner
+                                    .getValue());
+
+                            RecordQueries.insertRecord(new Record(
+                                "Check Up",
+                                app.getStartTime(),
+                                app.getDate(),
+                                0,
+                                (Integer) (checkUpHygieneSpinner.getValue()),
+                                totalCost("Check Up", Math.abs(prepaid))
+                            ));
+
+                            if (prepaid <= 0) {
+                                patientPlan.setCheckUpLeft(0);
+                            } else {
+                                patientPlan.setCheckUpLeft(prepaid);
+                            }
+                        }
                     }
 
                     if ((Integer) (silverAmalgamSpinner.getValue()) > 0) {
-                        RecordQueries.insertRecord(new Record(
-                            "Silver Amalgam Filling",
-                            app.getStartTime(),
-                            app.getDate(),
-                            0,
-                            totalCost("Silver Amalgam Filling", (Integer) (silverAmalgamSpinner.getValue()))
-                        ));
+                        if (patientPlan == null || patientPlan.getRepairWorkLeft() == 0) {
+                            RecordQueries.insertRecord(new Record(
+                                "Silver Amalgam Filling",
+                                app.getStartTime(),
+                                app.getDate(),
+                                0,
+                                (Integer) (silverAmalgamSpinner.getValue()),
+                                totalCost("Silver Amalgam Filling",
+                                    (Integer) (silverAmalgamSpinner.getValue()))
+                            ));
+                        } else {
+                            int prepaid =
+                                patientPlan.getRepairWorkLeft() - (Integer) (silverAmalgamSpinner
+                                    .getValue());
+
+                            RecordQueries.insertRecord(new Record(
+                                "Silver Amalgam Filling",
+                                app.getStartTime(),
+                                app.getDate(),
+                                0,
+                                (Integer) (silverAmalgamSpinner.getValue()),
+                                totalCost("Silver Amalgam Filling", Math.abs(prepaid))
+                            ));
+
+                            if (prepaid <= 0) {
+                                patientPlan.setRepairWorkLeft(0);
+                            } else {
+                                patientPlan.setRepairWorkLeft(prepaid);
+                            }
+                        }
                     }
 
                     if ((Integer) (whiteCompositeSpinner.getValue()) > 0) {
-                        RecordQueries.insertRecord(new Record(
-                            "White Composite Resin Filling",
-                            app.getStartTime(),
-                            app.getDate(),
-                            0,
-                            totalCost("White Composite Resin Filling", (Integer) (whiteCompositeSpinner.getValue()))
-                        ));
+                        if (patientPlan == null || patientPlan.getRepairWorkLeft() == 0) {
+                            RecordQueries.insertRecord(new Record(
+                                "White Composite Resin Filling",
+                                app.getStartTime(),
+                                app.getDate(),
+                                0,
+                                (Integer) (whiteCompositeSpinner.getValue()),
+                                totalCost("White Composite Resin Filling",
+                                    (Integer) (whiteCompositeSpinner.getValue()))
+                            ));
+                        } else {
+                            int prepaid =
+                                patientPlan.getRepairWorkLeft() - (Integer) (whiteCompositeSpinner
+                                    .getValue());
+
+                            RecordQueries.insertRecord(new Record(
+                                "White Composite Resin Filling",
+                                app.getStartTime(),
+                                app.getDate(),
+                                0,
+                                (Integer) (whiteCompositeSpinner.getValue()),
+                                totalCost("White Composite Resin Filling", Math.abs(prepaid))
+                            ));
+
+                            if (prepaid <= 0) {
+                                patientPlan.setRepairWorkLeft(0);
+                            } else {
+                                patientPlan.setRepairWorkLeft(prepaid);
+                            }
+                        }
                     }
 
                     if ((Integer) (goldCrownSpinner.getValue()) > 0) {
-                        RecordQueries.insertRecord(new Record(
-                            "Gold Crown Fitting",
-                            app.getStartTime(),
-                            app.getDate(),
-                            0,
-                            totalCost("Gold Crown Fitting", (Integer) (goldCrownSpinner.getValue()))
-                        ));
+                        if (patientPlan == null || patientPlan.getRepairWorkLeft() == 0) {
+                            RecordQueries.insertRecord(new Record(
+                                "Gold Crown Fitting",
+                                app.getStartTime(),
+                                app.getDate(),
+                                0,
+                                (Integer) (goldCrownSpinner.getValue()),
+                                totalCost("Gold Crown Fitting",
+                                    (Integer) (goldCrownSpinner.getValue()))
+                            ));
+                        } else {
+                            int prepaid =
+                                patientPlan.getRepairWorkLeft() - (Integer) (goldCrownSpinner
+                                    .getValue());
+
+                            RecordQueries.insertRecord(new Record(
+                                "Gold Crown Fitting",
+                                app.getStartTime(),
+                                app.getDate(),
+                                0,
+                                (Integer) (goldCrownSpinner.getValue()),
+                                totalCost("Gold Crown Fitting", Math.abs(prepaid))
+                            ));
+
+                            if (prepaid <= 0) {
+                                patientPlan.setRepairWorkLeft(0);
+                            } else {
+                                patientPlan.setRepairWorkLeft(prepaid);
+                            }
+                        }
                     }
+
+                    // Update the patient plan, deducting the prepaid amount
+                    SubscriptionQueries.updateSubscription(patientPlan);
                 } else {
                     if ((Integer) (checkUpHygieneSpinner.getValue()) > 0) {
-                        RecordQueries.insertRecord(new Record(
-                            "Hygiene",
-                            app.getStartTime(),
-                            app.getDate(),
-                            1,
-                            totalCost("Hygiene", (Integer) (checkUpHygieneSpinner.getValue()))
-                        ));
+                        if (patientPlan == null || patientPlan.getCheckUpLeft() == 0) {
+                            RecordQueries.insertRecord(new Record(
+                                "Hygiene",
+                                app.getStartTime(),
+                                app.getDate(),
+                                1,
+                                (Integer) (checkUpHygieneSpinner.getValue()),
+                                totalCost("Hygiene", (Integer) (checkUpHygieneSpinner.getValue()))
+                            ));
+                        } else {
+                            int prepaid =
+                                patientPlan.getCheckUpLeft() - (Integer) (checkUpHygieneSpinner
+                                    .getValue());
+
+                            RecordQueries.insertRecord(new Record(
+                                "Check Up",
+                                app.getStartTime(),
+                                app.getDate(),
+                                0,
+                                (Integer) (checkUpHygieneSpinner.getValue()),
+                                totalCost("Check Up", Math.abs(prepaid))
+                            ));
+
+                            if (prepaid <= 0) {
+                                patientPlan.setCheckUpLeft(0);
+                            } else {
+                                patientPlan.setCheckUpLeft(prepaid);
+                            }
+                        }
+
+                        SubscriptionQueries.updateSubscription(patientPlan);
                     }
                 }
 
@@ -366,7 +491,7 @@ public class AppointmentEditorPartner extends JDialog {
         setBounds(100, 100, 478, 632);
     }
 
-    public int totalCost(String treatmentName, int amount) {
+    private int totalCost(String treatmentName, int amount) {
         return TreatmentQueries.getCost(treatmentName) * amount;
     }
 }

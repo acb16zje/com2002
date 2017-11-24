@@ -29,7 +29,7 @@ public class PatientQueries {
             ((DefaultTableModel) patientTable.getModel()).setRowCount(0);
             while (res.next()) {
                 ((DefaultTableModel) patientTable.getModel()).addRow(
-                    new Object[] {
+                    new Object[]{
                         res.getInt(1),
                         res.getString(2),
                         res.getString(3) + " " + res.getString(4),
@@ -93,7 +93,8 @@ public class PatientQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("SELECT forename, surname FROM Patient WHERE patientID = ?");
+            pstmt = con
+                .prepareStatement("SELECT forename, surname FROM Patient WHERE patientID = ?");
             pstmt.setInt(1, ID);
             ResultSet res = pstmt.executeQuery();
             res.next();

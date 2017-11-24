@@ -32,8 +32,6 @@ import javax.swing.text.AbstractDocument;
 import model.Appointment;
 import util.IntegerFilter;
 import util.WeekGenerator;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class SecretaryInterface extends JFrame {
 
@@ -200,7 +198,8 @@ public class SecretaryInterface extends JFrame {
         JButton dentistSearchButton = new JButton("Search Appointment");
         dentistAppointmentPanel.add(dentistSearchButton);
         dentistSearchButton.addActionListener(e -> {
-            AppointmentSearch dialog = new AppointmentSearch(0, dentistTable, dentistWeek, dentistMonth, dentistYear,dentistCancelButton, dentistViewButton);
+            AppointmentSearch dialog = new AppointmentSearch(0, dentistTable, dentistWeek,
+                dentistMonth, dentistYear, dentistCancelButton, dentistViewButton);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
@@ -347,7 +346,8 @@ public class SecretaryInterface extends JFrame {
         // Hygienist search button
         JButton hygienistSearchButton = new JButton("Search Appointment");
         hygienistSearchButton.addActionListener(e -> {
-            AppointmentSearch dialog = new AppointmentSearch(1, hygienistTable, hygienistWeek, hygienistMonth, hygienistYear,hygienistCancelButton, hygienistViewButton);
+            AppointmentSearch dialog = new AppointmentSearch(1, hygienistTable, hygienistWeek,
+                hygienistMonth, hygienistYear, hygienistCancelButton, hygienistViewButton);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
@@ -437,13 +437,13 @@ public class SecretaryInterface extends JFrame {
         // View the patient registered plan
         JPanel planPanel = new JPanel();
         patientPanel.add(planPanel);
-        
+
         JButton viewOutstandingButton = new JButton("View Outstanding");
-        viewOutstandingButton.addActionListener(e ->{
-        	ViewPatientOutstanding dialog = new ViewPatientOutstanding();
+        viewOutstandingButton.addActionListener(e -> {
+            ViewPatientOutstanding dialog = new ViewPatientOutstanding();
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
-            dialog.setVisible(true);	
+            dialog.setVisible(true);
         });
         viewOutstandingButton.setEnabled(false);
         planPanel.add(viewOutstandingButton);

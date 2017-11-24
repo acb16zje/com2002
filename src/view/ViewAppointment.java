@@ -2,8 +2,8 @@ package view;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
-import controller.AppointmentQueries;
 import controller.PatientQueries;
+import controller.RecordQueries;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -256,8 +256,13 @@ public class ViewAppointment extends JDialog {
             new String[]{
                 "Treatment", "Cost"
             }
-        ));
-        AppointmentQueries.generateTreatmentTable(table, app);
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+        RecordQueries.generateTreatmentTable(table, app);
 
         totalCostPanel = new JPanel();
         FlowLayout fl_totalCostPanel = (FlowLayout) totalCostPanel.getLayout();
@@ -265,10 +270,12 @@ public class ViewAppointment extends JDialog {
         treatmentPanel.add(totalCostPanel, BorderLayout.SOUTH);
 
         totalCostLabel = new JLabel("Total Cost: \u00A3");
+
         totalCostPanel.add(totalCostLabel);
 
         totalCostTextField = new JTextField();
         totalCostTextField.setEditable(false);
+        totalCostTextField.setText(String.valueOf(RecordQueries.getTotalCost(app)));
         totalCostPanel.add(totalCostTextField);
         totalCostTextField.setColumns(8);
 
@@ -280,7 +287,7 @@ public class ViewAppointment extends JDialog {
         buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
         getContentPane().add(buttonPane, BorderLayout.SOUTH);
 
-        JButton saveButton = new JButton("Save");
+        JButton saveButton = new JButton("OK");
         saveButton.addActionListener(e -> dispose());
         saveButton.setActionCommand("OK");
         buttonPane.add(saveButton);

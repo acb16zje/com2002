@@ -9,16 +9,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import model.Address;
 import model.Appointment;
-import util.DateHandler;
 
 /**
  * @author Jake Sturgeon
@@ -207,7 +204,8 @@ public class AppointmentQueries {
         Connection con = db.getCon();
         PreparedStatement pstmt = null;
         try {
-            pstmt = con.prepareStatement("SELECT COUNT(1) FROM Record WHERE startTime = ? AND date = ? AND partnerID = ?");
+            pstmt = con.prepareStatement(
+                "SELECT COUNT(1) FROM Record WHERE startTime = ? AND date = ? AND partnerID = ?");
             pstmt.setTime(1, startTime);
             pstmt.setDate(2, date);
             pstmt.setInt(3, partnerID);
@@ -287,51 +285,6 @@ public class AppointmentQueries {
         }
     }
 
-    public static void generateTreatmentTable(JTable table, Appointment app) {
-        Database db = new Database();
-        Connection con = db.getCon();
-        PreparedStatement pstmt = null;
-
-        try {
-            pstmt = con.prepareStatement(
-                "SELECT Record.treatmentGiven, Treatment.type, Treatment.cost, Record.amountOwed, "
-                    + "Subscription.planName, Subscription.checkUpLeft, Subscription.hygieneVisitLeft, "
-                    + "Subscription.repairWorkLeft "
-                    + "FROM Record INNER JOIN Treatment "
-                    + "ON Record.treatmentGiven = Treatment.name LEFT JOIN Subscription "
-                    + "ON Subscription.patientID = ? WHERE Record.startTime = ? AND Record.date = ? AND Record.partnerID = ?");
-            pstmt.setInt(1, app.getPatientID());
-            pstmt.setTime(2, app.getStartTime());
-            pstmt.setDate(3, app.getDate());
-            pstmt.setInt(4, app.getPartnerID());
-            ResultSet res = pstmt.executeQuery();
-            res.next();
-            int checkUpLeft = res.getInt(6);
-            int hygieneVisitLeft = res.getInt(7);
-            int repairWorkLeft = res.getInt(8);
-            res.previous();
-            ((DefaultTableModel) table.getModel()).setRowCount(0);
-            while (res.next()) {
-                ((DefaultTableModel) table.getModel()).addRow(
-                    new Object[] {
-                        res.getString(1),
-                        String.valueOf(res.getInt(4) / res.getInt(3)) + " x \u00A3 "
-                    }
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            db.closeConnection();
-        }
-    }
 
     public static void deleteAppointment(Date d, int partnerID, Time time) {
         Database db = new Database();

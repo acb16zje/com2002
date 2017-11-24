@@ -15,12 +15,9 @@ import java.util.Objects;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import model.Appointment;
 import util.WeekGenerator;
-import view.ViewAppointment;
 
 public class AppointmentTableListener implements ActionListener {
 
@@ -69,15 +66,18 @@ public class AppointmentTableListener implements ActionListener {
                     viewButton.setEnabled(false);
                 } else {
                     try {
-                        String time = ((String) partnerTable.getValueAt(row, column)).substring(2, 7);
+                        String time = ((String) partnerTable.getValueAt(row, column))
+                            .substring(2, 7);
                         String dateString = partnerTable.getColumnName(column).substring(4, 14);
                         Time startTime = Time.valueOf(time + ":00");
-                        java.sql.Date date = new java.sql.Date(timeFormat.parse(dateString).getTime());
+                        java.sql.Date date = new java.sql.Date(
+                            timeFormat.parse(dateString).getTime());
 
                         if (((String) cell).substring(0, 1).equals("0")) {
                             cancelButton.setEnabled(true);
                             viewButton.setEnabled(false);
-                        } else if (AppointmentQueries.isAppointmentCompleted(startTime, date, partnerID)) {
+                        } else if (AppointmentQueries
+                            .isAppointmentCompleted(startTime, date, partnerID)) {
                             cancelButton.setEnabled(false);
                             viewButton.setEnabled(true);
                         } else {
@@ -104,15 +104,18 @@ public class AppointmentTableListener implements ActionListener {
                     viewButton.setEnabled(false);
                 } else {
                     try {
-                        String time = ((String) partnerTable.getValueAt(row, column)).substring(2, 7);
+                        String time = ((String) partnerTable.getValueAt(row, column))
+                            .substring(2, 7);
                         String dateString = partnerTable.getColumnName(column).substring(4, 14);
                         Time startTime = Time.valueOf(time + ":00");
-                        java.sql.Date date = new java.sql.Date(timeFormat.parse(dateString).getTime());
+                        java.sql.Date date = new java.sql.Date(
+                            timeFormat.parse(dateString).getTime());
 
                         if (((String) cell).substring(0, 1).equals("0")) {
                             cancelButton.setEnabled(true);
                             viewButton.setEnabled(false);
-                        } else if (AppointmentQueries.isAppointmentCompleted(startTime, date, partnerID)) {
+                        } else if (AppointmentQueries
+                            .isAppointmentCompleted(startTime, date, partnerID)) {
                             cancelButton.setEnabled(false);
                             viewButton.setEnabled(true);
                         } else {

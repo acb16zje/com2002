@@ -1,5 +1,9 @@
 package view;
 
+import controller.AppointmentQueries;
+import controller.AppointmentTableListener;
+import controller.DateListener;
+import controller.PatientQueries;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -11,7 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,11 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
-import controller.AppointmentQueries;
-import controller.AppointmentTableListener;
-import controller.DateListener;
-import controller.PatientQueries;
 import model.Appointment;
 import util.WeekGenerator;
 
@@ -35,7 +33,9 @@ public class AppointmentSearch extends JDialog {
     /**
      * Create the dialog.
      */
-    public AppointmentSearch(int partnerID,JTable partnerTable,JComboBox tableWeek,JComboBox tableMonth,JComboBox tableYear,JButton cancelPartnerButton, JButton viewPartnerButton) {
+    public AppointmentSearch(int partnerID, JTable partnerTable, JComboBox tableWeek,
+        JComboBox tableMonth, JComboBox tableYear, JButton cancelPartnerButton,
+        JButton viewPartnerButton) {
         // Main content panel
         getContentPane().setLayout(new BorderLayout());
         JPanel contentPanel = new JPanel();
@@ -44,10 +44,11 @@ public class AppointmentSearch extends JDialog {
         GridBagLayout gbl_contentPanel = new GridBagLayout();
         gbl_contentPanel.columnWidths = new int[]{33, 52, 50, 50, 76, 0, 0};
         gbl_contentPanel.rowHeights = new int[]{35, 25, 20, 24, 0, 0};
-        gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+        gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+            Double.MIN_VALUE};
         gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
         contentPanel.setLayout(gbl_contentPanel);
-        
+
         // Label for search appointment title
         JLabel lblSearchAppointment = new JLabel("Search Appointment");
         lblSearchAppointment.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -79,7 +80,7 @@ public class AppointmentSearch extends JDialog {
         gbc_textField.gridy = 2;
         contentPanel.add(textField, gbc_textField);
         textField.setColumns(10);
-        
+
         JLabel lblDate = new JLabel("Date:");
         GridBagConstraints gbc_lblDate = new GridBagConstraints();
         gbc_lblDate.fill = GridBagConstraints.HORIZONTAL;
@@ -87,7 +88,7 @@ public class AppointmentSearch extends JDialog {
         gbc_lblDate.gridx = 1;
         gbc_lblDate.gridy = 3;
         contentPanel.add(lblDate, gbc_lblDate);
-        
+
         Calendar tempCal = new GregorianCalendar().getInstance();
         // ComboBox for day
         JComboBox comboDay = new JComboBox();
@@ -101,7 +102,7 @@ public class AppointmentSearch extends JDialog {
             comboDay.addItem(i);
         }
         comboDay.setSelectedItem(tempCal.get(Calendar.DAY_OF_MONTH));
-        
+
         // ComboBox for month
         JComboBox comboMonth = new JComboBox();
         GridBagConstraints gbc_comboMonth = new GridBagConstraints();
@@ -114,7 +115,7 @@ public class AppointmentSearch extends JDialog {
             comboMonth.addItem(i);
         }
         comboMonth.setSelectedItem(tempCal.get(Calendar.MONTH) + 1);
-        
+
         // ComboBox for year
         JComboBox comboYear = new JComboBox();
         GridBagConstraints gbc_comboYear = new GridBagConstraints();
@@ -125,13 +126,13 @@ public class AppointmentSearch extends JDialog {
         contentPanel.add(comboYear, gbc_comboYear);
         int currentYear = tempCal.get(Calendar.YEAR);
         for (int i = currentYear; i <= currentYear + 2; i++) {
-        	comboYear.addItem(i);
+            comboYear.addItem(i);
         }
         comboYear.setSelectedItem(currentYear);
-        
-        comboMonth.addActionListener( new DateListener(comboDay,comboMonth,comboYear));
-        comboYear.addActionListener( new DateListener(comboDay,comboMonth,comboYear));
-         
+
+        comboMonth.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
+        comboYear.addActionListener(new DateListener(comboDay, comboMonth, comboYear));
+
         // Button panel
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -141,44 +142,54 @@ public class AppointmentSearch extends JDialog {
         JButton okButton = new JButton("OK");
         okButton.setActionCommand("OK");
         okButton.addActionListener(e -> {
-        	if (textField.getText().isEmpty() || Integer.parseInt(textField.getText()) > PatientQueries.getNewPatientID() - 1) {
+            if (textField.getText().isEmpty()
+                || Integer.parseInt(textField.getText()) > PatientQueries.getNewPatientID() - 1) {
                 JOptionPane.showMessageDialog(null, "Please Insert Valid Patient ID");
             } else {
-            	SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-            	String dateString = comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/" + comboYear.getSelectedItem()+" 09:00";
-            	Date selectedDate;
-            	try {
-					selectedDate = new java.sql.Date(timeFormat.parse(dateString).getTime());
-					Calendar loopCal = new GregorianCalendar();
-					loopCal.setTime(selectedDate);
-					boolean valid = false;
-					for (int i=0; i<24; i++ ) {
-						Appointment tempApp = AppointmentQueries.getAppointment(selectedDate,partnerID,Integer.parseInt(textField.getText()), new java.sql.Time(loopCal.getTime().getTime()));
-						if (tempApp != null) {
-								valid = true;
-						}
-						loopCal.add(Calendar.MINUTE, 20);
-					}
-					if (valid) {
-						SimpleDateFormat weekTimeFormat = new SimpleDateFormat("dd-MM-yyyy");
-						tableYear.setSelectedItem(comboYear.getSelectedItem());
-						tableMonth.setSelectedItem(comboMonth.getSelectedItem());
-						tempCal.set(Calendar.DAY_OF_WEEK, 2);
-						String monday = weekTimeFormat.format(loopCal.getTime());
-						tempCal.set(Calendar.DAY_OF_WEEK, 6);
-						String friday = weekTimeFormat.format(loopCal.getTime());
-						tableWeek.setModel(new DefaultComboBoxModel(WeekGenerator.weekList(loopCal)));
-						tableWeek.setSelectedItem(monday+" - "+friday);
-						AppointmentTableListener.refreshTable(partnerTable, monday, partnerID, cancelPartnerButton, viewPartnerButton);	
-						dispose();
-					} else {
-						JOptionPane.showMessageDialog(null, "No Appointment is available for the patient selected");
-					}
-					
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} 		
+                SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+                String dateString =
+                    comboDay.getSelectedItem() + "/" + comboMonth.getSelectedItem() + "/"
+                        + comboYear.getSelectedItem() + " 09:00";
+                Date selectedDate;
+                try {
+                    selectedDate = new java.sql.Date(timeFormat.parse(dateString).getTime());
+                    Calendar loopCal = new GregorianCalendar();
+                    loopCal.setTime(selectedDate);
+                    boolean valid = false;
+                    for (int i = 0; i < 24; i++) {
+                        Appointment tempApp = AppointmentQueries
+                            .getAppointment(selectedDate, partnerID,
+                                Integer.parseInt(textField.getText()),
+                                new java.sql.Time(loopCal.getTime().getTime()));
+                        if (tempApp != null) {
+                            valid = true;
+                        }
+                        loopCal.add(Calendar.MINUTE, 20);
+                    }
+                    if (valid) {
+                        SimpleDateFormat weekTimeFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        tableYear.setSelectedItem(comboYear.getSelectedItem());
+                        tableMonth.setSelectedItem(comboMonth.getSelectedItem());
+                        tempCal.set(Calendar.DAY_OF_WEEK, 2);
+                        String monday = weekTimeFormat.format(loopCal.getTime());
+                        tempCal.set(Calendar.DAY_OF_WEEK, 6);
+                        String friday = weekTimeFormat.format(loopCal.getTime());
+                        tableWeek
+                            .setModel(new DefaultComboBoxModel(WeekGenerator.weekList(loopCal)));
+                        tableWeek.setSelectedItem(monday + " - " + friday);
+                        AppointmentTableListener
+                            .refreshTable(partnerTable, monday, partnerID, cancelPartnerButton,
+                                viewPartnerButton);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                            "No Appointment is available for the patient selected");
+                    }
+
+                } catch (ParseException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         });
         buttonPane.add(okButton);
@@ -196,7 +207,7 @@ public class AppointmentSearch extends JDialog {
         setResizable(false);
         setLocationRelativeTo(null);
         okButton.addActionListener(e -> {
-            
+
         });
     }
 }
