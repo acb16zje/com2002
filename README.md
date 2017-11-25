@@ -2,9 +2,9 @@
 Repo for COM2002 group assignment.
 
 Team 6:
-  Ruairí Sinkler
-  Jake Sturgeon
-  Jia Hua Ng
-  Zer Jun Eng
+- Ruairí Sinkler
+- Jake Sturgeon
+- Jia Hua Ng
+- Zer Jun Eng
 
-view/Login.java is the starting point of our program. Please run this to start the application.
+src/view/Login.java is the starting point of our program. Please run this to start the application.
