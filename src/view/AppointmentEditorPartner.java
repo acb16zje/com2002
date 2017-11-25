@@ -544,6 +544,7 @@ class AppointmentEditorPartner extends JDialog {
         setTitle("Edit Appointment");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 478, 632);
+        setModal(true);
     }
 
     private int totalCost(String treatmentName, int amount) {

@@ -132,6 +132,7 @@ class PartnerInterface extends JFrame {
                     new java.sql.Date(new SimpleDateFormat("dd-MM-yyyy").parse(date).getTime()),
                     partnerID,
                     patientID, Time.valueOf(time + ":00"));
+                System.out.println(viewApp);
                 AppointmentEditorPartner dialog = new AppointmentEditorPartner(partner, viewApp);
                 dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 dialog.setVisible(true);

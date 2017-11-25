@@ -426,7 +426,9 @@ class SecretaryInterface extends JFrame {
         patientPanel.add(planPanel);
         JButton viewOutstandingButton = new JButton("View Outstanding");
         viewOutstandingButton.addActionListener(e -> {
-            ViewPatientOutstanding dialog = new ViewPatientOutstanding();
+        	int row = patientTable.getSelectedRow();
+            int patientid = Integer.valueOf(String.valueOf(patientTable.getValueAt(row, 0)));
+            ViewPatientOutstanding dialog = new ViewPatientOutstanding(patientid);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);

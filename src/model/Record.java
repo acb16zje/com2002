@@ -46,7 +46,11 @@ public class Record {
         return amountOwed;
     }
 
-    @Override
+    public void setAmountOwed(int amountOwed) {
+		this.amountOwed = amountOwed;
+	}
+
+	@Override
     public String toString() {
         return "Record [date=" + date + ", partnerID=" + partnerID + ", startTime=" + startTime
             + ", treatmentGiven=" + treatmentGiven + "]";
